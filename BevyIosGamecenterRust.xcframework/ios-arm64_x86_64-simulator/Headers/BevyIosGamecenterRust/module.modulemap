@@ -1,0 +1,5 @@
+module BevyIosGamecenterRust {
+    header "SwiftBridgeCoreGC.h"
+    header "bevy_ios_gamecenter.h"
+    export *
+}

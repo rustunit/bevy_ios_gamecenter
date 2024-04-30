@@ -1,0 +1,21 @@
+[package]
+name = "bevy_ios_gamecenter"
+version = "0.1.0"
+edition = "2021"
+build = "build.rs"
+
+[lib]
+crate-type = ["staticlib", "rlib"]
+
+[dependencies]
+bevy_app = { version = "0.13", default-features = false }
+bevy_ecs = { version = "0.13", default-features = false }
+bevy_ecs_macros = { version = "0.13", default-features = false }
+bevy_log = { version = "0.13", default-features = false }
+swift-bridge = "0.1"
+
+# [target.'cfg(target_os = "ios")'.dependencies]
+bevy_crossbeam_event = "0.5"
+
+[build-dependencies]
+swift-bridge-build = "0.1"
