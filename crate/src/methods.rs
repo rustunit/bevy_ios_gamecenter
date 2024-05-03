@@ -2,6 +2,7 @@
 
 #[allow(unused_imports)]
 use crate::native;
+use crate::IosGCSaveGame;
 
 pub fn init() {
     #[cfg(target_os = "ios")]
@@ -23,9 +24,16 @@ pub fn save_game(name: String, data: &[u8]) {
     }
 }
 
-pub fn load_game(name: String) {
+pub fn load_game(save_game: IosGCSaveGame) {
     if cfg!(target_os = "ios") {
-        native::load_game(name);
+        native::load_game(save_game);
+    } else {
+    }
+}
+
+pub fn fetch_save_games() {
+    if cfg!(target_os = "ios") {
+        native::fetch_save_games();
     } else {
     }
 }

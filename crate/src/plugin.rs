@@ -1,12 +1,18 @@
 use bevy_app::prelude::*;
 use bevy_ecs::prelude::*;
 
-use crate::{IosGCAuthResult, IosGCPlayer};
+use crate::{
+    IosGCAuthResult, IosGCLoadGamesResponse, IosGCPlayer, IosGCSaveGamesResponse,
+    IosGCSavedGameResponse,
+};
 
 ///
 #[derive(Event, Clone, Debug)]
 pub enum IosGamecenterEvents {
     Authentication(IosGCAuthResult),
+    SavedGame(IosGCSavedGameResponse),
+    SaveGames(IosGCSaveGamesResponse),
+    LoadGame(IosGCLoadGamesResponse),
     Player(IosGCPlayer),
 }
 

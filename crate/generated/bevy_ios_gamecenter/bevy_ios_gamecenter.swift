@@ -5,8 +5,14 @@ public func authentication(_ result: IosGCAuthResult) {
 public func receive_player(_ p: IosGCPlayer) {
     __swift_bridge__$receive_player({p.isOwned = false; return p.ptr;}())
 }
-public func receive_load_game<GenericIntoRustString: IntoRustString>(_ data: GenericIntoRustString) {
-    __swift_bridge__$receive_load_game({ let rustString = data.intoRustString(); rustString.isOwned = false; return rustString.ptr }())
+public func receive_load_game(_ response: IosGCLoadGamesResponse) {
+    __swift_bridge__$receive_load_game({response.isOwned = false; return response.ptr;}())
+}
+public func receive_saved_game(_ response: IosGCSavedGameResponse) {
+    __swift_bridge__$receive_saved_game({response.isOwned = false; return response.ptr;}())
+}
+public func receive_save_games(_ response: IosGCSaveGamesResponse) {
+    __swift_bridge__$receive_save_games({response.isOwned = false; return response.ptr;}())
 }
 @_cdecl("__swift_bridge__$ios_gc_init")
 public func __swift_bridge__ios_gc_init () {
@@ -24,8 +30,353 @@ public func __swift_bridge__save_game (_ data: UnsafeMutableRawPointer, _ name: 
 }
 
 @_cdecl("__swift_bridge__$load_game")
-public func __swift_bridge__load_game (_ name: UnsafeMutableRawPointer) {
-    load_game(name: RustString(ptr: name))
+public func __swift_bridge__load_game (_ save_game: UnsafeMutableRawPointer) {
+    load_game(save_game: IosGCSaveGame(ptr: save_game))
+}
+
+@_cdecl("__swift_bridge__$fetch_save_games")
+public func __swift_bridge__fetch_save_games () {
+    fetch_save_games()
+}
+
+
+public class IosGCLoadGamesResponse: IosGCLoadGamesResponseRefMut {
+    var isOwned: Bool = true
+
+    public override init(ptr: UnsafeMutableRawPointer) {
+        super.init(ptr: ptr)
+    }
+
+    deinit {
+        if isOwned {
+            __swift_bridge__$IosGCLoadGamesResponse$_free(ptr)
+        }
+    }
+}
+extension IosGCLoadGamesResponse {
+    class public func done<GenericIntoRustString: IntoRustString>(_ save_game: IosGCSaveGame, _ data: GenericIntoRustString) -> IosGCLoadGamesResponse {
+        IosGCLoadGamesResponse(ptr: __swift_bridge__$IosGCLoadGamesResponse$done({save_game.isOwned = false; return save_game.ptr;}(), { let rustString = data.intoRustString(); rustString.isOwned = false; return rustString.ptr }()))
+    }
+
+    class public func unknown(_ save_game: IosGCSaveGame) -> IosGCLoadGamesResponse {
+        IosGCLoadGamesResponse(ptr: __swift_bridge__$IosGCLoadGamesResponse$unknown({save_game.isOwned = false; return save_game.ptr;}()))
+    }
+
+    class public func error<GenericIntoRustString: IntoRustString>(_ e: GenericIntoRustString) -> IosGCLoadGamesResponse {
+        IosGCLoadGamesResponse(ptr: __swift_bridge__$IosGCLoadGamesResponse$error({ let rustString = e.intoRustString(); rustString.isOwned = false; return rustString.ptr }()))
+    }
+}
+public class IosGCLoadGamesResponseRefMut: IosGCLoadGamesResponseRef {
+    public override init(ptr: UnsafeMutableRawPointer) {
+        super.init(ptr: ptr)
+    }
+}
+public class IosGCLoadGamesResponseRef {
+    var ptr: UnsafeMutableRawPointer
+
+    public init(ptr: UnsafeMutableRawPointer) {
+        self.ptr = ptr
+    }
+}
+extension IosGCLoadGamesResponse: Vectorizable {
+    public static func vecOfSelfNew() -> UnsafeMutableRawPointer {
+        __swift_bridge__$Vec_IosGCLoadGamesResponse$new()
+    }
+
+    public static func vecOfSelfFree(vecPtr: UnsafeMutableRawPointer) {
+        __swift_bridge__$Vec_IosGCLoadGamesResponse$drop(vecPtr)
+    }
+
+    public static func vecOfSelfPush(vecPtr: UnsafeMutableRawPointer, value: IosGCLoadGamesResponse) {
+        __swift_bridge__$Vec_IosGCLoadGamesResponse$push(vecPtr, {value.isOwned = false; return value.ptr;}())
+    }
+
+    public static func vecOfSelfPop(vecPtr: UnsafeMutableRawPointer) -> Optional<Self> {
+        let pointer = __swift_bridge__$Vec_IosGCLoadGamesResponse$pop(vecPtr)
+        if pointer == nil {
+            return nil
+        } else {
+            return (IosGCLoadGamesResponse(ptr: pointer!) as! Self)
+        }
+    }
+
+    public static func vecOfSelfGet(vecPtr: UnsafeMutableRawPointer, index: UInt) -> Optional<IosGCLoadGamesResponseRef> {
+        let pointer = __swift_bridge__$Vec_IosGCLoadGamesResponse$get(vecPtr, index)
+        if pointer == nil {
+            return nil
+        } else {
+            return IosGCLoadGamesResponseRef(ptr: pointer!)
+        }
+    }
+
+    public static func vecOfSelfGetMut(vecPtr: UnsafeMutableRawPointer, index: UInt) -> Optional<IosGCLoadGamesResponseRefMut> {
+        let pointer = __swift_bridge__$Vec_IosGCLoadGamesResponse$get_mut(vecPtr, index)
+        if pointer == nil {
+            return nil
+        } else {
+            return IosGCLoadGamesResponseRefMut(ptr: pointer!)
+        }
+    }
+
+    public static func vecOfSelfAsPtr(vecPtr: UnsafeMutableRawPointer) -> UnsafePointer<IosGCLoadGamesResponseRef> {
+        UnsafePointer<IosGCLoadGamesResponseRef>(OpaquePointer(__swift_bridge__$Vec_IosGCLoadGamesResponse$as_ptr(vecPtr)))
+    }
+
+    public static func vecOfSelfLen(vecPtr: UnsafeMutableRawPointer) -> UInt {
+        __swift_bridge__$Vec_IosGCLoadGamesResponse$len(vecPtr)
+    }
+}
+
+
+public class IosGCSaveGamesResponse: IosGCSaveGamesResponseRefMut {
+    var isOwned: Bool = true
+
+    public override init(ptr: UnsafeMutableRawPointer) {
+        super.init(ptr: ptr)
+    }
+
+    deinit {
+        if isOwned {
+            __swift_bridge__$IosGCSaveGamesResponse$_free(ptr)
+        }
+    }
+}
+extension IosGCSaveGamesResponse {
+    class public func done(_ items: RustVec<IosGCSaveGame>) -> IosGCSaveGamesResponse {
+        IosGCSaveGamesResponse(ptr: __swift_bridge__$IosGCSaveGamesResponse$done({ let val = items; val.isOwned = false; return val.ptr }()))
+    }
+
+    class public func error<GenericIntoRustString: IntoRustString>(_ e: GenericIntoRustString) -> IosGCSaveGamesResponse {
+        IosGCSaveGamesResponse(ptr: __swift_bridge__$IosGCSaveGamesResponse$error({ let rustString = e.intoRustString(); rustString.isOwned = false; return rustString.ptr }()))
+    }
+}
+public class IosGCSaveGamesResponseRefMut: IosGCSaveGamesResponseRef {
+    public override init(ptr: UnsafeMutableRawPointer) {
+        super.init(ptr: ptr)
+    }
+}
+public class IosGCSaveGamesResponseRef {
+    var ptr: UnsafeMutableRawPointer
+
+    public init(ptr: UnsafeMutableRawPointer) {
+        self.ptr = ptr
+    }
+}
+extension IosGCSaveGamesResponse: Vectorizable {
+    public static func vecOfSelfNew() -> UnsafeMutableRawPointer {
+        __swift_bridge__$Vec_IosGCSaveGamesResponse$new()
+    }
+
+    public static func vecOfSelfFree(vecPtr: UnsafeMutableRawPointer) {
+        __swift_bridge__$Vec_IosGCSaveGamesResponse$drop(vecPtr)
+    }
+
+    public static func vecOfSelfPush(vecPtr: UnsafeMutableRawPointer, value: IosGCSaveGamesResponse) {
+        __swift_bridge__$Vec_IosGCSaveGamesResponse$push(vecPtr, {value.isOwned = false; return value.ptr;}())
+    }
+
+    public static func vecOfSelfPop(vecPtr: UnsafeMutableRawPointer) -> Optional<Self> {
+        let pointer = __swift_bridge__$Vec_IosGCSaveGamesResponse$pop(vecPtr)
+        if pointer == nil {
+            return nil
+        } else {
+            return (IosGCSaveGamesResponse(ptr: pointer!) as! Self)
+        }
+    }
+
+    public static func vecOfSelfGet(vecPtr: UnsafeMutableRawPointer, index: UInt) -> Optional<IosGCSaveGamesResponseRef> {
+        let pointer = __swift_bridge__$Vec_IosGCSaveGamesResponse$get(vecPtr, index)
+        if pointer == nil {
+            return nil
+        } else {
+            return IosGCSaveGamesResponseRef(ptr: pointer!)
+        }
+    }
+
+    public static func vecOfSelfGetMut(vecPtr: UnsafeMutableRawPointer, index: UInt) -> Optional<IosGCSaveGamesResponseRefMut> {
+        let pointer = __swift_bridge__$Vec_IosGCSaveGamesResponse$get_mut(vecPtr, index)
+        if pointer == nil {
+            return nil
+        } else {
+            return IosGCSaveGamesResponseRefMut(ptr: pointer!)
+        }
+    }
+
+    public static func vecOfSelfAsPtr(vecPtr: UnsafeMutableRawPointer) -> UnsafePointer<IosGCSaveGamesResponseRef> {
+        UnsafePointer<IosGCSaveGamesResponseRef>(OpaquePointer(__swift_bridge__$Vec_IosGCSaveGamesResponse$as_ptr(vecPtr)))
+    }
+
+    public static func vecOfSelfLen(vecPtr: UnsafeMutableRawPointer) -> UInt {
+        __swift_bridge__$Vec_IosGCSaveGamesResponse$len(vecPtr)
+    }
+}
+
+
+public class IosGCSavedGameResponse: IosGCSavedGameResponseRefMut {
+    var isOwned: Bool = true
+
+    public override init(ptr: UnsafeMutableRawPointer) {
+        super.init(ptr: ptr)
+    }
+
+    deinit {
+        if isOwned {
+            __swift_bridge__$IosGCSavedGameResponse$_free(ptr)
+        }
+    }
+}
+extension IosGCSavedGameResponse {
+    class public func done(_ save: IosGCSaveGame) -> IosGCSavedGameResponse {
+        IosGCSavedGameResponse(ptr: __swift_bridge__$IosGCSavedGameResponse$done({save.isOwned = false; return save.ptr;}()))
+    }
+
+    class public func error<GenericIntoRustString: IntoRustString>(_ e: GenericIntoRustString) -> IosGCSavedGameResponse {
+        IosGCSavedGameResponse(ptr: __swift_bridge__$IosGCSavedGameResponse$error({ let rustString = e.intoRustString(); rustString.isOwned = false; return rustString.ptr }()))
+    }
+}
+public class IosGCSavedGameResponseRefMut: IosGCSavedGameResponseRef {
+    public override init(ptr: UnsafeMutableRawPointer) {
+        super.init(ptr: ptr)
+    }
+}
+public class IosGCSavedGameResponseRef {
+    var ptr: UnsafeMutableRawPointer
+
+    public init(ptr: UnsafeMutableRawPointer) {
+        self.ptr = ptr
+    }
+}
+extension IosGCSavedGameResponse: Vectorizable {
+    public static func vecOfSelfNew() -> UnsafeMutableRawPointer {
+        __swift_bridge__$Vec_IosGCSavedGameResponse$new()
+    }
+
+    public static func vecOfSelfFree(vecPtr: UnsafeMutableRawPointer) {
+        __swift_bridge__$Vec_IosGCSavedGameResponse$drop(vecPtr)
+    }
+
+    public static func vecOfSelfPush(vecPtr: UnsafeMutableRawPointer, value: IosGCSavedGameResponse) {
+        __swift_bridge__$Vec_IosGCSavedGameResponse$push(vecPtr, {value.isOwned = false; return value.ptr;}())
+    }
+
+    public static func vecOfSelfPop(vecPtr: UnsafeMutableRawPointer) -> Optional<Self> {
+        let pointer = __swift_bridge__$Vec_IosGCSavedGameResponse$pop(vecPtr)
+        if pointer == nil {
+            return nil
+        } else {
+            return (IosGCSavedGameResponse(ptr: pointer!) as! Self)
+        }
+    }
+
+    public static func vecOfSelfGet(vecPtr: UnsafeMutableRawPointer, index: UInt) -> Optional<IosGCSavedGameResponseRef> {
+        let pointer = __swift_bridge__$Vec_IosGCSavedGameResponse$get(vecPtr, index)
+        if pointer == nil {
+            return nil
+        } else {
+            return IosGCSavedGameResponseRef(ptr: pointer!)
+        }
+    }
+
+    public static func vecOfSelfGetMut(vecPtr: UnsafeMutableRawPointer, index: UInt) -> Optional<IosGCSavedGameResponseRefMut> {
+        let pointer = __swift_bridge__$Vec_IosGCSavedGameResponse$get_mut(vecPtr, index)
+        if pointer == nil {
+            return nil
+        } else {
+            return IosGCSavedGameResponseRefMut(ptr: pointer!)
+        }
+    }
+
+    public static func vecOfSelfAsPtr(vecPtr: UnsafeMutableRawPointer) -> UnsafePointer<IosGCSavedGameResponseRef> {
+        UnsafePointer<IosGCSavedGameResponseRef>(OpaquePointer(__swift_bridge__$Vec_IosGCSavedGameResponse$as_ptr(vecPtr)))
+    }
+
+    public static func vecOfSelfLen(vecPtr: UnsafeMutableRawPointer) -> UInt {
+        __swift_bridge__$Vec_IosGCSavedGameResponse$len(vecPtr)
+    }
+}
+
+
+public class IosGCSaveGame: IosGCSaveGameRefMut {
+    var isOwned: Bool = true
+
+    public override init(ptr: UnsafeMutableRawPointer) {
+        super.init(ptr: ptr)
+    }
+
+    deinit {
+        if isOwned {
+            __swift_bridge__$IosGCSaveGame$_free(ptr)
+        }
+    }
+}
+extension IosGCSaveGame {
+    class public func new<GenericIntoRustString: IntoRustString>(_ name: GenericIntoRustString, _ device_name: GenericIntoRustString, _ modification_date: UInt64) -> IosGCSaveGame {
+        IosGCSaveGame(ptr: __swift_bridge__$IosGCSaveGame$new({ let rustString = name.intoRustString(); rustString.isOwned = false; return rustString.ptr }(), { let rustString = device_name.intoRustString(); rustString.isOwned = false; return rustString.ptr }(), modification_date))
+    }
+
+    class public func equals(_ a: IosGCSaveGameRef, _ b: IosGCSaveGameRef) -> Bool {
+        __swift_bridge__$IosGCSaveGame$equals(a.ptr, b.ptr)
+    }
+}
+public class IosGCSaveGameRefMut: IosGCSaveGameRef {
+    public override init(ptr: UnsafeMutableRawPointer) {
+        super.init(ptr: ptr)
+    }
+}
+public class IosGCSaveGameRef {
+    var ptr: UnsafeMutableRawPointer
+
+    public init(ptr: UnsafeMutableRawPointer) {
+        self.ptr = ptr
+    }
+}
+extension IosGCSaveGame: Vectorizable {
+    public static func vecOfSelfNew() -> UnsafeMutableRawPointer {
+        __swift_bridge__$Vec_IosGCSaveGame$new()
+    }
+
+    public static func vecOfSelfFree(vecPtr: UnsafeMutableRawPointer) {
+        __swift_bridge__$Vec_IosGCSaveGame$drop(vecPtr)
+    }
+
+    public static func vecOfSelfPush(vecPtr: UnsafeMutableRawPointer, value: IosGCSaveGame) {
+        __swift_bridge__$Vec_IosGCSaveGame$push(vecPtr, {value.isOwned = false; return value.ptr;}())
+    }
+
+    public static func vecOfSelfPop(vecPtr: UnsafeMutableRawPointer) -> Optional<Self> {
+        let pointer = __swift_bridge__$Vec_IosGCSaveGame$pop(vecPtr)
+        if pointer == nil {
+            return nil
+        } else {
+            return (IosGCSaveGame(ptr: pointer!) as! Self)
+        }
+    }
+
+    public static func vecOfSelfGet(vecPtr: UnsafeMutableRawPointer, index: UInt) -> Optional<IosGCSaveGameRef> {
+        let pointer = __swift_bridge__$Vec_IosGCSaveGame$get(vecPtr, index)
+        if pointer == nil {
+            return nil
+        } else {
+            return IosGCSaveGameRef(ptr: pointer!)
+        }
+    }
+
+    public static func vecOfSelfGetMut(vecPtr: UnsafeMutableRawPointer, index: UInt) -> Optional<IosGCSaveGameRefMut> {
+        let pointer = __swift_bridge__$Vec_IosGCSaveGame$get_mut(vecPtr, index)
+        if pointer == nil {
+            return nil
+        } else {
+            return IosGCSaveGameRefMut(ptr: pointer!)
+        }
+    }
+
+    public static func vecOfSelfAsPtr(vecPtr: UnsafeMutableRawPointer) -> UnsafePointer<IosGCSaveGameRef> {
+        UnsafePointer<IosGCSaveGameRef>(OpaquePointer(__swift_bridge__$Vec_IosGCSaveGame$as_ptr(vecPtr)))
+    }
+
+    public static func vecOfSelfLen(vecPtr: UnsafeMutableRawPointer) -> UInt {
+        __swift_bridge__$Vec_IosGCSaveGame$len(vecPtr)
+    }
 }
 
 
