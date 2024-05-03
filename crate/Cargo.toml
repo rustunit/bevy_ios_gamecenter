@@ -13,9 +13,8 @@ bevy_ecs = { version = "0.13", default-features = false }
 bevy_ecs_macros = { version = "0.13", default-features = false }
 bevy_log = { version = "0.13", default-features = false }
 swift-bridge = "0.1"
-
-# [target.'cfg(target_os = "ios")'.dependencies]
 bevy_crossbeam_event = "0.5"
+base64 = "0.22"
 
 [build-dependencies]
 swift-bridge-build = "0.1"

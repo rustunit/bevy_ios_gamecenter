@@ -33,15 +33,14 @@ mod ffi {
 
         fn authentication(result: IosGCAuthResult);
         fn receive_player(p: IosGCPlayer);
+        fn receive_load_game(data: String);
     }
 
     extern "Swift" {
         pub fn ios_gc_init();
-    }
-
-    extern "Swift" {
-
-        fn get_player();
+        pub fn get_player();
+        pub fn save_game(data: String, name: String);
+        pub fn load_game(name: String);
     }
 }
 
@@ -74,4 +73,10 @@ fn receive_player(p: IosGCPlayer) {
         .as_ref()
         .unwrap()
         .send(IosGamecenterEvents::Player(p));
+}
+
+fn receive_load_game(data: String) {
+    if let Ok(data) = base64::decode(data) {
+        bevy_log::info!("data: {data:?}");
+    }
 }

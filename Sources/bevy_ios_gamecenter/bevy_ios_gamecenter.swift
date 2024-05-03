@@ -5,6 +5,9 @@ public func authentication(_ result: IosGCAuthResult) {
 public func receive_player(_ p: IosGCPlayer) {
     __swift_bridge__$receive_player({p.isOwned = false; return p.ptr;}())
 }
+public func receive_load_game<GenericIntoRustString: IntoRustString>(_ data: GenericIntoRustString) {
+    __swift_bridge__$receive_load_game({ let rustString = data.intoRustString(); rustString.isOwned = false; return rustString.ptr }())
+}
 @_cdecl("__swift_bridge__$ios_gc_init")
 public func __swift_bridge__ios_gc_init () {
     ios_gc_init()
@@ -13,6 +16,16 @@ public func __swift_bridge__ios_gc_init () {
 @_cdecl("__swift_bridge__$get_player")
 public func __swift_bridge__get_player () {
     get_player()
+}
+
+@_cdecl("__swift_bridge__$save_game")
+public func __swift_bridge__save_game (_ data: UnsafeMutableRawPointer, _ name: UnsafeMutableRawPointer) {
+    save_game(data: RustString(ptr: data), name: RustString(ptr: name))
+}
+
+@_cdecl("__swift_bridge__$load_game")
+public func __swift_bridge__load_game (_ name: UnsafeMutableRawPointer) {
+    load_game(name: RustString(ptr: name))
 }
 
 

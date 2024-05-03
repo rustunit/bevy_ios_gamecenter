@@ -2,6 +2,7 @@ mod methods;
 mod native;
 mod plugin;
 
+pub use methods::{init, load_game, request_player, save_game};
 pub use plugin::{IosGamecenterEvents, IosGamecenterPlugin};
 
 #[derive(Debug, Clone)]

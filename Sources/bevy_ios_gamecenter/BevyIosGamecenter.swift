@@ -6,6 +6,7 @@
 //
 
 import GameKit
+import Foundation
 import BevyIosGamecenterRust
 
 public func ios_gc_init() {
@@ -27,4 +28,38 @@ public func get_player() {
     let p = GKLocalPlayer.local;
     
     receive_player(IosGCPlayer.new(p.gamePlayerID, p.teamPlayerID, p.isAuthenticated, p.alias, p.displayName))
+}
+
+public func save_game(data: RustString, name: RustString) {
+    Task{
+        do {
+            let gameData = try Data.init(base64Encoded:data.toString())!
+            try await GKLocalPlayer.local.saveGameData(gameData, withName: name.toString())
+            let games = try await GKLocalPlayer.local.fetchSavedGames()
+            print("Fetched: \(games).")
+        } catch {
+            print("Error: \(error.localizedDescription).")
+        }
+    }
+}
+
+public func load_game(name: RustString) {
+    
+    Task{
+        do {
+            let games = try await GKLocalPlayer.local.fetchSavedGames()
+            
+            for game in games {
+                if game.name == name.toString() {
+                    var data = try await game.loadData()
+                                        
+                    let result = data.base64EncodedString()
+
+                    receive_load_game(result)
+                }
+            }
+        } catch {
+            print("Error: \(error.localizedDescription).")
+        }
+    }
 }

@@ -30,5 +30,6 @@ void* __swift_bridge__$IosGCAuthResult$login_presented(void);
 void* __swift_bridge__$IosGCAuthResult$error(void* e);
 void __swift_bridge__$authentication(void* result);
 void __swift_bridge__$receive_player(void* p);
+void __swift_bridge__$receive_load_game(void* data);
 
 
