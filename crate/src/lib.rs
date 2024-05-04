@@ -2,7 +2,10 @@ mod methods;
 mod native;
 mod plugin;
 
-pub use methods::{fetch_save_games, init, load_game, request_player, save_game};
+pub use methods::{
+    achievement_progress, achievements_reset, fetch_save_games, init, load_game, request_player,
+    save_game,
+};
 pub use plugin::{IosGamecenterEvents, IosGamecenterPlugin};
 
 #[derive(Debug, Clone)]
@@ -120,6 +123,62 @@ impl IosGCLoadGamesResponse {
 
     fn unknown(save_game: IosGCSaveGame) -> Self {
         Self::Unknown(save_game)
+    }
+
+    fn error(e: String) -> Self {
+        Self::Error(e)
+    }
+}
+
+#[derive(Debug, Clone, Default)]
+pub struct IosGCAchievement {
+    pub identifier: String,
+    pub progress: f64,
+    pub is_completed: bool,
+    pub last_reported_date: u64,
+}
+
+impl IosGCAchievement {
+    pub fn new(
+        identifier: String,
+        progress: f64,
+        is_completed: bool,
+        last_reported_date: u64,
+    ) -> Self {
+        Self {
+            identifier,
+            progress,
+            is_completed,
+            last_reported_date,
+        }
+    }
+}
+
+#[derive(Debug, Clone)]
+pub enum IosGCAchievementProgressResponse {
+    Done(IosGCAchievement),
+    Error(String),
+}
+
+impl IosGCAchievementProgressResponse {
+    fn done(a: IosGCAchievement) -> Self {
+        Self::Done(a)
+    }
+
+    fn error(e: String) -> Self {
+        Self::Error(e)
+    }
+}
+
+#[derive(Debug, Clone)]
+pub enum IosGCAchievementsResetResponse {
+    Done,
+    Error(String),
+}
+
+impl IosGCAchievementsResetResponse {
+    fn done() -> Self {
+        Self::Done
     }
 
     fn error(e: String) -> Self {

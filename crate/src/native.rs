@@ -6,7 +6,8 @@ use bevy_crossbeam_event::CrossbeamEventSender;
 pub use ffi::*;
 
 use crate::{
-    plugin::IosGamecenterEvents, IosGCAuthResult, IosGCLoadGamesResponse, IosGCPlayer,
+    plugin::IosGamecenterEvents, IosGCAchievement, IosGCAchievementProgressResponse,
+    IosGCAchievementsResetResponse, IosGCAuthResult, IosGCLoadGamesResponse, IosGCPlayer,
     IosGCSaveGame, IosGCSaveGamesResponse, IosGCSavedGameResponse,
 };
 
@@ -63,11 +64,37 @@ mod ffi {
         #[swift_bridge(associated_to = IosGCLoadGamesResponse)]
         fn error(e: String) -> IosGCLoadGamesResponse;
 
+        type IosGCAchievement;
+
+        #[swift_bridge(associated_to = IosGCAchievement)]
+        fn new(
+            identifier: String,
+            progress: f64,
+            is_completed: bool,
+            last_reported_date: u64,
+        ) -> IosGCAchievement;
+
+        type IosGCAchievementProgressResponse;
+
+        #[swift_bridge(associated_to = IosGCAchievementProgressResponse)]
+        fn done(a: IosGCAchievement) -> IosGCAchievementProgressResponse;
+        #[swift_bridge(associated_to = IosGCAchievementProgressResponse)]
+        fn error(e: String) -> IosGCAchievementProgressResponse;
+
+        type IosGCAchievementsResetResponse;
+
+        #[swift_bridge(associated_to = IosGCAchievementsResetResponse)]
+        fn done() -> IosGCAchievementsResetResponse;
+        #[swift_bridge(associated_to = IosGCAchievementsResetResponse)]
+        fn error(e: String) -> IosGCAchievementsResetResponse;
+
         fn authentication(result: IosGCAuthResult);
         fn receive_player(p: IosGCPlayer);
         fn receive_load_game(response: IosGCLoadGamesResponse);
         fn receive_saved_game(response: IosGCSavedGameResponse);
         fn receive_save_games(response: IosGCSaveGamesResponse);
+        fn receive_achievement_progress(response: IosGCAchievementProgressResponse);
+        fn receive_achievement_reset(response: IosGCAchievementsResetResponse);
     }
 
     extern "Swift" {
@@ -76,6 +103,8 @@ mod ffi {
         pub fn save_game(data: String, name: String);
         pub fn load_game(save_game: IosGCSaveGame);
         pub fn fetch_save_games();
+        pub fn achievement_progress(id: String, progress: f64);
+        pub fn reset_achievements();
     }
 }
 
@@ -87,8 +116,6 @@ pub fn set_sender(sender: CrossbeamEventSender<IosGamecenterEvents>) {
 }
 
 fn authentication(result: IosGCAuthResult) {
-    bevy_log::info!("authentication: {result:?}");
-
     get_player();
 
     SENDER
@@ -109,8 +136,6 @@ fn receive_player(p: IosGCPlayer) {
 }
 
 fn receive_saved_game(response: IosGCSavedGameResponse) {
-    bevy_log::info!("receive_saved_game: {:?}", response);
-
     SENDER
         .get()
         .unwrap()
@@ -120,8 +145,6 @@ fn receive_saved_game(response: IosGCSavedGameResponse) {
 }
 
 fn receive_save_games(response: IosGCSaveGamesResponse) {
-    bevy_log::info!("receive_save_games: {:?}", response);
-
     SENDER
         .get()
         .unwrap()
@@ -131,12 +154,28 @@ fn receive_save_games(response: IosGCSaveGamesResponse) {
 }
 
 fn receive_load_game(response: IosGCLoadGamesResponse) {
-    bevy_log::info!("receive_load_game: {:?}", response);
-
     SENDER
         .get()
         .unwrap()
         .as_ref()
         .unwrap()
         .send(IosGamecenterEvents::LoadGame(response));
+}
+
+fn receive_achievement_progress(response: IosGCAchievementProgressResponse) {
+    SENDER
+        .get()
+        .unwrap()
+        .as_ref()
+        .unwrap()
+        .send(IosGamecenterEvents::AchievementProgress(response));
+}
+
+fn receive_achievement_reset(response: IosGCAchievementsResetResponse) {
+    SENDER
+        .get()
+        .unwrap()
+        .as_ref()
+        .unwrap()
+        .send(IosGamecenterEvents::AchievementsReset(response));
 }

@@ -87,3 +87,34 @@ public func fetch_save_games() {
         }
     }
 }
+
+fileprivate func convert_achievement(_ a: GKAchievement) throws -> IosGCAchievement {
+    return IosGCAchievement.new(a.identifier, a.percentComplete, a.isCompleted, UInt64(try a.lastReportedDate.timeIntervalSince1970))
+}
+
+public func achievement_progress(id: RustString, progress: Double){
+    Task {
+        do{
+            var achievement = GKAchievement.init(identifier: id.toString())
+            
+            achievement.percentComplete = progress
+            try await GKAchievement.report([achievement])
+            let response = try convert_achievement(achievement)
+            receive_achievement_progress(IosGCAchievementProgressResponse.done(response))
+        } catch {
+            receive_achievement_progress(IosGCAchievementProgressResponse.error(error.localizedDescription))
+        }
+    }
+}
+
+public func reset_achievements() {
+    Task {
+        do{
+            try await GKAchievement.resetAchievements()
+            receive_achievement_reset(IosGCAchievementsResetResponse.done())
+        } catch {
+            receive_achievement_reset(IosGCAchievementsResetResponse.error(error.localizedDescription))
+        }
+    }
+}
+

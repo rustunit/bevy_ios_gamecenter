@@ -37,3 +37,17 @@ pub fn fetch_save_games() {
     } else {
     }
 }
+
+pub fn achievement_progress(id: String, progress: f64) {
+    if cfg!(target_os = "ios") {
+        native::achievement_progress(id, progress);
+    } else {
+    }
+}
+
+pub fn achievements_reset() {
+    if cfg!(target_os = "ios") {
+        native::reset_achievements();
+    } else {
+    }
+}

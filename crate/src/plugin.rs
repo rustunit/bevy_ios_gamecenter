@@ -2,8 +2,8 @@ use bevy_app::prelude::*;
 use bevy_ecs::prelude::*;
 
 use crate::{
-    IosGCAuthResult, IosGCLoadGamesResponse, IosGCPlayer, IosGCSaveGamesResponse,
-    IosGCSavedGameResponse,
+    IosGCAchievementProgressResponse, IosGCAchievementsResetResponse, IosGCAuthResult,
+    IosGCLoadGamesResponse, IosGCPlayer, IosGCSaveGamesResponse, IosGCSavedGameResponse,
 };
 
 ///
@@ -14,6 +14,8 @@ pub enum IosGamecenterEvents {
     SaveGames(IosGCSaveGamesResponse),
     LoadGame(IosGCLoadGamesResponse),
     Player(IosGCPlayer),
+    AchievementProgress(IosGCAchievementProgressResponse),
+    AchievementsReset(IosGCAchievementsResetResponse),
 }
 
 ///

@@ -14,6 +14,12 @@ public func receive_saved_game(_ response: IosGCSavedGameResponse) {
 public func receive_save_games(_ response: IosGCSaveGamesResponse) {
     __swift_bridge__$receive_save_games({response.isOwned = false; return response.ptr;}())
 }
+public func receive_achievement_progress(_ response: IosGCAchievementProgressResponse) {
+    __swift_bridge__$receive_achievement_progress({response.isOwned = false; return response.ptr;}())
+}
+public func receive_achievement_reset(_ response: IosGCAchievementsResetResponse) {
+    __swift_bridge__$receive_achievement_reset({response.isOwned = false; return response.ptr;}())
+}
 @_cdecl("__swift_bridge__$ios_gc_init")
 public func __swift_bridge__ios_gc_init () {
     ios_gc_init()
@@ -37,6 +43,265 @@ public func __swift_bridge__load_game (_ save_game: UnsafeMutableRawPointer) {
 @_cdecl("__swift_bridge__$fetch_save_games")
 public func __swift_bridge__fetch_save_games () {
     fetch_save_games()
+}
+
+@_cdecl("__swift_bridge__$achievement_progress")
+public func __swift_bridge__achievement_progress (_ id: UnsafeMutableRawPointer, _ progress: Double) {
+    achievement_progress(id: RustString(ptr: id), progress: progress)
+}
+
+@_cdecl("__swift_bridge__$reset_achievements")
+public func __swift_bridge__reset_achievements () {
+    reset_achievements()
+}
+
+
+public class IosGCAchievementsResetResponse: IosGCAchievementsResetResponseRefMut {
+    var isOwned: Bool = true
+
+    public override init(ptr: UnsafeMutableRawPointer) {
+        super.init(ptr: ptr)
+    }
+
+    deinit {
+        if isOwned {
+            __swift_bridge__$IosGCAchievementsResetResponse$_free(ptr)
+        }
+    }
+}
+extension IosGCAchievementsResetResponse {
+    class public func error<GenericIntoRustString: IntoRustString>(_ e: GenericIntoRustString) -> IosGCAchievementsResetResponse {
+        IosGCAchievementsResetResponse(ptr: __swift_bridge__$IosGCAchievementsResetResponse$error({ let rustString = e.intoRustString(); rustString.isOwned = false; return rustString.ptr }()))
+    }
+}
+public class IosGCAchievementsResetResponseRefMut: IosGCAchievementsResetResponseRef {
+    public override init(ptr: UnsafeMutableRawPointer) {
+        super.init(ptr: ptr)
+    }
+}
+public class IosGCAchievementsResetResponseRef {
+    var ptr: UnsafeMutableRawPointer
+
+    public init(ptr: UnsafeMutableRawPointer) {
+        self.ptr = ptr
+    }
+}
+extension IosGCAchievementsResetResponseRef {
+    class public func done() -> IosGCAchievementsResetResponse {
+        IosGCAchievementsResetResponse(ptr: __swift_bridge__$IosGCAchievementsResetResponse$done())
+    }
+}
+extension IosGCAchievementsResetResponse: Vectorizable {
+    public static func vecOfSelfNew() -> UnsafeMutableRawPointer {
+        __swift_bridge__$Vec_IosGCAchievementsResetResponse$new()
+    }
+
+    public static func vecOfSelfFree(vecPtr: UnsafeMutableRawPointer) {
+        __swift_bridge__$Vec_IosGCAchievementsResetResponse$drop(vecPtr)
+    }
+
+    public static func vecOfSelfPush(vecPtr: UnsafeMutableRawPointer, value: IosGCAchievementsResetResponse) {
+        __swift_bridge__$Vec_IosGCAchievementsResetResponse$push(vecPtr, {value.isOwned = false; return value.ptr;}())
+    }
+
+    public static func vecOfSelfPop(vecPtr: UnsafeMutableRawPointer) -> Optional<Self> {
+        let pointer = __swift_bridge__$Vec_IosGCAchievementsResetResponse$pop(vecPtr)
+        if pointer == nil {
+            return nil
+        } else {
+            return (IosGCAchievementsResetResponse(ptr: pointer!) as! Self)
+        }
+    }
+
+    public static func vecOfSelfGet(vecPtr: UnsafeMutableRawPointer, index: UInt) -> Optional<IosGCAchievementsResetResponseRef> {
+        let pointer = __swift_bridge__$Vec_IosGCAchievementsResetResponse$get(vecPtr, index)
+        if pointer == nil {
+            return nil
+        } else {
+            return IosGCAchievementsResetResponseRef(ptr: pointer!)
+        }
+    }
+
+    public static func vecOfSelfGetMut(vecPtr: UnsafeMutableRawPointer, index: UInt) -> Optional<IosGCAchievementsResetResponseRefMut> {
+        let pointer = __swift_bridge__$Vec_IosGCAchievementsResetResponse$get_mut(vecPtr, index)
+        if pointer == nil {
+            return nil
+        } else {
+            return IosGCAchievementsResetResponseRefMut(ptr: pointer!)
+        }
+    }
+
+    public static func vecOfSelfAsPtr(vecPtr: UnsafeMutableRawPointer) -> UnsafePointer<IosGCAchievementsResetResponseRef> {
+        UnsafePointer<IosGCAchievementsResetResponseRef>(OpaquePointer(__swift_bridge__$Vec_IosGCAchievementsResetResponse$as_ptr(vecPtr)))
+    }
+
+    public static func vecOfSelfLen(vecPtr: UnsafeMutableRawPointer) -> UInt {
+        __swift_bridge__$Vec_IosGCAchievementsResetResponse$len(vecPtr)
+    }
+}
+
+
+public class IosGCAchievementProgressResponse: IosGCAchievementProgressResponseRefMut {
+    var isOwned: Bool = true
+
+    public override init(ptr: UnsafeMutableRawPointer) {
+        super.init(ptr: ptr)
+    }
+
+    deinit {
+        if isOwned {
+            __swift_bridge__$IosGCAchievementProgressResponse$_free(ptr)
+        }
+    }
+}
+extension IosGCAchievementProgressResponse {
+    class public func done(_ a: IosGCAchievement) -> IosGCAchievementProgressResponse {
+        IosGCAchievementProgressResponse(ptr: __swift_bridge__$IosGCAchievementProgressResponse$done({a.isOwned = false; return a.ptr;}()))
+    }
+
+    class public func error<GenericIntoRustString: IntoRustString>(_ e: GenericIntoRustString) -> IosGCAchievementProgressResponse {
+        IosGCAchievementProgressResponse(ptr: __swift_bridge__$IosGCAchievementProgressResponse$error({ let rustString = e.intoRustString(); rustString.isOwned = false; return rustString.ptr }()))
+    }
+}
+public class IosGCAchievementProgressResponseRefMut: IosGCAchievementProgressResponseRef {
+    public override init(ptr: UnsafeMutableRawPointer) {
+        super.init(ptr: ptr)
+    }
+}
+public class IosGCAchievementProgressResponseRef {
+    var ptr: UnsafeMutableRawPointer
+
+    public init(ptr: UnsafeMutableRawPointer) {
+        self.ptr = ptr
+    }
+}
+extension IosGCAchievementProgressResponse: Vectorizable {
+    public static func vecOfSelfNew() -> UnsafeMutableRawPointer {
+        __swift_bridge__$Vec_IosGCAchievementProgressResponse$new()
+    }
+
+    public static func vecOfSelfFree(vecPtr: UnsafeMutableRawPointer) {
+        __swift_bridge__$Vec_IosGCAchievementProgressResponse$drop(vecPtr)
+    }
+
+    public static func vecOfSelfPush(vecPtr: UnsafeMutableRawPointer, value: IosGCAchievementProgressResponse) {
+        __swift_bridge__$Vec_IosGCAchievementProgressResponse$push(vecPtr, {value.isOwned = false; return value.ptr;}())
+    }
+
+    public static func vecOfSelfPop(vecPtr: UnsafeMutableRawPointer) -> Optional<Self> {
+        let pointer = __swift_bridge__$Vec_IosGCAchievementProgressResponse$pop(vecPtr)
+        if pointer == nil {
+            return nil
+        } else {
+            return (IosGCAchievementProgressResponse(ptr: pointer!) as! Self)
+        }
+    }
+
+    public static func vecOfSelfGet(vecPtr: UnsafeMutableRawPointer, index: UInt) -> Optional<IosGCAchievementProgressResponseRef> {
+        let pointer = __swift_bridge__$Vec_IosGCAchievementProgressResponse$get(vecPtr, index)
+        if pointer == nil {
+            return nil
+        } else {
+            return IosGCAchievementProgressResponseRef(ptr: pointer!)
+        }
+    }
+
+    public static func vecOfSelfGetMut(vecPtr: UnsafeMutableRawPointer, index: UInt) -> Optional<IosGCAchievementProgressResponseRefMut> {
+        let pointer = __swift_bridge__$Vec_IosGCAchievementProgressResponse$get_mut(vecPtr, index)
+        if pointer == nil {
+            return nil
+        } else {
+            return IosGCAchievementProgressResponseRefMut(ptr: pointer!)
+        }
+    }
+
+    public static func vecOfSelfAsPtr(vecPtr: UnsafeMutableRawPointer) -> UnsafePointer<IosGCAchievementProgressResponseRef> {
+        UnsafePointer<IosGCAchievementProgressResponseRef>(OpaquePointer(__swift_bridge__$Vec_IosGCAchievementProgressResponse$as_ptr(vecPtr)))
+    }
+
+    public static func vecOfSelfLen(vecPtr: UnsafeMutableRawPointer) -> UInt {
+        __swift_bridge__$Vec_IosGCAchievementProgressResponse$len(vecPtr)
+    }
+}
+
+
+public class IosGCAchievement: IosGCAchievementRefMut {
+    var isOwned: Bool = true
+
+    public override init(ptr: UnsafeMutableRawPointer) {
+        super.init(ptr: ptr)
+    }
+
+    deinit {
+        if isOwned {
+            __swift_bridge__$IosGCAchievement$_free(ptr)
+        }
+    }
+}
+extension IosGCAchievement {
+    class public func new<GenericIntoRustString: IntoRustString>(_ identifier: GenericIntoRustString, _ progress: Double, _ is_completed: Bool, _ last_reported_date: UInt64) -> IosGCAchievement {
+        IosGCAchievement(ptr: __swift_bridge__$IosGCAchievement$new({ let rustString = identifier.intoRustString(); rustString.isOwned = false; return rustString.ptr }(), progress, is_completed, last_reported_date))
+    }
+}
+public class IosGCAchievementRefMut: IosGCAchievementRef {
+    public override init(ptr: UnsafeMutableRawPointer) {
+        super.init(ptr: ptr)
+    }
+}
+public class IosGCAchievementRef {
+    var ptr: UnsafeMutableRawPointer
+
+    public init(ptr: UnsafeMutableRawPointer) {
+        self.ptr = ptr
+    }
+}
+extension IosGCAchievement: Vectorizable {
+    public static func vecOfSelfNew() -> UnsafeMutableRawPointer {
+        __swift_bridge__$Vec_IosGCAchievement$new()
+    }
+
+    public static func vecOfSelfFree(vecPtr: UnsafeMutableRawPointer) {
+        __swift_bridge__$Vec_IosGCAchievement$drop(vecPtr)
+    }
+
+    public static func vecOfSelfPush(vecPtr: UnsafeMutableRawPointer, value: IosGCAchievement) {
+        __swift_bridge__$Vec_IosGCAchievement$push(vecPtr, {value.isOwned = false; return value.ptr;}())
+    }
+
+    public static func vecOfSelfPop(vecPtr: UnsafeMutableRawPointer) -> Optional<Self> {
+        let pointer = __swift_bridge__$Vec_IosGCAchievement$pop(vecPtr)
+        if pointer == nil {
+            return nil
+        } else {
+            return (IosGCAchievement(ptr: pointer!) as! Self)
+        }
+    }
+
+    public static func vecOfSelfGet(vecPtr: UnsafeMutableRawPointer, index: UInt) -> Optional<IosGCAchievementRef> {
+        let pointer = __swift_bridge__$Vec_IosGCAchievement$get(vecPtr, index)
+        if pointer == nil {
+            return nil
+        } else {
+            return IosGCAchievementRef(ptr: pointer!)
+        }
+    }
+
+    public static func vecOfSelfGetMut(vecPtr: UnsafeMutableRawPointer, index: UInt) -> Optional<IosGCAchievementRefMut> {
+        let pointer = __swift_bridge__$Vec_IosGCAchievement$get_mut(vecPtr, index)
+        if pointer == nil {
+            return nil
+        } else {
+            return IosGCAchievementRefMut(ptr: pointer!)
+        }
+    }
+
+    public static func vecOfSelfAsPtr(vecPtr: UnsafeMutableRawPointer) -> UnsafePointer<IosGCAchievementRef> {
+        UnsafePointer<IosGCAchievementRef>(OpaquePointer(__swift_bridge__$Vec_IosGCAchievement$as_ptr(vecPtr)))
+    }
+
+    public static func vecOfSelfLen(vecPtr: UnsafeMutableRawPointer) -> UInt {
+        __swift_bridge__$Vec_IosGCAchievement$len(vecPtr)
+    }
 }
 
 
