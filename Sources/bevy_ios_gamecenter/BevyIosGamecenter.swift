@@ -96,7 +96,6 @@ public func achievement_progress(id: RustString, progress: Double){
     Task {
         do{
             var achievement = GKAchievement.init(identifier: id.toString())
-            
             achievement.percentComplete = progress
             try await GKAchievement.report([achievement])
             let response = try convert_achievement(achievement)
@@ -115,6 +114,25 @@ public func reset_achievements() {
         } catch {
             receive_achievement_reset(IosGCAchievementsResetResponse.error(error.localizedDescription))
         }
+    }
+}
+
+public func leaderboards_score(id:RustString, score:Int64, context:Int64) {
+    Task {
+        do{
+            try await GKLeaderboard.submitScore(Int(score), context:Int(context), player:GKLocalPlayer.local, leaderboardIDs: [id.toString()])
+            GKAccessPoint.shared.trigger(state: GKGameCenterViewControllerState.leaderboards){
+                //
+            }
+        } catch {
+            print("error: \(error.localizedDescription)")
+        }
+    }
+}
+
+public func trigger_view(state: Int32) {
+    GKAccessPoint.shared.trigger(state: GKGameCenterViewControllerState(rawValue: Int(state)) ?? GKGameCenterViewControllerState.default){
+        //TODO: callback?
     }
 }
 

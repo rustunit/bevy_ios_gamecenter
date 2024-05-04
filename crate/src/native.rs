@@ -105,6 +105,8 @@ mod ffi {
         pub fn fetch_save_games();
         pub fn achievement_progress(id: String, progress: f64);
         pub fn reset_achievements();
+        pub fn leaderboards_score(id: String, score: i64, context: i64);
+        pub fn trigger_view(state: i32);
     }
 }
 

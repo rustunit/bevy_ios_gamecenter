@@ -2,7 +2,7 @@
 
 #[allow(unused_imports)]
 use crate::native;
-use crate::IosGCSaveGame;
+use crate::{IosGCSaveGame, IosGCViewState};
 
 pub fn init() {
     #[cfg(target_os = "ios")]
@@ -48,6 +48,20 @@ pub fn achievement_progress(id: String, progress: f64) {
 pub fn achievements_reset() {
     if cfg!(target_os = "ios") {
         native::reset_achievements();
+    } else {
+    }
+}
+
+pub fn leaderboards_score(id: String, score: i64, context: i64) {
+    if cfg!(target_os = "ios") {
+        native::leaderboards_score(id, score, context);
+    } else {
+    }
+}
+
+pub fn trigger_view(state: IosGCViewState) {
+    if cfg!(target_os = "ios") {
+        native::trigger_view(state);
     } else {
     }
 }

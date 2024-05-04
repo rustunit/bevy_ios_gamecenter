@@ -55,6 +55,16 @@ public func __swift_bridge__reset_achievements () {
     reset_achievements()
 }
 
+@_cdecl("__swift_bridge__$leaderboards_score")
+public func __swift_bridge__leaderboards_score (_ id: UnsafeMutableRawPointer, _ score: Int64, _ context: Int64) {
+    leaderboards_score(id: RustString(ptr: id), score: score, context: context)
+}
+
+@_cdecl("__swift_bridge__$trigger_view")
+public func __swift_bridge__trigger_view (_ state: Int32) {
+    trigger_view(state: state)
+}
+
 
 public class IosGCAchievementsResetResponse: IosGCAchievementsResetResponseRefMut {
     var isOwned: Bool = true

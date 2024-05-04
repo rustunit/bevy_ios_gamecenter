@@ -3,8 +3,8 @@ mod native;
 mod plugin;
 
 pub use methods::{
-    achievement_progress, achievements_reset, fetch_save_games, init, load_game, request_player,
-    save_game,
+    achievement_progress, achievements_reset, fetch_save_games, init, leaderboards_score,
+    load_game, request_player, save_game, trigger_view,
 };
 pub use plugin::{IosGamecenterEvents, IosGamecenterPlugin};
 
@@ -184,4 +184,18 @@ impl IosGCAchievementsResetResponse {
     fn error(e: String) -> Self {
         Self::Error(e)
     }
+}
+
+pub type IosGCViewState = i32;
+
+pub mod view_states {
+    use crate::IosGCViewState;
+
+    pub static DEFAULT: IosGCViewState = -1;
+    pub static LEADERBOARDS: IosGCViewState = 0;
+    pub static ACHIEVEMENTS: IosGCViewState = 1;
+    pub static CHALLENGES: IosGCViewState = 2;
+    pub static LOCAL_PLAYER_PROFILES: IosGCViewState = 3;
+    pub static DASHBOARD: IosGCViewState = 4;
+    pub static LOCAL_PLAYER_FRIENDS_LIST: IosGCViewState = 5;
 }
