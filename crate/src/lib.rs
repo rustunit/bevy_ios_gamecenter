@@ -118,7 +118,11 @@ pub enum IosGCLoadGamesResponse {
 
 impl IosGCLoadGamesResponse {
     fn done(save_game: IosGCSaveGame, data: String) -> Self {
-        Self::Done((save_game, base64::decode(data).ok()))
+        use base64::Engine;
+        Self::Done((
+            save_game,
+            base64::engine::general_purpose::STANDARD.decode(data).ok(),
+        ))
     }
 
     fn unknown(save_game: IosGCSaveGame) -> Self {

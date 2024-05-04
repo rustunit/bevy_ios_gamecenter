@@ -18,7 +18,8 @@ pub fn request_player() {
 
 pub fn save_game(name: String, data: &[u8]) {
     if cfg!(target_os = "ios") {
-        let s = base64::encode(data);
+        use base64::Engine;
+        let s = base64::engine::general_purpose::STANDARD.encode(data);
         native::save_game(s, name);
     } else {
     }
