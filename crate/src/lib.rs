@@ -8,6 +8,10 @@ pub use methods::{
 };
 pub use plugin::{IosGamecenterEvents, IosGamecenterPlugin};
 
+/// Expected event data in response to [`init`] method call or
+/// implict on startup when registering Plugin via `IosGamecenterPlugin::new(true)`.
+///
+/// See Event [`IosGamecenterEvents`]
 #[derive(Debug, Clone)]
 pub enum IosGCAuthResult {
     IsAuthenticated,
@@ -29,7 +33,8 @@ impl IosGCAuthResult {
     }
 }
 
-///request_player
+/// Expected event data in response to [`request_player`] method call.
+/// See Event [`IosGamecenterEvents`]
 #[derive(Debug, Clone, Default)]
 pub struct IosGCPlayer {
     pub game_id: String,
@@ -57,6 +62,8 @@ impl IosGCPlayer {
     }
 }
 
+/// Expected event data in response to [`save_game`] method call.
+/// See Event [`IosGamecenterEvents`]
 #[derive(Debug, Clone)]
 pub enum IosGCSavedGameResponse {
     Done(IosGCSaveGame),
@@ -230,14 +237,38 @@ impl IosGCScoreSubmitResponse {
 /// used in [`trigger_view`] to define what view to open
 pub type IosGCViewState = i32;
 
+/// used in [`trigger_view`] to define what view to open.
+///
+/// See values in Apple Docs: <https://developer.apple.com/documentation/gamekit/gkgamecenterviewcontrollerstate>
 pub mod view_states {
     use crate::IosGCViewState;
 
+    /// Defines what part of Gamecenter UI to open. See [`trigger_view`][crate::trigger_view]
+    ///
+    /// See values in Apple Docs: <https://developer.apple.com/documentation/gamekit/gkgamecenterviewcontrollerstate/default>
     pub static DEFAULT: IosGCViewState = -1;
+    /// Defines what part of Gamecenter UI to open. See [`trigger_view`][crate::trigger_view]
+    ///
+    /// See values in Apple Docs: <https://developer.apple.com/documentation/gamekit/gkgamecenterviewcontrollerstate/leaderboards>
     pub static LEADERBOARDS: IosGCViewState = 0;
+    /// Defines what part of Gamecenter UI to open. See [`trigger_view`][crate::trigger_view]
+    ///
+    /// See values in Apple Docs: <https://developer.apple.com/documentation/gamekit/gkgamecenterviewcontrollerstate/achievements>
     pub static ACHIEVEMENTS: IosGCViewState = 1;
+    /// Defines what part of Gamecenter UI to open. See [`trigger_view`][crate::trigger_view]
+    ///
+    /// See values in Apple Docs: <https://developer.apple.com/documentation/gamekit/gkgamecenterviewcontrollerstate/challenges>
     pub static CHALLENGES: IosGCViewState = 2;
+    /// Defines what part of Gamecenter UI to open. See [`trigger_view`][crate::trigger_view]
+    ///
+    /// See values in Apple Docs: <https://developer.apple.com/documentation/gamekit/gkgamecenterviewcontrollerstate/localplayerprofile>
     pub static LOCAL_PLAYER_PROFILES: IosGCViewState = 3;
+    /// Defines what part of Gamecenter UI to open. See [`trigger_view`][crate::trigger_view]
+    ///
+    /// See values in Apple Docs: <https://developer.apple.com/documentation/gamekit/gkgamecenterviewcontrollerstate/dashboard>
     pub static DASHBOARD: IosGCViewState = 4;
+    /// Defines what part of Gamecenter UI to open. See [`trigger_view`][crate::trigger_view]
+    ///
+    /// See values in Apple Docs: <https://developer.apple.com/documentation/gamekit/gkgamecenterviewcontrollerstate/localplayerfriendslist>
     pub static LOCAL_PLAYER_FRIENDS_LIST: IosGCViewState = 5;
 }

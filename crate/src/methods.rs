@@ -61,7 +61,7 @@ pub fn achievement_progress(id: String, progress: f64) {
 }
 
 /// Resets all achievements.
-/// Expected to be confirmed with `IosGamecenterEvents::AchievementsReset` event
+/// Expected to be confirmed with [`IosGamecenterEvents::AchievementsReset`][crate::IosGamecenterEvents::AchievementsReset] event
 pub fn achievements_reset() {
     if cfg!(target_os = "ios") {
         native::reset_achievements();
@@ -69,14 +69,18 @@ pub fn achievements_reset() {
 }
 
 /// Submits score to a leaderboard
-/// Expected to be confirmed with `IosGamecenterEvents::LeaderboardScoreSubmitted` event
+/// Expected to be confirmed with [`IosGamecenterEvents::LeaderboardScoreSubmitted`][crate::IosGamecenterEvents::LeaderboardScoreSubmitted] event
 pub fn leaderboards_score(id: String, score: i64, context: i64) {
     if cfg!(target_os = "ios") {
         native::leaderboards_score(id, score, context);
     }
 }
 
-/// Opens Gamecenter View (to a specific `state`)
+/// Opens Gamecenter View to a specific [`IosGCViewState`]
+/// ## Note
+/// Unlike most other methods this will not trigger a response
+///
+/// See Apple Docs: <https://developer.apple.com/documentation/gamekit/gkaccesspoint/3606333-trigger>
 pub fn trigger_view(state: IosGCViewState) {
     if cfg!(target_os = "ios") {
         native::trigger_view(state);
