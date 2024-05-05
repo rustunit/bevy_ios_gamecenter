@@ -1,9 +1,11 @@
 // build.rs
 
-use std::path::PathBuf;
-
 fn main() {
-    if !cfg!(doc) {
+    #[cfg(not(docrs))]
+    {
+        println!("cargo:warning=running swift-bridge");
+
+        use std::path::PathBuf;
         let out_dir = PathBuf::from("./generated");
 
         let bridges = vec!["src/lib.rs", "src/native.rs"];
