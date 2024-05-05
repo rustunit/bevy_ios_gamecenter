@@ -2,6 +2,9 @@ check:
 	cd ./crate/ && cargo c --target=aarch64-apple-ios-sim
 	cd ./crate/ && cargo clippy --target=aarch64-apple-ios-sim
 
+build-rust-release:
+	./crate/build-rust-release.sh
+
 build-rust:
 	./crate/build-rust.sh
 
@@ -21,6 +24,12 @@ copy-generated:
 build: build-rust copy-generated
 	cp ./crate/target/universal-ios/debug/libbevy_ios_gamecenter.a ./BevyIosGamecenterRust.xcframework/ios-arm64_x86_64-simulator/
 	cp ./crate/target/aarch64-apple-ios/debug/libbevy_ios_gamecenter.a ./BevyIosGamecenterRust.xcframework/ios-arm64/
+
+build-release: build-rust-release copy-generated
+	cp ./bevy_ios_gamecenter/target/universal-ios/release/libbevy_ios_gamecenter.a ./BevyIosGamecenterRust.xcframework/ios-arm64_x86_64-simulator/
+	cp ./bevy_ios_gamecenter/target/aarch64-apple-ios/release/libbevy_ios_gamecenter.a ./BevyIosGamecenterRust.xcframework/ios-arm64/
+	ls -lisah ./BevyIosGamecenterRust.xcframework/ios-arm64/
+	ls -lisah ./BevyIosGamecenterRust.xcframework/ios-arm64_x86_64-simulator
 
 zip: build-release
 	zip -r BevyIosGamecenterRust.xcframework.zip ./RustXcframework.xcframework/
