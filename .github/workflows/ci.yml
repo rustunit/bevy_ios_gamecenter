@@ -1,0 +1,45 @@
+name: CI-rust
+
+on:
+  push:
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+    #TODO: run and test on wasm, win and linux
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - uses: dtolnay/rust-toolchain@stable
+
+    - name: Add iOS targets
+      run: rustup target add aarch64-apple-ios aarch64-apple-ios-sim x86_64-apple-ios
+
+    - name: Rust Cache
+      uses: Swatinem/rust-cache@v2
+      with:
+        workspaces: "./crate"
+
+    - name: Check iOS Sim
+      run: |
+        cd ./crate/ 
+        cargo c --target=aarch64-apple-ios-sim
+        cargo b --target=aarch64-apple-ios-sim
+        cargo clippy --target=aarch64-apple-ios-sim
+
+    - name: Check iOS
+      run: |
+        cd ./crate/ 
+        cargo c --target=aarch64-apple-ios
+        cargo b --target=aarch64-apple-ios
+        cargo clippy --target=aarch64-apple-ios
+    
+    - name: Check MacOs
+      run: |
+        cd ./crate/ 
+        cargo c
+        cargo b
+        cargo t
