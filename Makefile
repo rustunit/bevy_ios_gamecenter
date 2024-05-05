@@ -32,7 +32,7 @@ build-release: build-rust-release copy-generated
 	ls -lisah ./BevyIosGamecenterRust.xcframework/ios-arm64_x86_64-simulator
 
 zip: build-release
-	zip -r BevyIosGamecenterRust.xcframework.zip ./RustXcframework.xcframework/
+	zip -r BevyIosGamecenterRust.xcframework.zip ./BevyIosGamecenterRust.xcframework/
 	ls -lisah BevyIosGamecenterRust.xcframework.zip
 	shasum -a 256 BevyIosGamecenterRust.xcframework.zip
 	shasum -a 256 BevyIosGamecenterRust.xcframework.zip > BevyIosGamecenterRust.xcframework.sha256.txt
