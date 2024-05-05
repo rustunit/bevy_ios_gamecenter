@@ -5,9 +5,9 @@
 Bevy Plugin and Swift Package to provide access to iOS native GameKit (Gamecenter) from inside Bevy Apps
 It uses [Swift-Bridge](https://github.com/chinedufn/swift-bridge) to auto-generate the glue code and transport datatypes.
 
-![demo](./demo.gif)
+![demo](./assets/demo.gif)
 
-See also [bevy_ios_iap](https://github.com/rustunit/bevy_ios_iap), [bevy_ios_notifications](https://github.com/rustunit/bevy_ios_notifications), [bevy_ios_alerts](https://github.com/rustunit/bevy_ios_alerts) & [bevy_ios_impact](https://github.com/rustunit/bevy_ios_impact)
+See also [bevy_ios_iap](https://github.com/rustunit/bevy_ios_iap), [bevy_ios_notifications](https://github.com/rustunit/bevy_ios_notifications), [bevy_ios_alerts](https://github.com/rustunit/bevy_ios_alerts), [bevy_ios_review](https://github.com/rustunit/bevy_ios_review) & [bevy_ios_impact](https://github.com/rustunit/bevy_ios_impact)
 
 ## Instructions
 
@@ -39,4 +39,55 @@ Initialize Bevy Plugin:
 ```rust
 // request auth right on startup
 app.add_plugins(IosGamecenterPlugin::new(true));
+```
+
+```rust
+fn bevy_system() {
+    bevy_ios_gamecenter::achievements_reset();
+    
+    // update achievement progress, 100 % will complete it
+    bevy_ios_gamecenter::achievement_progress("id".into(),100.);
+
+    bevy_ios_gamecenter::leaderboards_score(
+        "raking id".into(),
+        // score
+        1,
+        // context
+        2,
+    );
+
+    // open gamecenter view (leaderboard)
+    bevy_ios_gamecenter::trigger_view(view_states::LEADERBOARDS);
+
+    // save arbitrary binary buffer as a savegame
+    bevy_ios_gamecenter::save_game("test".into(), vec![1, 2, 3].as_slice());
+
+    // request list of `IosGCSaveGame`
+    bevy_ios_gamecenter::fetch_save_games();
+
+    // based on result of above `fetch_save_games` request
+    let save_game = IosGCSaveGame {..} 
+    bevy_ios_gamecenter::load_game(save_game);
+}
+```
+
+Process Response Events from iOS back to us in Rust:
+
+```rust
+fn process_gamecenter_events(
+    mut events: EventReader<IosGamecenterEvents>,
+) {
+    for e in events.read() {
+        match e {
+            IosGamecenterEvents::SaveGames(response) => todo!(),
+            IosGamecenterEvents::Player(player) => todo!(),
+            IosGamecenterEvents::Authentication(response) => todo!(),
+            IosGamecenterEvents::SavedGame(response) => todo!(),
+            IosGamecenterEvents::LoadGame(response) => todo!(),
+            IosGamecenterEvents::AchievementProgress(response) => todo!(),
+            IosGamecenterEvents::AchievementsReset(response) => todo!(),
+            IosGamecenterEvents::LeaderboardScoreSubmitted(response) => todo!(),
+        }
+    }
+}
 ```

@@ -29,6 +29,7 @@ impl IosGCAuthResult {
     }
 }
 
+///request_player
 #[derive(Debug, Clone, Default)]
 pub struct IosGCPlayer {
     pub game_id: String,
@@ -72,6 +73,8 @@ impl IosGCSavedGameResponse {
     }
 }
 
+/// Expected event data in response to `fetch_save_games` method call.
+/// See Event `IosGamecenterEvents`
 #[derive(Debug, Clone)]
 pub enum IosGCSaveGamesResponse {
     Done(Vec<IosGCSaveGame>),
@@ -88,6 +91,12 @@ impl IosGCSaveGamesResponse {
     }
 }
 
+/// Save Game meta data.
+/// Expected event data in response to `save_game` or `fetch_save_games` method call.
+/// See Event `IosGamecenterEvents`
+///
+/// ## Note
+/// This does not contain the actual saved bytes, these have to be requested via `load_game`
 #[derive(Debug, Clone, Default, PartialEq, Eq)]
 pub struct IosGCSaveGame {
     pub name: String,
@@ -109,9 +118,15 @@ impl IosGCSaveGame {
     }
 }
 
+/// Expected event data in response to `load_game` method call.
+/// See Event `IosGamecenterEvents`
 #[derive(Debug, Clone)]
 pub enum IosGCLoadGamesResponse {
+    /// Indicates a successfully loaded Save Game
+    /// It will return the Save Game that was requestsed and the Data as a `Option<Vec<u8>>`.
+    /// The `Option` will only be `None` in case of an error decoding the underlying Data back from base64 encoding.
     Done((IosGCSaveGame, Option<Vec<u8>>)),
+    /// Returned if requested Save Game was not found
     Unknown(IosGCSaveGame),
     Error(String),
 }
@@ -158,6 +173,8 @@ impl IosGCAchievement {
     }
 }
 
+/// Expected event data in response to `achievement_progress` method call.
+/// See Event `IosGamecenterEvents`
 #[derive(Debug, Clone)]
 pub enum IosGCAchievementProgressResponse {
     Done(IosGCAchievement),
@@ -174,6 +191,8 @@ impl IosGCAchievementProgressResponse {
     }
 }
 
+/// Expected event data in response to `achievements_reset` method call.
+/// See Event `IosGamecenterEvents`
 #[derive(Debug, Clone)]
 pub enum IosGCAchievementsResetResponse {
     Done,
@@ -190,6 +209,8 @@ impl IosGCAchievementsResetResponse {
     }
 }
 
+/// Expected event data in response to `leaderboards_score` method call.
+/// See Event `IosGamecenterEvents`
 #[derive(Debug, Clone)]
 pub enum IosGCScoreSubmitResponse {
     Done,
@@ -206,6 +227,7 @@ impl IosGCScoreSubmitResponse {
     }
 }
 
+/// used in `trigger_view` to define what view to open
 pub type IosGCViewState = i32;
 
 pub mod view_states {
