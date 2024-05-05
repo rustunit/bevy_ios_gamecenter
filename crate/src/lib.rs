@@ -73,8 +73,8 @@ impl IosGCSavedGameResponse {
     }
 }
 
-/// Expected event data in response to `fetch_save_games` method call.
-/// See Event `IosGamecenterEvents`
+/// Expected event data in response to [`fetch_save_games`] method call.
+/// See Event [`IosGamecenterEvents`]
 #[derive(Debug, Clone)]
 pub enum IosGCSaveGamesResponse {
     Done(Vec<IosGCSaveGame>),
@@ -92,11 +92,11 @@ impl IosGCSaveGamesResponse {
 }
 
 /// Save Game meta data.
-/// Expected event data in response to `save_game` or `fetch_save_games` method call.
-/// See Event `IosGamecenterEvents`
+/// Expected event data in response to [`save_game`] or [`fetch_save_games`] method call.
+/// See Event [`IosGamecenterEvents`]
 ///
 /// ## Note
-/// This does not contain the actual saved bytes, these have to be requested via `load_game`
+/// This does not contain the actual saved bytes, these have to be requested via [`load_game`]
 #[derive(Debug, Clone, Default, PartialEq, Eq)]
 pub struct IosGCSaveGame {
     pub name: String,
@@ -118,8 +118,8 @@ impl IosGCSaveGame {
     }
 }
 
-/// Expected event data in response to `load_game` method call.
-/// See Event `IosGamecenterEvents`
+/// Expected event data in response to [`load_game`] method call.
+/// See Event [`IosGamecenterEvents`]
 #[derive(Debug, Clone)]
 pub enum IosGCLoadGamesResponse {
     /// Indicates a successfully loaded Save Game
@@ -173,8 +173,8 @@ impl IosGCAchievement {
     }
 }
 
-/// Expected event data in response to `achievement_progress` method call.
-/// See Event `IosGamecenterEvents`
+/// Expected event data in response to [`achievement_progress`] method call.
+/// See Event [`IosGamecenterEvents`]
 #[derive(Debug, Clone)]
 pub enum IosGCAchievementProgressResponse {
     Done(IosGCAchievement),
@@ -191,8 +191,8 @@ impl IosGCAchievementProgressResponse {
     }
 }
 
-/// Expected event data in response to `achievements_reset` method call.
-/// See Event `IosGamecenterEvents`
+/// Expected event data in response to [`achievements_reset`] method call.
+/// See Event [`IosGamecenterEvents`]
 #[derive(Debug, Clone)]
 pub enum IosGCAchievementsResetResponse {
     Done,
@@ -209,8 +209,8 @@ impl IosGCAchievementsResetResponse {
     }
 }
 
-/// Expected event data in response to `leaderboards_score` method call.
-/// See Event `IosGamecenterEvents`
+/// Expected event data in response to [`leaderboards_score`] method call.
+/// See Event [`IosGamecenterEvents`]
 #[derive(Debug, Clone)]
 pub enum IosGCScoreSubmitResponse {
     Done,
@@ -227,7 +227,7 @@ impl IosGCScoreSubmitResponse {
     }
 }
 
-/// used in `trigger_view` to define what view to open
+/// used in [`trigger_view`] to define what view to open
 pub type IosGCViewState = i32;
 
 pub mod view_states {

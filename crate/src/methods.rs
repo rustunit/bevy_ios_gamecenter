@@ -5,7 +5,7 @@ use crate::native;
 use crate::{IosGCSaveGame, IosGCViewState};
 
 /// Authenticate
-/// Expected to be confirmed with `IosGamecenterEvents::Authentication` event
+/// Expected to be confirmed with [`IosGamecenterEvents::Authentication`][crate::IosGamecenterEvents::Authentication] event
 pub fn init() {
     if cfg!(target_os = "ios") {
         native::ios_gc_init();
@@ -13,7 +13,7 @@ pub fn init() {
 }
 
 /// Request Player Infos
-/// Expected to be confirmed with `IosGamecenterEvents::Player` event
+/// Expected to be confirmed with [`IosGamecenterEvents::Player`][crate::IosGamecenterEvents::Player] event
 ///
 /// ## Note
 /// This will base64 encode the data to save it
@@ -24,7 +24,7 @@ pub fn request_player() {
 }
 
 /// Save Game under `name`
-/// Expected to be confirmed with `IosGamecenterEvents::SavedGame` event
+/// Expected to be confirmed with [`IosGamecenterEvents::SavedGame`][crate::IosGamecenterEvents::SavedGame] event
 ///
 /// ## Note
 /// This will base64 encode the data to save it
@@ -36,8 +36,8 @@ pub fn save_game(name: String, data: &[u8]) {
     }
 }
 
-/// Requests the Data inside a given `IosGCSaveGame`
-/// Expected to be confirmed with `IosGamecenterEvents::LoadGame` event
+/// Requests the Data inside a given [`IosGCSaveGame`]
+/// Expected to be confirmed with [`IosGamecenterEvents::SavedGame`][crate::IosGamecenterEvents::LoadGame] event
 pub fn load_game(save_game: IosGCSaveGame) {
     if cfg!(target_os = "ios") {
         native::load_game(save_game);
@@ -45,7 +45,7 @@ pub fn load_game(save_game: IosGCSaveGame) {
 }
 
 /// Requests a list of all available SaveGames
-/// Expected to be confirmed with `IosGamecenterEvents::SaveGames` event
+/// Expected to be confirmed with [`IosGamecenterEvents::SaveGames`][crate::IosGamecenterEvents::SaveGames] event
 pub fn fetch_save_games() {
     if cfg!(target_os = "ios") {
         native::fetch_save_games();
@@ -53,7 +53,7 @@ pub fn fetch_save_games() {
 }
 
 /// Updates progress on an Achievement.
-/// Expected to be confirmed with `IosGamecenterEvents::AchievementProgress` event
+/// Expected to be confirmed with [`IosGamecenterEvents::AchievementProgress`][crate::IosGamecenterEvents::AchievementProgress] event
 pub fn achievement_progress(id: String, progress: f64) {
     if cfg!(target_os = "ios") {
         native::achievement_progress(id, progress);
