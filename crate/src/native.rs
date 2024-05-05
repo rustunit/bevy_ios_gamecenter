@@ -8,7 +8,7 @@ pub use ffi::*;
 use crate::{
     plugin::IosGamecenterEvents, IosGCAchievement, IosGCAchievementProgressResponse,
     IosGCAchievementsResetResponse, IosGCAuthResult, IosGCLoadGamesResponse, IosGCPlayer,
-    IosGCSaveGame, IosGCSaveGamesResponse, IosGCSavedGameResponse,
+    IosGCSaveGame, IosGCSaveGamesResponse, IosGCSavedGameResponse, IosGCScoreSubmitResponse,
 };
 
 #[swift_bridge::bridge]
@@ -88,6 +88,13 @@ mod ffi {
         #[swift_bridge(associated_to = IosGCAchievementsResetResponse)]
         fn error(e: String) -> IosGCAchievementsResetResponse;
 
+        type IosGCScoreSubmitResponse;
+
+        #[swift_bridge(associated_to = IosGCScoreSubmitResponse)]
+        fn done() -> IosGCScoreSubmitResponse;
+        #[swift_bridge(associated_to = IosGCScoreSubmitResponse)]
+        fn error(e: String) -> IosGCScoreSubmitResponse;
+
         fn authentication(result: IosGCAuthResult);
         fn receive_player(p: IosGCPlayer);
         fn receive_load_game(response: IosGCLoadGamesResponse);
@@ -95,6 +102,7 @@ mod ffi {
         fn receive_save_games(response: IosGCSaveGamesResponse);
         fn receive_achievement_progress(response: IosGCAchievementProgressResponse);
         fn receive_achievement_reset(response: IosGCAchievementsResetResponse);
+        fn receive_leaderboard_score(response: IosGCScoreSubmitResponse);
     }
 
     extern "Swift" {
@@ -180,4 +188,13 @@ fn receive_achievement_reset(response: IosGCAchievementsResetResponse) {
         .as_ref()
         .unwrap()
         .send(IosGamecenterEvents::AchievementsReset(response));
+}
+
+fn receive_leaderboard_score(response: IosGCScoreSubmitResponse) {
+    SENDER
+        .get()
+        .unwrap()
+        .as_ref()
+        .unwrap()
+        .send(IosGamecenterEvents::LeaderboardScoreSubmitted(response));
 }

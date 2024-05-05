@@ -121,18 +121,16 @@ public func leaderboards_score(id:RustString, score:Int64, context:Int64) {
     Task {
         do{
             try await GKLeaderboard.submitScore(Int(score), context:Int(context), player:GKLocalPlayer.local, leaderboardIDs: [id.toString()])
-            GKAccessPoint.shared.trigger(state: GKGameCenterViewControllerState.leaderboards){
-                //
-            }
+            receive_leaderboard_score(IosGCScoreSubmitResponse.done())
         } catch {
-            print("error: \(error.localizedDescription)")
+            receive_leaderboard_score(IosGCScoreSubmitResponse.error(error.localizedDescription))
         }
     }
 }
 
 public func trigger_view(state: Int32) {
     GKAccessPoint.shared.trigger(state: GKGameCenterViewControllerState(rawValue: Int(state)) ?? GKGameCenterViewControllerState.default){
-        //TODO: callback?
+        //TODO: no idea why this gets never called
     }
 }
 

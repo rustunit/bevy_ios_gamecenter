@@ -4,6 +4,7 @@ use bevy_ecs::prelude::*;
 use crate::{
     IosGCAchievementProgressResponse, IosGCAchievementsResetResponse, IosGCAuthResult,
     IosGCLoadGamesResponse, IosGCPlayer, IosGCSaveGamesResponse, IosGCSavedGameResponse,
+    IosGCScoreSubmitResponse,
 };
 
 ///
@@ -16,6 +17,7 @@ pub enum IosGamecenterEvents {
     Player(IosGCPlayer),
     AchievementProgress(IosGCAchievementProgressResponse),
     AchievementsReset(IosGCAchievementsResetResponse),
+    LeaderboardScoreSubmitted(IosGCScoreSubmitResponse),
 }
 
 ///

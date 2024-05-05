@@ -190,6 +190,22 @@ impl IosGCAchievementsResetResponse {
     }
 }
 
+#[derive(Debug, Clone)]
+pub enum IosGCScoreSubmitResponse {
+    Done,
+    Error(String),
+}
+
+impl IosGCScoreSubmitResponse {
+    fn done() -> Self {
+        Self::Done
+    }
+
+    fn error(e: String) -> Self {
+        Self::Error(e)
+    }
+}
+
 pub type IosGCViewState = i32;
 
 pub mod view_states {

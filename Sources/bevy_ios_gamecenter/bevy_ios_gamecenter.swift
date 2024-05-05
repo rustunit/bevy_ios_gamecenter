@@ -20,6 +20,9 @@ public func receive_achievement_progress(_ response: IosGCAchievementProgressRes
 public func receive_achievement_reset(_ response: IosGCAchievementsResetResponse) {
     __swift_bridge__$receive_achievement_reset({response.isOwned = false; return response.ptr;}())
 }
+public func receive_leaderboard_score(_ response: IosGCScoreSubmitResponse) {
+    __swift_bridge__$receive_leaderboard_score({response.isOwned = false; return response.ptr;}())
+}
 @_cdecl("__swift_bridge__$ios_gc_init")
 public func __swift_bridge__ios_gc_init () {
     ios_gc_init()
@@ -63,6 +66,91 @@ public func __swift_bridge__leaderboards_score (_ id: UnsafeMutableRawPointer, _
 @_cdecl("__swift_bridge__$trigger_view")
 public func __swift_bridge__trigger_view (_ state: Int32) {
     trigger_view(state: state)
+}
+
+
+public class IosGCScoreSubmitResponse: IosGCScoreSubmitResponseRefMut {
+    var isOwned: Bool = true
+
+    public override init(ptr: UnsafeMutableRawPointer) {
+        super.init(ptr: ptr)
+    }
+
+    deinit {
+        if isOwned {
+            __swift_bridge__$IosGCScoreSubmitResponse$_free(ptr)
+        }
+    }
+}
+extension IosGCScoreSubmitResponse {
+    class public func error<GenericIntoRustString: IntoRustString>(_ e: GenericIntoRustString) -> IosGCScoreSubmitResponse {
+        IosGCScoreSubmitResponse(ptr: __swift_bridge__$IosGCScoreSubmitResponse$error({ let rustString = e.intoRustString(); rustString.isOwned = false; return rustString.ptr }()))
+    }
+}
+public class IosGCScoreSubmitResponseRefMut: IosGCScoreSubmitResponseRef {
+    public override init(ptr: UnsafeMutableRawPointer) {
+        super.init(ptr: ptr)
+    }
+}
+public class IosGCScoreSubmitResponseRef {
+    var ptr: UnsafeMutableRawPointer
+
+    public init(ptr: UnsafeMutableRawPointer) {
+        self.ptr = ptr
+    }
+}
+extension IosGCScoreSubmitResponseRef {
+    class public func done() -> IosGCScoreSubmitResponse {
+        IosGCScoreSubmitResponse(ptr: __swift_bridge__$IosGCScoreSubmitResponse$done())
+    }
+}
+extension IosGCScoreSubmitResponse: Vectorizable {
+    public static func vecOfSelfNew() -> UnsafeMutableRawPointer {
+        __swift_bridge__$Vec_IosGCScoreSubmitResponse$new()
+    }
+
+    public static func vecOfSelfFree(vecPtr: UnsafeMutableRawPointer) {
+        __swift_bridge__$Vec_IosGCScoreSubmitResponse$drop(vecPtr)
+    }
+
+    public static func vecOfSelfPush(vecPtr: UnsafeMutableRawPointer, value: IosGCScoreSubmitResponse) {
+        __swift_bridge__$Vec_IosGCScoreSubmitResponse$push(vecPtr, {value.isOwned = false; return value.ptr;}())
+    }
+
+    public static func vecOfSelfPop(vecPtr: UnsafeMutableRawPointer) -> Optional<Self> {
+        let pointer = __swift_bridge__$Vec_IosGCScoreSubmitResponse$pop(vecPtr)
+        if pointer == nil {
+            return nil
+        } else {
+            return (IosGCScoreSubmitResponse(ptr: pointer!) as! Self)
+        }
+    }
+
+    public static func vecOfSelfGet(vecPtr: UnsafeMutableRawPointer, index: UInt) -> Optional<IosGCScoreSubmitResponseRef> {
+        let pointer = __swift_bridge__$Vec_IosGCScoreSubmitResponse$get(vecPtr, index)
+        if pointer == nil {
+            return nil
+        } else {
+            return IosGCScoreSubmitResponseRef(ptr: pointer!)
+        }
+    }
+
+    public static func vecOfSelfGetMut(vecPtr: UnsafeMutableRawPointer, index: UInt) -> Optional<IosGCScoreSubmitResponseRefMut> {
+        let pointer = __swift_bridge__$Vec_IosGCScoreSubmitResponse$get_mut(vecPtr, index)
+        if pointer == nil {
+            return nil
+        } else {
+            return IosGCScoreSubmitResponseRefMut(ptr: pointer!)
+        }
+    }
+
+    public static func vecOfSelfAsPtr(vecPtr: UnsafeMutableRawPointer) -> UnsafePointer<IosGCScoreSubmitResponseRef> {
+        UnsafePointer<IosGCScoreSubmitResponseRef>(OpaquePointer(__swift_bridge__$Vec_IosGCScoreSubmitResponse$as_ptr(vecPtr)))
+    }
+
+    public static func vecOfSelfLen(vecPtr: UnsafeMutableRawPointer) -> UInt {
+        __swift_bridge__$Vec_IosGCScoreSubmitResponse$len(vecPtr)
+    }
 }
 
 
