@@ -26,8 +26,8 @@ build: build-rust copy-generated
 	cp ./crate/target/aarch64-apple-ios/debug/libbevy_ios_gamecenter.a ./BevyIosGamecenterRust.xcframework/ios-arm64/
 
 build-release: build-rust-release copy-generated
-	cp ./bevy_ios_gamecenter/target/universal-ios/release/libbevy_ios_gamecenter.a ./BevyIosGamecenterRust.xcframework/ios-arm64_x86_64-simulator/
-	cp ./bevy_ios_gamecenter/target/aarch64-apple-ios/release/libbevy_ios_gamecenter.a ./BevyIosGamecenterRust.xcframework/ios-arm64/
+	cp ./crate/target/universal-ios/release/libbevy_ios_gamecenter.a ./BevyIosGamecenterRust.xcframework/ios-arm64_x86_64-simulator/
+	cp ./crate/target/aarch64-apple-ios/release/libbevy_ios_gamecenter.a ./BevyIosGamecenterRust.xcframework/ios-arm64/
 	ls -lisah ./BevyIosGamecenterRust.xcframework/ios-arm64/
 	ls -lisah ./BevyIosGamecenterRust.xcframework/ios-arm64_x86_64-simulator
 
