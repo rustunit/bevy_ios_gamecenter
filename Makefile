@@ -1,5 +1,6 @@
 check:
 	cd ./crate/ && cargo c --target=aarch64-apple-ios-sim
+	cd ./crate/ && cargo clippy --target=aarch64-apple-ios-sim
 
 build-rust:
 	./crate/build-rust.sh

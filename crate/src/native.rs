@@ -1,3 +1,5 @@
+#![allow(clippy::unnecessary_cast)]
+
 use std::sync::OnceLock;
 
 use bevy_crossbeam_event::CrossbeamEventSender;
@@ -122,7 +124,7 @@ static SENDER: OnceLock<Option<CrossbeamEventSender<IosGamecenterEvents>>> = Onc
 
 #[allow(dead_code)]
 pub fn set_sender(sender: CrossbeamEventSender<IosGamecenterEvents>) {
-    while !SENDER.set(Some(sender.clone())).is_ok() {}
+    while SENDER.set(Some(sender.clone())).is_err() {}
 }
 
 fn authentication(result: IosGCAuthResult) {

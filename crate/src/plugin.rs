@@ -7,7 +7,7 @@ use crate::{
     IosGCScoreSubmitResponse,
 };
 
-///
+/// All events for communication from native iOS (Swift) side to Rust/Bevy
 #[derive(Event, Clone, Debug)]
 pub enum IosGamecenterEvents {
     Authentication(IosGCAuthResult),
@@ -20,14 +20,14 @@ pub enum IosGamecenterEvents {
     LeaderboardScoreSubmitted(IosGCScoreSubmitResponse),
 }
 
-///
+/// Bevy plugin to integrate access to iOS Gamecenter
 #[allow(dead_code)]
 pub struct IosGamecenterPlugin {
     auto_init: bool,
 }
 
 impl IosGamecenterPlugin {
-    ///
+    /// create plugin and define whether it will authenticate automatically right on startup
     pub fn new(auto_init: bool) -> Self {
         Self { auto_init }
     }
