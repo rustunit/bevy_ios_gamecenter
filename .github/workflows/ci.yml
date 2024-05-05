@@ -1,4 +1,4 @@
-name: CD-rust
+name: CI-rust
 
 on:
   push:
@@ -8,6 +8,7 @@ env:
 
 jobs:
   build:
+    #TODO: run and test on wasm, win and linux
     runs-on: macos-latest
 
     steps:
@@ -22,13 +23,23 @@ jobs:
       with:
         workspaces: "./crate"
 
-    - name: Build and test
+    - name: Check iOS Sim
       run: |
         cd ./crate/ 
         cargo c --target=aarch64-apple-ios-sim
-        cargo t --target=aarch64-apple-ios-sim
+        cargo b --target=aarch64-apple-ios-sim
+        cargo clippy --target=aarch64-apple-ios-sim
 
-    - name: Lint
+    - name: Check iOS
       run: |
         cd ./crate/ 
-        cargo clippy --target=aarch64-apple-ios-sim
+        cargo c --target=aarch64-apple-ios
+        cargo b --target=aarch64-apple-ios
+        cargo clippy --target=aarch64-apple-ios
+    
+    - name: Check MacOs
+      run: |
+        cd ./crate/ 
+        cargo c
+        cargo b
+        cargo t
