@@ -1,7 +1,7 @@
 // build.rs
 
 fn main() {
-    #[cfg(not(docrs))]
+    #[cfg(not(docsrs))]
     {
         println!("cargo:warning=running swift-bridge");
 
