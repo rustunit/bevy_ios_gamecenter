@@ -1,6 +1,8 @@
 # bevy_ios_gamecenter
 
 [![crates.io](https://img.shields.io/crates/v/bevy_ios_gamecenter.svg)](https://crates.io/crates/bevy_ios_gamecenter)
+[![docs.rs](https://img.shields.io/docsrs/bevy_ios_gamecenter)](https://docs.rs/bevy_ios_gamecenter/latest/bevy_ios_gamecenter/)
+
 
 Bevy Plugin and Swift Package to provide access to iOS native GameKit (Gamecenter) from inside Bevy Apps
 It uses [Swift-Bridge](https://github.com/chinedufn/swift-bridge) to auto-generate the glue code and transport datatypes.
