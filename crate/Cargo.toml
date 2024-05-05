@@ -3,6 +3,13 @@ name = "bevy_ios_gamecenter"
 version = "0.1.0"
 edition = "2021"
 build = "build.rs"
+readme = "../README.md"
+license = "MIT"
+authors = ["extrawurst <mail@rusticorn.com>"]
+documentation = "https://docs.rs/bevy_ios_gamecenter"
+repository = "https://github.com/rustunit/bevy_ios_gamecenter"
+keywords = ["bevy", "gamedev", "mobile", "ios", "swift"]
+description = "Bevy Plugin and Swift Package to provide access to iOS native GameKit (Gamecenter) from inside Bevy Apps"
 
 [lib]
 crate-type = ["staticlib", "rlib"]
