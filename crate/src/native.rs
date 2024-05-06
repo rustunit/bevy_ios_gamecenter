@@ -1,4 +1,4 @@
-#![allow(clippy::unnecessary_cast)]
+#![allow(clippy::unnecessary_cast, unused_variables)]
 
 use std::sync::OnceLock;
 
@@ -128,17 +128,21 @@ pub fn set_sender(sender: CrossbeamEventSender<IosGamecenterEvents>) {
 }
 
 fn authentication(result: IosGCAuthResult) {
-    get_player();
+    #[cfg(target_os = "ios")]
+    {
+        get_player();
 
-    SENDER
-        .get()
-        .unwrap()
-        .as_ref()
-        .unwrap()
-        .send(IosGamecenterEvents::Authentication(result));
+        SENDER
+            .get()
+            .unwrap()
+            .as_ref()
+            .unwrap()
+            .send(IosGamecenterEvents::Authentication(result));
+    }
 }
 
 fn receive_player(p: IosGCPlayer) {
+    #[cfg(target_os = "ios")]
     SENDER
         .get()
         .unwrap()
@@ -148,6 +152,7 @@ fn receive_player(p: IosGCPlayer) {
 }
 
 fn receive_saved_game(response: IosGCSavedGameResponse) {
+    #[cfg(target_os = "ios")]
     SENDER
         .get()
         .unwrap()
@@ -157,6 +162,7 @@ fn receive_saved_game(response: IosGCSavedGameResponse) {
 }
 
 fn receive_save_games(response: IosGCSaveGamesResponse) {
+    #[cfg(target_os = "ios")]
     SENDER
         .get()
         .unwrap()
@@ -166,6 +172,7 @@ fn receive_save_games(response: IosGCSaveGamesResponse) {
 }
 
 fn receive_load_game(response: IosGCLoadGamesResponse) {
+    #[cfg(target_os = "ios")]
     SENDER
         .get()
         .unwrap()
@@ -175,6 +182,7 @@ fn receive_load_game(response: IosGCLoadGamesResponse) {
 }
 
 fn receive_achievement_progress(response: IosGCAchievementProgressResponse) {
+    #[cfg(target_os = "ios")]
     SENDER
         .get()
         .unwrap()
@@ -184,6 +192,7 @@ fn receive_achievement_progress(response: IosGCAchievementProgressResponse) {
 }
 
 fn receive_achievement_reset(response: IosGCAchievementsResetResponse) {
+    #[cfg(target_os = "ios")]
     SENDER
         .get()
         .unwrap()
@@ -193,6 +202,7 @@ fn receive_achievement_reset(response: IosGCAchievementsResetResponse) {
 }
 
 fn receive_leaderboard_score(response: IosGCScoreSubmitResponse) {
+    #[cfg(target_os = "ios")]
     SENDER
         .get()
         .unwrap()
