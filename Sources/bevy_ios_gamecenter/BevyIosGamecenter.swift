@@ -145,3 +145,20 @@ public func trigger_view(state: Int32) {
     }
 }
 
+public func fetch_signature() {
+    Task {
+        do{
+            let items = try await GKLocalPlayer.local.fetchItemsForIdentityVerificationSignature()
+            
+            let rust_items = IosGCFetchItemsForSignatureVerification.new(
+                items.0.absoluteString,
+                items.1.base64EncodedString(),
+                items.2.base64EncodedString(),
+                items.3)
+            
+            receive_items_for_signature_verification(IosGCFetchItemsForSignatureVerificationResponse.done(rust_items))
+        } catch {
+            receive_items_for_signature_verification(IosGCFetchItemsForSignatureVerificationResponse.error(error.localizedDescription))
+        }
+    }
+}

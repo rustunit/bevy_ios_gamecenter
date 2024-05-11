@@ -10,6 +10,7 @@ pub use ffi::*;
 use crate::{
     plugin::IosGamecenterEvents, IosGCAchievement, IosGCAchievementProgressResponse,
     IosGCAchievementsResetResponse, IosGCAuthResult, IosGCDeleteSaveGameResponse,
+    IosGCFetchItemsForSignatureVerification, IosGCFetchItemsForSignatureVerificationResponse,
     IosGCLoadGamesResponse, IosGCPlayer, IosGCSaveGame, IosGCSaveGamesResponse,
     IosGCSavedGameResponse, IosGCScoreSubmitResponse,
 };
@@ -105,6 +106,25 @@ mod ffi {
         #[swift_bridge(associated_to = IosGCDeleteSaveGameResponse)]
         fn error(e: String) -> IosGCDeleteSaveGameResponse;
 
+        type IosGCFetchItemsForSignatureVerification;
+
+        #[swift_bridge(associated_to = IosGCFetchItemsForSignatureVerification)]
+        fn new(
+            url: String,
+            signature_as_base64: String,
+            salt_as_base64: String,
+            timestamp: u64,
+        ) -> IosGCFetchItemsForSignatureVerification;
+
+        type IosGCFetchItemsForSignatureVerificationResponse;
+
+        #[swift_bridge(associated_to = IosGCFetchItemsForSignatureVerificationResponse)]
+        fn done(
+            items: IosGCFetchItemsForSignatureVerification,
+        ) -> IosGCFetchItemsForSignatureVerificationResponse;
+        #[swift_bridge(associated_to = IosGCFetchItemsForSignatureVerificationResponse)]
+        fn error(e: String) -> IosGCFetchItemsForSignatureVerificationResponse;
+
         fn authentication(result: IosGCAuthResult);
         fn receive_player(p: IosGCPlayer);
         fn receive_load_game(response: IosGCLoadGamesResponse);
@@ -114,6 +134,9 @@ mod ffi {
         fn receive_achievement_progress(response: IosGCAchievementProgressResponse);
         fn receive_achievement_reset(response: IosGCAchievementsResetResponse);
         fn receive_leaderboard_score(response: IosGCScoreSubmitResponse);
+        fn receive_items_for_signature_verification(
+            response: IosGCFetchItemsForSignatureVerificationResponse,
+        );
     }
 
     extern "Swift" {
@@ -127,6 +150,7 @@ mod ffi {
         pub fn reset_achievements();
         pub fn leaderboards_score(id: String, score: i64, context: i64);
         pub fn trigger_view(state: i32);
+        pub fn fetch_signature();
     }
 }
 
@@ -229,4 +253,16 @@ fn receive_deleted_game(response: IosGCDeleteSaveGameResponse) {
         .as_ref()
         .unwrap()
         .send(IosGamecenterEvents::DeletedSaveGame(response));
+}
+
+fn receive_items_for_signature_verification(
+    response: IosGCFetchItemsForSignatureVerificationResponse,
+) {
+    #[cfg(target_os = "ios")]
+    SENDER
+        .get()
+        .unwrap()
+        .as_ref()
+        .unwrap()
+        .send(IosGamecenterEvents::ItemsForSignatureVerification(response));
 }

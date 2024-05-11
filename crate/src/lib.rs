@@ -3,8 +3,8 @@ mod native;
 mod plugin;
 
 pub use methods::{
-    achievement_progress, achievements_reset, delete_savegame, fetch_save_games, init,
-    leaderboards_score, load_game, request_player, save_game, trigger_view,
+    achievement_progress, achievements_reset, delete_savegame, fetch_save_games, fetch_signature,
+    init, leaderboards_score, load_game, request_player, save_game, trigger_view,
 };
 pub use plugin::{IosGamecenterEvents, IosGamecenterPlugin};
 
@@ -245,6 +245,55 @@ pub enum IosGCDeleteSaveGameResponse {
 impl IosGCDeleteSaveGameResponse {
     fn done(name: String) -> Self {
         Self::Done(name)
+    }
+
+    fn error(e: String) -> Self {
+        Self::Error(e)
+    }
+}
+
+#[derive(Debug, Clone, Default)]
+pub struct IosGCFetchItemsForSignatureVerification {
+    pub url: String,
+    pub signature: Vec<u8>,
+    pub salt: Vec<u8>,
+    pub timestamp: u64,
+}
+
+impl IosGCFetchItemsForSignatureVerification {
+    pub fn new(
+        url: String,
+        signature_as_base64: String,
+        salt_as_base64: String,
+        timestamp: u64,
+    ) -> Self {
+        use base64::Engine;
+        let signature = base64::engine::general_purpose::STANDARD
+            .decode(signature_as_base64)
+            .unwrap_or_default();
+        let salt = base64::engine::general_purpose::STANDARD
+            .decode(salt_as_base64)
+            .unwrap_or_default();
+        Self {
+            url,
+            signature,
+            salt,
+            timestamp,
+        }
+    }
+}
+
+/// Expected event data in response to [`fetch_signature`] method call.
+/// See Event [`IosGamecenterEvents`]
+#[derive(Debug, Clone)]
+pub enum IosGCFetchItemsForSignatureVerificationResponse {
+    Done(IosGCFetchItemsForSignatureVerification),
+    Error(String),
+}
+
+impl IosGCFetchItemsForSignatureVerificationResponse {
+    fn done(items: IosGCFetchItemsForSignatureVerification) -> Self {
+        Self::Done(items)
     }
 
     fn error(e: String) -> Self {

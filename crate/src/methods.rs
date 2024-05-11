@@ -50,6 +50,14 @@ pub fn delete_savegame(name: String) {
     native::delete_game(name);
 }
 
+/// Fetch Items for Signature Verification
+/// Expected to be confirmed with [`IosGamecenterEvents::ItemsForSignatureVerification`][crate::IosGamecenterEvents::ItemsForSignatureVerification] event
+/// See <https://developer.apple.com/documentation/gamekit/gklocalplayer/3516283-fetchitemsforidentityverificatio>
+pub fn fetch_signature() {
+    #[cfg(target_os = "ios")]
+    native::fetch_signature();
+}
+
 /// Requests a list of all available SaveGames
 /// Expected to be confirmed with [`IosGamecenterEvents::SaveGames`][crate::IosGamecenterEvents::SaveGames] event
 pub fn fetch_save_games() {

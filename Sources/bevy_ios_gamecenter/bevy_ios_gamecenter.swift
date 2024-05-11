@@ -26,6 +26,9 @@ public func receive_achievement_reset(_ response: IosGCAchievementsResetResponse
 public func receive_leaderboard_score(_ response: IosGCScoreSubmitResponse) {
     __swift_bridge__$receive_leaderboard_score({response.isOwned = false; return response.ptr;}())
 }
+public func receive_items_for_signature_verification(_ response: IosGCFetchItemsForSignatureVerificationResponse) {
+    __swift_bridge__$receive_items_for_signature_verification({response.isOwned = false; return response.ptr;}())
+}
 @_cdecl("__swift_bridge__$ios_gc_init")
 public func __swift_bridge__ios_gc_init () {
     ios_gc_init()
@@ -74,6 +77,175 @@ public func __swift_bridge__leaderboards_score (_ id: UnsafeMutableRawPointer, _
 @_cdecl("__swift_bridge__$trigger_view")
 public func __swift_bridge__trigger_view (_ state: Int32) {
     trigger_view(state: state)
+}
+
+@_cdecl("__swift_bridge__$fetch_signature")
+public func __swift_bridge__fetch_signature () {
+    fetch_signature()
+}
+
+
+public class IosGCFetchItemsForSignatureVerificationResponse: IosGCFetchItemsForSignatureVerificationResponseRefMut {
+    var isOwned: Bool = true
+
+    public override init(ptr: UnsafeMutableRawPointer) {
+        super.init(ptr: ptr)
+    }
+
+    deinit {
+        if isOwned {
+            __swift_bridge__$IosGCFetchItemsForSignatureVerificationResponse$_free(ptr)
+        }
+    }
+}
+extension IosGCFetchItemsForSignatureVerificationResponse {
+    class public func done(_ items: IosGCFetchItemsForSignatureVerification) -> IosGCFetchItemsForSignatureVerificationResponse {
+        IosGCFetchItemsForSignatureVerificationResponse(ptr: __swift_bridge__$IosGCFetchItemsForSignatureVerificationResponse$done({items.isOwned = false; return items.ptr;}()))
+    }
+
+    class public func error<GenericIntoRustString: IntoRustString>(_ e: GenericIntoRustString) -> IosGCFetchItemsForSignatureVerificationResponse {
+        IosGCFetchItemsForSignatureVerificationResponse(ptr: __swift_bridge__$IosGCFetchItemsForSignatureVerificationResponse$error({ let rustString = e.intoRustString(); rustString.isOwned = false; return rustString.ptr }()))
+    }
+}
+public class IosGCFetchItemsForSignatureVerificationResponseRefMut: IosGCFetchItemsForSignatureVerificationResponseRef {
+    public override init(ptr: UnsafeMutableRawPointer) {
+        super.init(ptr: ptr)
+    }
+}
+public class IosGCFetchItemsForSignatureVerificationResponseRef {
+    var ptr: UnsafeMutableRawPointer
+
+    public init(ptr: UnsafeMutableRawPointer) {
+        self.ptr = ptr
+    }
+}
+extension IosGCFetchItemsForSignatureVerificationResponse: Vectorizable {
+    public static func vecOfSelfNew() -> UnsafeMutableRawPointer {
+        __swift_bridge__$Vec_IosGCFetchItemsForSignatureVerificationResponse$new()
+    }
+
+    public static func vecOfSelfFree(vecPtr: UnsafeMutableRawPointer) {
+        __swift_bridge__$Vec_IosGCFetchItemsForSignatureVerificationResponse$drop(vecPtr)
+    }
+
+    public static func vecOfSelfPush(vecPtr: UnsafeMutableRawPointer, value: IosGCFetchItemsForSignatureVerificationResponse) {
+        __swift_bridge__$Vec_IosGCFetchItemsForSignatureVerificationResponse$push(vecPtr, {value.isOwned = false; return value.ptr;}())
+    }
+
+    public static func vecOfSelfPop(vecPtr: UnsafeMutableRawPointer) -> Optional<Self> {
+        let pointer = __swift_bridge__$Vec_IosGCFetchItemsForSignatureVerificationResponse$pop(vecPtr)
+        if pointer == nil {
+            return nil
+        } else {
+            return (IosGCFetchItemsForSignatureVerificationResponse(ptr: pointer!) as! Self)
+        }
+    }
+
+    public static func vecOfSelfGet(vecPtr: UnsafeMutableRawPointer, index: UInt) -> Optional<IosGCFetchItemsForSignatureVerificationResponseRef> {
+        let pointer = __swift_bridge__$Vec_IosGCFetchItemsForSignatureVerificationResponse$get(vecPtr, index)
+        if pointer == nil {
+            return nil
+        } else {
+            return IosGCFetchItemsForSignatureVerificationResponseRef(ptr: pointer!)
+        }
+    }
+
+    public static func vecOfSelfGetMut(vecPtr: UnsafeMutableRawPointer, index: UInt) -> Optional<IosGCFetchItemsForSignatureVerificationResponseRefMut> {
+        let pointer = __swift_bridge__$Vec_IosGCFetchItemsForSignatureVerificationResponse$get_mut(vecPtr, index)
+        if pointer == nil {
+            return nil
+        } else {
+            return IosGCFetchItemsForSignatureVerificationResponseRefMut(ptr: pointer!)
+        }
+    }
+
+    public static func vecOfSelfAsPtr(vecPtr: UnsafeMutableRawPointer) -> UnsafePointer<IosGCFetchItemsForSignatureVerificationResponseRef> {
+        UnsafePointer<IosGCFetchItemsForSignatureVerificationResponseRef>(OpaquePointer(__swift_bridge__$Vec_IosGCFetchItemsForSignatureVerificationResponse$as_ptr(vecPtr)))
+    }
+
+    public static func vecOfSelfLen(vecPtr: UnsafeMutableRawPointer) -> UInt {
+        __swift_bridge__$Vec_IosGCFetchItemsForSignatureVerificationResponse$len(vecPtr)
+    }
+}
+
+
+public class IosGCFetchItemsForSignatureVerification: IosGCFetchItemsForSignatureVerificationRefMut {
+    var isOwned: Bool = true
+
+    public override init(ptr: UnsafeMutableRawPointer) {
+        super.init(ptr: ptr)
+    }
+
+    deinit {
+        if isOwned {
+            __swift_bridge__$IosGCFetchItemsForSignatureVerification$_free(ptr)
+        }
+    }
+}
+extension IosGCFetchItemsForSignatureVerification {
+    class public func new<GenericIntoRustString: IntoRustString>(_ url: GenericIntoRustString, _ signature_as_base64: GenericIntoRustString, _ salt_as_base64: GenericIntoRustString, _ timestamp: UInt64) -> IosGCFetchItemsForSignatureVerification {
+        IosGCFetchItemsForSignatureVerification(ptr: __swift_bridge__$IosGCFetchItemsForSignatureVerification$new({ let rustString = url.intoRustString(); rustString.isOwned = false; return rustString.ptr }(), { let rustString = signature_as_base64.intoRustString(); rustString.isOwned = false; return rustString.ptr }(), { let rustString = salt_as_base64.intoRustString(); rustString.isOwned = false; return rustString.ptr }(), timestamp))
+    }
+}
+public class IosGCFetchItemsForSignatureVerificationRefMut: IosGCFetchItemsForSignatureVerificationRef {
+    public override init(ptr: UnsafeMutableRawPointer) {
+        super.init(ptr: ptr)
+    }
+}
+public class IosGCFetchItemsForSignatureVerificationRef {
+    var ptr: UnsafeMutableRawPointer
+
+    public init(ptr: UnsafeMutableRawPointer) {
+        self.ptr = ptr
+    }
+}
+extension IosGCFetchItemsForSignatureVerification: Vectorizable {
+    public static func vecOfSelfNew() -> UnsafeMutableRawPointer {
+        __swift_bridge__$Vec_IosGCFetchItemsForSignatureVerification$new()
+    }
+
+    public static func vecOfSelfFree(vecPtr: UnsafeMutableRawPointer) {
+        __swift_bridge__$Vec_IosGCFetchItemsForSignatureVerification$drop(vecPtr)
+    }
+
+    public static func vecOfSelfPush(vecPtr: UnsafeMutableRawPointer, value: IosGCFetchItemsForSignatureVerification) {
+        __swift_bridge__$Vec_IosGCFetchItemsForSignatureVerification$push(vecPtr, {value.isOwned = false; return value.ptr;}())
+    }
+
+    public static func vecOfSelfPop(vecPtr: UnsafeMutableRawPointer) -> Optional<Self> {
+        let pointer = __swift_bridge__$Vec_IosGCFetchItemsForSignatureVerification$pop(vecPtr)
+        if pointer == nil {
+            return nil
+        } else {
+            return (IosGCFetchItemsForSignatureVerification(ptr: pointer!) as! Self)
+        }
+    }
+
+    public static func vecOfSelfGet(vecPtr: UnsafeMutableRawPointer, index: UInt) -> Optional<IosGCFetchItemsForSignatureVerificationRef> {
+        let pointer = __swift_bridge__$Vec_IosGCFetchItemsForSignatureVerification$get(vecPtr, index)
+        if pointer == nil {
+            return nil
+        } else {
+            return IosGCFetchItemsForSignatureVerificationRef(ptr: pointer!)
+        }
+    }
+
+    public static func vecOfSelfGetMut(vecPtr: UnsafeMutableRawPointer, index: UInt) -> Optional<IosGCFetchItemsForSignatureVerificationRefMut> {
+        let pointer = __swift_bridge__$Vec_IosGCFetchItemsForSignatureVerification$get_mut(vecPtr, index)
+        if pointer == nil {
+            return nil
+        } else {
+            return IosGCFetchItemsForSignatureVerificationRefMut(ptr: pointer!)
+        }
+    }
+
+    public static func vecOfSelfAsPtr(vecPtr: UnsafeMutableRawPointer) -> UnsafePointer<IosGCFetchItemsForSignatureVerificationRef> {
+        UnsafePointer<IosGCFetchItemsForSignatureVerificationRef>(OpaquePointer(__swift_bridge__$Vec_IosGCFetchItemsForSignatureVerification$as_ptr(vecPtr)))
+    }
+
+    public static func vecOfSelfLen(vecPtr: UnsafeMutableRawPointer) -> UInt {
+        __swift_bridge__$Vec_IosGCFetchItemsForSignatureVerification$len(vecPtr)
+    }
 }
 
 
