@@ -27,12 +27,17 @@ See also [bevy_ios_iap](https://github.com/rustunit/bevy_ios_iap), [bevy_ios_not
 
 ### 1. Add to XCode
 
-Go to `File` -> `Add Package Dependencies` and paste `https://github.com/rustunit/bevy_ios_gamecenter.git` into the search bar on the top right:
+* Add `GameKit` framework:
+![gamekit](./assets/framework.png)
+
+* Go to `File` -> `Add Package Dependencies` and paste `https://github.com/rustunit/bevy_ios_gamecenter.git` into the search bar on the top right:
 ![xcode](./assets/xcode-spm.png)
 
 **Note:** 
 The rust crate used must be exactly the same version as the Swift Package.
 I suggest using a specific version (like `0.1.7` in the screenshot) to make sure to always use binary matching versions!
+
+
 
 ### 2. Add Rust dependency
 
