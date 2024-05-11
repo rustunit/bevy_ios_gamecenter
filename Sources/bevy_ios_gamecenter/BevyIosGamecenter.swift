@@ -71,6 +71,17 @@ public func load_game(save_game: IosGCSaveGame) {
     }
 }
 
+public func delete_game(name: RustString) {
+    Task{
+        do {
+            try await GKLocalPlayer.local.deleteSavedGames(withName: name.toString())
+            receive_deleted_game(IosGCDeleteSaveGameResponse.done(name))
+        } catch {
+            receive_deleted_game(IosGCDeleteSaveGameResponse.error(error.localizedDescription))
+        }
+    }
+}
+
 public func fetch_save_games() {
     Task{
         do {

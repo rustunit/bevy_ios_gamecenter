@@ -3,8 +3,8 @@ mod native;
 mod plugin;
 
 pub use methods::{
-    achievement_progress, achievements_reset, fetch_save_games, init, leaderboards_score,
-    load_game, request_player, save_game, trigger_view,
+    achievement_progress, achievements_reset, delete_savegame, fetch_save_games, init,
+    leaderboards_score, load_game, request_player, save_game, trigger_view,
 };
 pub use plugin::{IosGamecenterEvents, IosGamecenterPlugin};
 
@@ -227,6 +227,24 @@ pub enum IosGCScoreSubmitResponse {
 impl IosGCScoreSubmitResponse {
     fn done() -> Self {
         Self::Done
+    }
+
+    fn error(e: String) -> Self {
+        Self::Error(e)
+    }
+}
+
+/// Expected event data in response to [`delete_savegame`] method call.
+/// See Event [`IosGamecenterEvents`]
+#[derive(Debug, Clone)]
+pub enum IosGCDeleteSaveGameResponse {
+    Done(String),
+    Error(String),
+}
+
+impl IosGCDeleteSaveGameResponse {
+    fn done(name: String) -> Self {
+        Self::Done(name)
     }
 
     fn error(e: String) -> Self {

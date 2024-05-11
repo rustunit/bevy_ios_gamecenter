@@ -3,8 +3,8 @@ use bevy_ecs::prelude::*;
 
 use crate::{
     IosGCAchievementProgressResponse, IosGCAchievementsResetResponse, IosGCAuthResult,
-    IosGCLoadGamesResponse, IosGCPlayer, IosGCSaveGamesResponse, IosGCSavedGameResponse,
-    IosGCScoreSubmitResponse,
+    IosGCDeleteSaveGameResponse, IosGCLoadGamesResponse, IosGCPlayer, IosGCSaveGamesResponse,
+    IosGCSavedGameResponse, IosGCScoreSubmitResponse,
 };
 
 /// All events for communication from native iOS (Swift) side to Rust/Bevy
@@ -18,6 +18,8 @@ pub enum IosGamecenterEvents {
     SaveGames(IosGCSaveGamesResponse),
     /// Triggered by calls to [`load_game`][crate::load_game]
     LoadGame(IosGCLoadGamesResponse),
+    /// Triggered by calls to [`delete_savegame`][crate::delete_savegame]
+    DeletedSaveGame(IosGCDeleteSaveGameResponse),
     /// Triggered by calls to [`request_player`][crate::request_player]
     Player(IosGCPlayer),
     /// Triggered by calls to [`achievement_progress`][crate::achievement_progress]

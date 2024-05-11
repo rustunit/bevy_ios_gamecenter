@@ -9,8 +9,9 @@ pub use ffi::*;
 
 use crate::{
     plugin::IosGamecenterEvents, IosGCAchievement, IosGCAchievementProgressResponse,
-    IosGCAchievementsResetResponse, IosGCAuthResult, IosGCLoadGamesResponse, IosGCPlayer,
-    IosGCSaveGame, IosGCSaveGamesResponse, IosGCSavedGameResponse, IosGCScoreSubmitResponse,
+    IosGCAchievementsResetResponse, IosGCAuthResult, IosGCDeleteSaveGameResponse,
+    IosGCLoadGamesResponse, IosGCPlayer, IosGCSaveGame, IosGCSaveGamesResponse,
+    IosGCSavedGameResponse, IosGCScoreSubmitResponse,
 };
 
 #[swift_bridge::bridge]
@@ -97,11 +98,19 @@ mod ffi {
         #[swift_bridge(associated_to = IosGCScoreSubmitResponse)]
         fn error(e: String) -> IosGCScoreSubmitResponse;
 
+        type IosGCDeleteSaveGameResponse;
+
+        #[swift_bridge(associated_to = IosGCDeleteSaveGameResponse)]
+        fn done(e: String) -> IosGCDeleteSaveGameResponse;
+        #[swift_bridge(associated_to = IosGCDeleteSaveGameResponse)]
+        fn error(e: String) -> IosGCDeleteSaveGameResponse;
+
         fn authentication(result: IosGCAuthResult);
         fn receive_player(p: IosGCPlayer);
         fn receive_load_game(response: IosGCLoadGamesResponse);
         fn receive_saved_game(response: IosGCSavedGameResponse);
         fn receive_save_games(response: IosGCSaveGamesResponse);
+        fn receive_deleted_game(response: IosGCDeleteSaveGameResponse);
         fn receive_achievement_progress(response: IosGCAchievementProgressResponse);
         fn receive_achievement_reset(response: IosGCAchievementsResetResponse);
         fn receive_leaderboard_score(response: IosGCScoreSubmitResponse);
@@ -112,6 +121,7 @@ mod ffi {
         pub fn get_player();
         pub fn save_game(data: String, name: String);
         pub fn load_game(save_game: IosGCSaveGame);
+        pub fn delete_game(name: String);
         pub fn fetch_save_games();
         pub fn achievement_progress(id: String, progress: f64);
         pub fn reset_achievements();
@@ -209,4 +219,14 @@ fn receive_leaderboard_score(response: IosGCScoreSubmitResponse) {
         .as_ref()
         .unwrap()
         .send(IosGamecenterEvents::LeaderboardScoreSubmitted(response));
+}
+
+fn receive_deleted_game(response: IosGCDeleteSaveGameResponse) {
+    #[cfg(target_os = "ios")]
+    SENDER
+        .get()
+        .unwrap()
+        .as_ref()
+        .unwrap()
+        .send(IosGamecenterEvents::DeletedSaveGame(response));
 }

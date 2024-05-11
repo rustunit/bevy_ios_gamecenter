@@ -42,6 +42,14 @@ pub fn load_game(save_game: IosGCSaveGame) {
     native::load_game(save_game);
 }
 
+/// Delete Save Game by name
+/// Expected to be confirmed with [`IosGamecenterEvents::DeletedSaveGame`][crate::IosGamecenterEvents::DeletedSaveGame] event
+/// See <https://developer.apple.com/documentation/gamekit/gklocalplayer/1520951-deletesavedgameswithname>
+pub fn delete_savegame(name: String) {
+    #[cfg(target_os = "ios")]
+    native::delete_game(name);
+}
+
 /// Requests a list of all available SaveGames
 /// Expected to be confirmed with [`IosGamecenterEvents::SaveGames`][crate::IosGamecenterEvents::SaveGames] event
 pub fn fetch_save_games() {
