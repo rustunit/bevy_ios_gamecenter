@@ -1,12 +1,22 @@
 # bevy_ios_gamecenter
 
-[![crates.io](https://img.shields.io/crates/v/bevy_ios_gamecenter.svg)](https://crates.io/crates/bevy_ios_gamecenter)
-[![docs.rs](https://img.shields.io/docsrs/bevy_ios_gamecenter)](https://docs.rs/bevy_ios_gamecenter/latest/bevy_ios_gamecenter/)
+[![crates.io][sh_crates]][lk_crates]
+[![docs.rs][sh_docs]][lk_docs]
+[![discord][sh_discord]][lk_discord]
+
+[sh_crates]: https://img.shields.io/crates/v/bevy_ios_gamecenter.svg
+[lk_crates]: https://crates.io/crates/bevy_ios_gamecenter
+[sh_docs]: https://img.shields.io/docsrs/bevy_ios_gamecenter
+[lk_docs]: https://docs.rs/bevy_ios_iap/latest/bevy_ios_gamecenter/
+[sh_discord]: https://img.shields.io/discord/1176858176897953872?label=discord&color=5561E6
+[lk_discord]: https://discord.gg/rQNeEnMhus
 
 Bevy Plugin and Swift Package to provide access to iOS native GameKit (Gamecenter) from inside Bevy Apps
 It uses [Swift-Bridge](https://github.com/chinedufn/swift-bridge) to auto-generate the glue code and transport datatypes.
 
 ![demo](./assets/demo.gif)
+
+> Demo from our game using this crate: [zoolitaire.com](https://zoolitaire.com)
 
 See also [bevy_ios_iap](https://github.com/rustunit/bevy_ios_iap), [bevy_ios_notifications](https://github.com/rustunit/bevy_ios_notifications), [bevy_ios_alerts](https://github.com/rustunit/bevy_ios_alerts), [bevy_ios_review](https://github.com/rustunit/bevy_ios_review) & [bevy_ios_impact](https://github.com/rustunit/bevy_ios_impact)
 
