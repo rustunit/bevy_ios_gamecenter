@@ -45,7 +45,7 @@ See also [bevy_ios_iap](https://github.com/rustunit/bevy_ios_iap), [bevy_ios_not
 
 **Note:** 
 The rust crate used must be exactly the same version as the Swift Package.
-I suggest using a specific version (like `0.1.7` in the screenshot) to make sure to always use binary matching versions!
+I suggest using a specific version (like `0.2.0` in the screenshot) to make sure to always use binary matching versions!
 
 
 
@@ -59,7 +59,7 @@ or
 
 ```toml
 # always pin to the same exact version you also of the Swift package
-bevy_ios_gamecenter = { version = "=0.1.7" }
+bevy_ios_gamecenter = { version = "=0.2.0" }
 ```
 
 ### 3. Setup Plugin
@@ -121,6 +121,13 @@ fn process_gamecenter_events(
     }
 }
 ```
+
+## Bevy version support
+
+|bevy|bevy\_ios\_gamecenter|
+|----|---|
+|0.14|0.2,main|
+|0.13|0.1|
 
 # License
 

@@ -60,7 +60,7 @@ impl Plugin for IosGamecenterPlugin {
             app.add_crossbeam_event::<IosGamecenterEvents>();
 
             let sender = app
-                .world
+                .world()
                 .get_resource::<CrossbeamEventSender<IosGamecenterEvents>>()
                 .unwrap()
                 .clone();

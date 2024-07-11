@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## [0.2.0] - 2024-07-12
+
+### Changed
+* update to bevy `0.14`
+
 ## [0.1.8] - 2024-05-11
 
 *note:* the crate release matches the commit tagged with the `ru-` prefix because we release the swift package after the crate due to its dependency on each other
