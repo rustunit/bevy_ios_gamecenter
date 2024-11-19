@@ -9,7 +9,30 @@ import GameKit
 import Foundation
 import BevyIosGamecenterRust
 
+final class SavedGameListener: NSObject, GKLocalPlayerListener {
+    
+    var conflicts : [GKSavedGame] = []
+    
+    func player(_ player: GKPlayer, hasConflictingSavedGames savedGames: [GKSavedGame]) {
+        do {
+            conflicts = savedGames
+            receive_conflicting_savegames(try convert_save_games(savedGames))
+        } catch {
+            print("Error reporting conflicting save games: \(error.localizedDescription)")
+        }
+    }
+}
+
+var Listener:SavedGameListener? = nil
+var Games:[GKSavedGame] = []
+
 public func ios_gc_init() {
+    if Listener == nil {
+        print("Install saved game listener")
+        Listener = SavedGameListener()
+        GKLocalPlayer.local.register(Listener!)
+    }
+    
     GKLocalPlayer.local.authenticateHandler = nil
     GKLocalPlayer.local.authenticateHandler = { gcAuthVC, error in
        if GKLocalPlayer.local.isAuthenticated {
@@ -35,6 +58,14 @@ fileprivate func convert_save_game(_ save: GKSavedGame) throws -> IosGCSaveGame 
     return IosGCSaveGame.new(save.name!, save.deviceName!, UInt64(try save.modificationDate!.timeIntervalSince1970))
 }
 
+fileprivate func convert_save_games(_ games: [GKSavedGame]) throws -> IosGCSaveGames {
+    var result = RustVec<IosGCSaveGame>()
+    for game in games {
+        result.push(value: try convert_save_game(game))
+    }
+    return IosGCSaveGames.new(result)
+}
+
 public func save_game(data: RustString, name: RustString) {
     Task{
         do {
@@ -52,9 +83,7 @@ public func save_game(data: RustString, name: RustString) {
 public func load_game(save_game: IosGCSaveGame) {
     Task{
         do {
-            let games = try await GKLocalPlayer.local.fetchSavedGames()
-            
-            for game in games {
+            for game in Games {
                 let rust_game = try convert_save_game(game)
                 if IosGCSaveGame.equals(rust_game,save_game) {
                     var data = try await game.loadData()
@@ -82,15 +111,37 @@ public func delete_game(name: RustString) {
     }
 }
 
+public func resolve_conflicting_games(save_games: IosGCSaveGames, data: RustString) {
+    Task{
+        do {
+            var found:[GKSavedGame] = []
+            
+            for game in Listener?.conflicts ?? [] {
+                let rust_game = try convert_save_game(game)
+                if IosGCSaveGames.contains(save_games, rust_game) {
+                    found.append(game)
+                }
+            }
+            
+            let gameData = try Data.init(base64Encoded:data.toString())!
+            
+            let result = try await GKLocalPlayer.local.resolveConflictingSavedGames(found, with: gameData)
+            
+            Listener?.conflicts = []
+            
+            receive_resolved_conflicts(IosGCResolvedConflictsResponse.done(try convert_save_games(result)))
+        } catch {
+            receive_resolved_conflicts(IosGCResolvedConflictsResponse.error(error.localizedDescription))
+        }
+    }
+}
+
 public func fetch_save_games() {
     Task{
         do {
-            let games = try await GKLocalPlayer.local.fetchSavedGames()
+            Games = try await GKLocalPlayer.local.fetchSavedGames()
             
-            var result = RustVec<IosGCSaveGame>()
-            for game in games {
-                result.push(value: try convert_save_game(game))
-            }
+            let result = try convert_save_games(Games)
             
             receive_save_games(IosGCSaveGamesResponse.done(result))
         } catch {

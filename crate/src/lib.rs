@@ -4,12 +4,13 @@ mod plugin;
 
 pub use methods::{
     achievement_progress, achievements_reset, delete_savegame, fetch_save_games, fetch_signature,
-    init, leaderboards_score, load_game, request_player, save_game, trigger_view,
+    init, leaderboards_score, load_game, request_player, resolve_conflicting_games, save_game,
+    trigger_view,
 };
 pub use plugin::{IosGamecenterEvents, IosGamecenterPlugin};
 
 /// Expected event data in response to [`init`] method call or
-/// implict on startup when registering Plugin via `IosGamecenterPlugin::new(true)`.
+/// implicit on startup when registering Plugin via `IosGamecenterPlugin::new(true)`.
 ///
 /// See Event [`IosGamecenterEvents`]
 #[derive(Debug, Clone)]
@@ -26,6 +27,35 @@ impl IosGCAuthResult {
 
     fn login_presented() -> Self {
         Self::LoginPresented
+    }
+
+    fn error(e: String) -> Self {
+        Self::Error(e)
+    }
+}
+
+#[derive(Debug, Clone, Default)]
+pub struct IosGCSaveGames(pub Vec<IosGCSaveGame>);
+
+impl IosGCSaveGames {
+    fn new(items: Vec<IosGCSaveGame>) -> Self {
+        Self(items)
+    }
+
+    pub fn contains(items: &Self, a: &IosGCSaveGame) -> bool {
+        items.0.contains(a)
+    }
+}
+
+#[derive(Debug, Clone)]
+pub enum IosGCResolvedConflictsResponse {
+    Done(IosGCSaveGames),
+    Error(String),
+}
+
+impl IosGCResolvedConflictsResponse {
+    fn done(items: IosGCSaveGames) -> Self {
+        Self::Done(items)
     }
 
     fn error(e: String) -> Self {
@@ -84,12 +114,12 @@ impl IosGCSavedGameResponse {
 /// See Event [`IosGamecenterEvents`]
 #[derive(Debug, Clone)]
 pub enum IosGCSaveGamesResponse {
-    Done(Vec<IosGCSaveGame>),
+    Done(IosGCSaveGames),
     Error(String),
 }
 
 impl IosGCSaveGamesResponse {
-    fn done(items: Vec<IosGCSaveGame>) -> Self {
+    fn done(items: IosGCSaveGames) -> Self {
         Self::Done(items)
     }
 
@@ -130,7 +160,7 @@ impl IosGCSaveGame {
 #[derive(Debug, Clone)]
 pub enum IosGCLoadGamesResponse {
     /// Indicates a successfully loaded Save Game
-    /// It will return the Save Game that was requestsed and the Data as a `Option<Vec<u8>>`.
+    /// It will return the Save Game that was requested and the Data as a `Option<Vec<u8>>`.
     /// The `Option` will only be `None` in case of an error decoding the underlying Data back from base64 encoding.
     Done((IosGCSaveGame, Option<Vec<u8>>)),
     /// Returned if requested Save Game was not found

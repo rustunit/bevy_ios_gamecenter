@@ -2,7 +2,7 @@
 
 #[allow(unused_imports)]
 use crate::native;
-use crate::{IosGCSaveGame, IosGCViewState};
+use crate::{IosGCSaveGame, IosGCSaveGames, IosGCViewState};
 
 /// Authenticate
 /// Expected to be confirmed with [`IosGamecenterEvents::Authentication`][crate::IosGamecenterEvents::Authentication] event
@@ -48,6 +48,20 @@ pub fn load_game(save_game: IosGCSaveGame) {
 pub fn delete_savegame(name: String) {
     #[cfg(target_os = "ios")]
     native::delete_game(name);
+}
+
+/// Resolve conflicting save games.
+/// Conflicts will be reported via the [`IosGamecenterEvents::ConflictingSaveGames`][crate::IosGamecenterEvents::ConflictingSaveGames] event.
+/// Define the resolved save game via `data`, the conflicting save games will share the same name and the resolved save game will have a new timestamp.
+/// Expected to be confirmed with [`IosGamecenterEvents::ResolvedConflicts`][crate::IosGamecenterEvents::ResolvedConflicts] event.
+/// See <https://developer.apple.com/documentation/gamekit/gklocalplayer/1521116-resolveconflictingsavedgames>
+pub fn resolve_conflicting_games(save_games: IosGCSaveGames, data: &[u8]) {
+    #[cfg(target_os = "ios")]
+    {
+        use base64::Engine;
+        let s = base64::engine::general_purpose::STANDARD.encode(data);
+        native::resolve_conflicting_games(save_games, s);
+    }
 }
 
 /// Fetch Items for Signature Verification

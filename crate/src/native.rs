@@ -11,8 +11,8 @@ use crate::{
     plugin::IosGamecenterEvents, IosGCAchievement, IosGCAchievementProgressResponse,
     IosGCAchievementsResetResponse, IosGCAuthResult, IosGCDeleteSaveGameResponse,
     IosGCFetchItemsForSignatureVerification, IosGCFetchItemsForSignatureVerificationResponse,
-    IosGCLoadGamesResponse, IosGCPlayer, IosGCSaveGame, IosGCSaveGamesResponse,
-    IosGCSavedGameResponse, IosGCScoreSubmitResponse,
+    IosGCLoadGamesResponse, IosGCPlayer, IosGCResolvedConflictsResponse, IosGCSaveGame,
+    IosGCSaveGames, IosGCSaveGamesResponse, IosGCSavedGameResponse, IosGCScoreSubmitResponse,
 };
 
 #[swift_bridge::bridge]
@@ -55,7 +55,7 @@ mod ffi {
         type IosGCSaveGamesResponse;
 
         #[swift_bridge(associated_to = IosGCSaveGamesResponse)]
-        fn done(items: Vec<IosGCSaveGame>) -> IosGCSaveGamesResponse;
+        fn done(items: IosGCSaveGames) -> IosGCSaveGamesResponse;
         #[swift_bridge(associated_to = IosGCSaveGamesResponse)]
         fn error(e: String) -> IosGCSaveGamesResponse;
 
@@ -125,6 +125,20 @@ mod ffi {
         #[swift_bridge(associated_to = IosGCFetchItemsForSignatureVerificationResponse)]
         fn error(e: String) -> IosGCFetchItemsForSignatureVerificationResponse;
 
+        type IosGCSaveGames;
+
+        #[swift_bridge(associated_to = IosGCSaveGames)]
+        fn new(items: Vec<IosGCSaveGame>) -> IosGCSaveGames;
+        #[swift_bridge(associated_to = IosGCSaveGames)]
+        fn contains(items: &IosGCSaveGames, item: &IosGCSaveGame) -> bool;
+
+        type IosGCResolvedConflictsResponse;
+
+        #[swift_bridge(associated_to = IosGCResolvedConflictsResponse)]
+        fn done(items: IosGCSaveGames) -> IosGCResolvedConflictsResponse;
+        #[swift_bridge(associated_to = IosGCResolvedConflictsResponse)]
+        fn error(e: String) -> IosGCResolvedConflictsResponse;
+
         fn authentication(result: IosGCAuthResult);
         fn receive_player(p: IosGCPlayer);
         fn receive_load_game(response: IosGCLoadGamesResponse);
@@ -137,6 +151,8 @@ mod ffi {
         fn receive_items_for_signature_verification(
             response: IosGCFetchItemsForSignatureVerificationResponse,
         );
+        fn receive_conflicting_savegames(savegames: IosGCSaveGames);
+        fn receive_resolved_conflicts(response: IosGCResolvedConflictsResponse);
     }
 
     extern "Swift" {
@@ -145,6 +161,7 @@ mod ffi {
         pub fn save_game(data: String, name: String);
         pub fn load_game(save_game: IosGCSaveGame);
         pub fn delete_game(name: String);
+        pub fn resolve_conflicting_games(save_games: IosGCSaveGames, data: String);
         pub fn fetch_save_games();
         pub fn achievement_progress(id: String, progress: f64);
         pub fn reset_achievements();
@@ -265,4 +282,24 @@ fn receive_items_for_signature_verification(
         .as_ref()
         .unwrap()
         .send(IosGamecenterEvents::ItemsForSignatureVerification(response));
+}
+
+fn receive_conflicting_savegames(savegames: IosGCSaveGames) {
+    #[cfg(target_os = "ios")]
+    SENDER
+        .get()
+        .unwrap()
+        .as_ref()
+        .unwrap()
+        .send(IosGamecenterEvents::ConflictingSaveGames(savegames));
+}
+
+fn receive_resolved_conflicts(response: IosGCResolvedConflictsResponse) {
+    #[cfg(target_os = "ios")]
+    SENDER
+        .get()
+        .unwrap()
+        .as_ref()
+        .unwrap()
+        .send(IosGamecenterEvents::ResolvedConflicts(response));
 }

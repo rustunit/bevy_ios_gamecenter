@@ -4,8 +4,8 @@ use bevy_ecs::prelude::*;
 use crate::{
     IosGCAchievementProgressResponse, IosGCAchievementsResetResponse, IosGCAuthResult,
     IosGCDeleteSaveGameResponse, IosGCFetchItemsForSignatureVerificationResponse,
-    IosGCLoadGamesResponse, IosGCPlayer, IosGCSaveGamesResponse, IosGCSavedGameResponse,
-    IosGCScoreSubmitResponse,
+    IosGCLoadGamesResponse, IosGCPlayer, IosGCResolvedConflictsResponse, IosGCSaveGames,
+    IosGCSaveGamesResponse, IosGCSavedGameResponse, IosGCScoreSubmitResponse,
 };
 
 /// All events for communication from native iOS (Swift) side to Rust/Bevy
@@ -31,6 +31,10 @@ pub enum IosGamecenterEvents {
     LeaderboardScoreSubmitted(IosGCScoreSubmitResponse),
     /// Triggered by calls to [`fetch_signature`][crate::fetch_signature]
     ItemsForSignatureVerification(IosGCFetchItemsForSignatureVerificationResponse),
+    /// Triggered by calls to [`fetch_save_games`][crate::fetch_save_games] or [`save_game`][crate::save_game]
+    ConflictingSaveGames(IosGCSaveGames),
+    /// Triggered by calls to [`resolve_conflicting_games`][crate::resolve_conflicting_games]
+    ResolvedConflicts(IosGCResolvedConflictsResponse),
 }
 
 /// Bevy plugin to integrate access to iOS Gamecenter
