@@ -3,9 +3,9 @@ mod native;
 mod plugin;
 
 pub use methods::{
-    achievement_progress, achievements_reset, delete_savegame, fetch_save_games, fetch_signature,
-    init, leaderboards_score, load_game, request_player, resolve_conflicting_games, save_game,
-    trigger_view,
+    achievement_progress, achievements_reset, authenticate, delete_savegame, fetch_save_games,
+    fetch_signature, init_listeners, leaderboards_score, load_game, request_player,
+    resolve_conflicting_games, save_game, trigger_view,
 };
 pub use plugin::{IosGamecenterEvents, IosGamecenterPlugin};
 

@@ -210,17 +210,17 @@ void* __swift_bridge__$IosGCSaveGames$new(void* items);
 bool __swift_bridge__$IosGCSaveGames$contains(void* items, void* item);
 void* __swift_bridge__$IosGCResolvedConflictsResponse$done(void* items);
 void* __swift_bridge__$IosGCResolvedConflictsResponse$error(void* e);
-void __swift_bridge__$authentication(void* result);
-void __swift_bridge__$receive_player(void* p);
-void __swift_bridge__$receive_load_game(void* response);
-void __swift_bridge__$receive_saved_game(void* response);
-void __swift_bridge__$receive_save_games(void* response);
-void __swift_bridge__$receive_deleted_game(void* response);
-void __swift_bridge__$receive_achievement_progress(void* response);
-void __swift_bridge__$receive_achievement_reset(void* response);
-void __swift_bridge__$receive_leaderboard_score(void* response);
-void __swift_bridge__$receive_items_for_signature_verification(void* response);
+void __swift_bridge__$receive_authentication(int64_t request, void* result);
+void __swift_bridge__$receive_player(int64_t request, void* p);
+void __swift_bridge__$receive_load_game(int64_t request, void* response);
+void __swift_bridge__$receive_saved_game(int64_t request, void* response);
+void __swift_bridge__$receive_save_games(int64_t request, void* response);
+void __swift_bridge__$receive_deleted_game(int64_t request, void* response);
+void __swift_bridge__$receive_achievement_progress(int64_t request, void* response);
+void __swift_bridge__$receive_achievement_reset(int64_t request, void* response);
+void __swift_bridge__$receive_leaderboard_score(int64_t request, void* response);
+void __swift_bridge__$receive_items_for_signature_verification(int64_t request, void* response);
+void __swift_bridge__$receive_resolved_conflicts(int64_t request, void* response);
 void __swift_bridge__$receive_conflicting_savegames(void* savegames);
-void __swift_bridge__$receive_resolved_conflicts(void* response);
 
 

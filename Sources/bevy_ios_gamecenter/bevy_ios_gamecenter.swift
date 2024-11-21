@@ -1,88 +1,43 @@
 import BevyIosGamecenterRust 
-public func authentication(_ result: IosGCAuthResult) {
-    __swift_bridge__$authentication({result.isOwned = false; return result.ptr;}())
+public func receive_authentication(_ request: Int64, _ result: IosGCAuthResult) {
+    __swift_bridge__$receive_authentication(request, {result.isOwned = false; return result.ptr;}())
 }
-public func receive_player(_ p: IosGCPlayer) {
-    __swift_bridge__$receive_player({p.isOwned = false; return p.ptr;}())
+public func receive_player(_ request: Int64, _ p: IosGCPlayer) {
+    __swift_bridge__$receive_player(request, {p.isOwned = false; return p.ptr;}())
 }
-public func receive_load_game(_ response: IosGCLoadGamesResponse) {
-    __swift_bridge__$receive_load_game({response.isOwned = false; return response.ptr;}())
+public func receive_load_game(_ request: Int64, _ response: IosGCLoadGamesResponse) {
+    __swift_bridge__$receive_load_game(request, {response.isOwned = false; return response.ptr;}())
 }
-public func receive_saved_game(_ response: IosGCSavedGameResponse) {
-    __swift_bridge__$receive_saved_game({response.isOwned = false; return response.ptr;}())
+public func receive_saved_game(_ request: Int64, _ response: IosGCSavedGameResponse) {
+    __swift_bridge__$receive_saved_game(request, {response.isOwned = false; return response.ptr;}())
 }
-public func receive_save_games(_ response: IosGCSaveGamesResponse) {
-    __swift_bridge__$receive_save_games({response.isOwned = false; return response.ptr;}())
+public func receive_save_games(_ request: Int64, _ response: IosGCSaveGamesResponse) {
+    __swift_bridge__$receive_save_games(request, {response.isOwned = false; return response.ptr;}())
 }
-public func receive_deleted_game(_ response: IosGCDeleteSaveGameResponse) {
-    __swift_bridge__$receive_deleted_game({response.isOwned = false; return response.ptr;}())
+public func receive_deleted_game(_ request: Int64, _ response: IosGCDeleteSaveGameResponse) {
+    __swift_bridge__$receive_deleted_game(request, {response.isOwned = false; return response.ptr;}())
 }
-public func receive_achievement_progress(_ response: IosGCAchievementProgressResponse) {
-    __swift_bridge__$receive_achievement_progress({response.isOwned = false; return response.ptr;}())
+public func receive_achievement_progress(_ request: Int64, _ response: IosGCAchievementProgressResponse) {
+    __swift_bridge__$receive_achievement_progress(request, {response.isOwned = false; return response.ptr;}())
 }
-public func receive_achievement_reset(_ response: IosGCAchievementsResetResponse) {
-    __swift_bridge__$receive_achievement_reset({response.isOwned = false; return response.ptr;}())
+public func receive_achievement_reset(_ request: Int64, _ response: IosGCAchievementsResetResponse) {
+    __swift_bridge__$receive_achievement_reset(request, {response.isOwned = false; return response.ptr;}())
 }
-public func receive_leaderboard_score(_ response: IosGCScoreSubmitResponse) {
-    __swift_bridge__$receive_leaderboard_score({response.isOwned = false; return response.ptr;}())
+public func receive_leaderboard_score(_ request: Int64, _ response: IosGCScoreSubmitResponse) {
+    __swift_bridge__$receive_leaderboard_score(request, {response.isOwned = false; return response.ptr;}())
 }
-public func receive_items_for_signature_verification(_ response: IosGCFetchItemsForSignatureVerificationResponse) {
-    __swift_bridge__$receive_items_for_signature_verification({response.isOwned = false; return response.ptr;}())
+public func receive_items_for_signature_verification(_ request: Int64, _ response: IosGCFetchItemsForSignatureVerificationResponse) {
+    __swift_bridge__$receive_items_for_signature_verification(request, {response.isOwned = false; return response.ptr;}())
+}
+public func receive_resolved_conflicts(_ request: Int64, _ response: IosGCResolvedConflictsResponse) {
+    __swift_bridge__$receive_resolved_conflicts(request, {response.isOwned = false; return response.ptr;}())
 }
 public func receive_conflicting_savegames(_ savegames: IosGCSaveGames) {
     __swift_bridge__$receive_conflicting_savegames({savegames.isOwned = false; return savegames.ptr;}())
 }
-public func receive_resolved_conflicts(_ response: IosGCResolvedConflictsResponse) {
-    __swift_bridge__$receive_resolved_conflicts({response.isOwned = false; return response.ptr;}())
-}
-@_cdecl("__swift_bridge__$ios_gc_init")
-public func __swift_bridge__ios_gc_init () {
-    ios_gc_init()
-}
-
-@_cdecl("__swift_bridge__$get_player")
-public func __swift_bridge__get_player () {
-    get_player()
-}
-
-@_cdecl("__swift_bridge__$save_game")
-public func __swift_bridge__save_game (_ data: UnsafeMutableRawPointer, _ name: UnsafeMutableRawPointer) {
-    save_game(data: RustString(ptr: data), name: RustString(ptr: name))
-}
-
-@_cdecl("__swift_bridge__$load_game")
-public func __swift_bridge__load_game (_ save_game: UnsafeMutableRawPointer) {
-    load_game(save_game: IosGCSaveGame(ptr: save_game))
-}
-
-@_cdecl("__swift_bridge__$delete_game")
-public func __swift_bridge__delete_game (_ name: UnsafeMutableRawPointer) {
-    delete_game(name: RustString(ptr: name))
-}
-
-@_cdecl("__swift_bridge__$resolve_conflicting_games")
-public func __swift_bridge__resolve_conflicting_games (_ save_games: UnsafeMutableRawPointer, _ data: UnsafeMutableRawPointer) {
-    resolve_conflicting_games(save_games: IosGCSaveGames(ptr: save_games), data: RustString(ptr: data))
-}
-
-@_cdecl("__swift_bridge__$fetch_save_games")
-public func __swift_bridge__fetch_save_games () {
-    fetch_save_games()
-}
-
-@_cdecl("__swift_bridge__$achievement_progress")
-public func __swift_bridge__achievement_progress (_ id: UnsafeMutableRawPointer, _ progress: Double) {
-    achievement_progress(id: RustString(ptr: id), progress: progress)
-}
-
-@_cdecl("__swift_bridge__$reset_achievements")
-public func __swift_bridge__reset_achievements () {
-    reset_achievements()
-}
-
-@_cdecl("__swift_bridge__$leaderboards_score")
-public func __swift_bridge__leaderboards_score (_ id: UnsafeMutableRawPointer, _ score: Int64, _ context: Int64) {
-    leaderboards_score(id: RustString(ptr: id), score: score, context: context)
+@_cdecl("__swift_bridge__$init_listeners")
+public func __swift_bridge__init_listeners () {
+    init_listeners()
 }
 
 @_cdecl("__swift_bridge__$trigger_view")
@@ -90,9 +45,59 @@ public func __swift_bridge__trigger_view (_ state: Int32) {
     trigger_view(state: state)
 }
 
+@_cdecl("__swift_bridge__$authenticate")
+public func __swift_bridge__authenticate (_ request: Int64) {
+    authenticate(request: request)
+}
+
+@_cdecl("__swift_bridge__$get_player")
+public func __swift_bridge__get_player (_ request: Int64) {
+    get_player(request: request)
+}
+
+@_cdecl("__swift_bridge__$save_game")
+public func __swift_bridge__save_game (_ request: Int64, _ data: UnsafeMutableRawPointer, _ name: UnsafeMutableRawPointer) {
+    save_game(request: request, data: RustString(ptr: data), name: RustString(ptr: name))
+}
+
+@_cdecl("__swift_bridge__$load_game")
+public func __swift_bridge__load_game (_ request: Int64, _ save_game: UnsafeMutableRawPointer) {
+    load_game(request: request, save_game: IosGCSaveGame(ptr: save_game))
+}
+
+@_cdecl("__swift_bridge__$delete_game")
+public func __swift_bridge__delete_game (_ request: Int64, _ name: UnsafeMutableRawPointer) {
+    delete_game(request: request, name: RustString(ptr: name))
+}
+
+@_cdecl("__swift_bridge__$resolve_conflicting_games")
+public func __swift_bridge__resolve_conflicting_games (_ request: Int64, _ save_games: UnsafeMutableRawPointer, _ data: UnsafeMutableRawPointer) {
+    resolve_conflicting_games(request: request, save_games: IosGCSaveGames(ptr: save_games), data: RustString(ptr: data))
+}
+
+@_cdecl("__swift_bridge__$fetch_save_games")
+public func __swift_bridge__fetch_save_games (_ request: Int64) {
+    fetch_save_games(request: request)
+}
+
+@_cdecl("__swift_bridge__$achievement_progress")
+public func __swift_bridge__achievement_progress (_ request: Int64, _ id: UnsafeMutableRawPointer, _ progress: Double) {
+    achievement_progress(request: request, id: RustString(ptr: id), progress: progress)
+}
+
+@_cdecl("__swift_bridge__$reset_achievements")
+public func __swift_bridge__reset_achievements (_ request: Int64) {
+    reset_achievements(request: request)
+}
+
+@_cdecl("__swift_bridge__$leaderboards_score")
+public func __swift_bridge__leaderboards_score (_ request: Int64, _ id: UnsafeMutableRawPointer, _ score: Int64, _ context: Int64) {
+    leaderboards_score(request: request, id: RustString(ptr: id), score: score, context: context)
+}
+
 @_cdecl("__swift_bridge__$fetch_signature")
-public func __swift_bridge__fetch_signature () {
-    fetch_signature()
+public func __swift_bridge__fetch_signature (_ request: Int64) {
+    fetch_signature(request: request)
 }
 
 
