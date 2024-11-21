@@ -2,7 +2,7 @@ use bevy_app::prelude::*;
 use bevy_ecs::prelude::*;
 
 use crate::{
-    IosGCAchievementProgressResponse, IosGCAchievementsResetResponse, IosGCAuthResult,
+    request, IosGCAchievementProgressResponse, IosGCAchievementsResetResponse, IosGCAuthResult,
     IosGCDeleteSaveGameResponse, IosGCFetchItemsForSignatureVerificationResponse,
     IosGCLoadGamesResponse, IosGCPlayer, IosGCResolvedConflictsResponse, IosGCSaveGames,
     IosGCSaveGamesResponse, IosGCSavedGameResponse, IosGCScoreSubmitResponse,
@@ -52,6 +52,8 @@ impl IosGamecenterPlugin {
 
 impl Plugin for IosGamecenterPlugin {
     fn build(&self, app: &mut App) {
+        app.add_plugins(request::plugin);
+
         #[cfg(not(target_os = "ios"))]
         {
             app.add_event::<IosGamecenterEvents>();

@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 * new `resolve_conflicting_games` method (#8).
 * new `ConflictingSaveGames` and `ResolvedConflicts` events.
+* new `BevyIosGamecenter` SystemParam for convenient request response flow based on `Observer`
 
 ### Changed
 * `init` is now explicitly `init_listeners` and is still called automatically (by default).
