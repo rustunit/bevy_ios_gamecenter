@@ -11,11 +11,8 @@ import BevyIosGamecenterRust
 
 final class SavedGameListener: NSObject, GKLocalPlayerListener {
     
-    var conflicts : [GKSavedGame] = []
-    
     func player(_ player: GKPlayer, hasConflictingSavedGames savedGames: [GKSavedGame]) {
         do {
-            conflicts = savedGames
             receive_conflicting_savegames(try convert_save_games(savedGames))
         } catch {
             print("Error reporting conflicting save games: \(error.localizedDescription)")
@@ -24,7 +21,6 @@ final class SavedGameListener: NSObject, GKLocalPlayerListener {
 }
 
 var Listener:SavedGameListener? = nil
-var Games:[GKSavedGame] = []
 
 public func ios_gc_init() {
     if Listener == nil {
@@ -33,25 +29,33 @@ public func ios_gc_init() {
         GKLocalPlayer.local.register(Listener!)
     }
     
-    GKLocalPlayer.local.authenticateHandler = nil
-    GKLocalPlayer.local.authenticateHandler = { gcAuthVC, error in
-       if GKLocalPlayer.local.isAuthenticated {
-           authentication(IosGCAuthResult.authenticated())
-       } else if let vc = gcAuthVC {
-           UIApplication.shared.keyWindow?.rootViewController?.present(vc, animated: true)
-           authentication(IosGCAuthResult.login_presented())
-       }
-       else {
-           //TODO: more error types
-           authentication(IosGCAuthResult.error(error!.localizedDescription))
-       }
-     }
+    Task {
+        if GKLocalPlayer.local.isAuthenticated {
+            authentication(IosGCAuthResult.authenticated())
+            return
+        }
+        
+        GKLocalPlayer.local.authenticateHandler = nil
+        GKLocalPlayer.local.authenticateHandler = { gcAuthVC, error in
+            if GKLocalPlayer.local.isAuthenticated {
+                authentication(IosGCAuthResult.authenticated())
+            } else if let vc = gcAuthVC {
+                UIApplication.shared.keyWindow?.rootViewController?.present(vc, animated: true)
+                authentication(IosGCAuthResult.login_presented())
+            }
+            else {
+                authentication(IosGCAuthResult.error(error!.localizedDescription))
+            }
+        }
+    }
 }
 
 public func get_player() {
-    let p = GKLocalPlayer.local;
-    
-    receive_player(IosGCPlayer.new(p.gamePlayerID, p.teamPlayerID, p.isAuthenticated, p.alias, p.displayName))
+    Task {
+        let p = GKLocalPlayer.local;
+        
+        receive_player(IosGCPlayer.new(p.gamePlayerID, p.teamPlayerID, p.isAuthenticated, p.alias, p.displayName))
+    }
 }
 
 fileprivate func convert_save_game(_ save: GKSavedGame) throws -> IosGCSaveGame {
@@ -83,7 +87,8 @@ public func save_game(data: RustString, name: RustString) {
 public func load_game(save_game: IosGCSaveGame) {
     Task{
         do {
-            for game in Games {
+            let games = await try GKLocalPlayer.local.fetchSavedGames();
+            for game in games {
                 let rust_game = try convert_save_game(game)
                 if IosGCSaveGame.equals(rust_game,save_game) {
                     var data = try await game.loadData()
@@ -115,8 +120,9 @@ public func resolve_conflicting_games(save_games: IosGCSaveGames, data: RustStri
     Task{
         do {
             var found:[GKSavedGame] = []
+            let games = try await GKLocalPlayer.local.fetchSavedGames()
             
-            for game in Listener?.conflicts ?? [] {
+            for game in games {
                 let rust_game = try convert_save_game(game)
                 if IosGCSaveGames.contains(save_games, rust_game) {
                     found.append(game)
@@ -126,8 +132,6 @@ public func resolve_conflicting_games(save_games: IosGCSaveGames, data: RustStri
             let gameData = try Data.init(base64Encoded:data.toString())!
             
             let result = try await GKLocalPlayer.local.resolveConflictingSavedGames(found, with: gameData)
-            
-            Listener?.conflicts = []
             
             receive_resolved_conflicts(IosGCResolvedConflictsResponse.done(try convert_save_games(result)))
         } catch {
@@ -139,9 +143,9 @@ public func resolve_conflicting_games(save_games: IosGCSaveGames, data: RustStri
 public func fetch_save_games() {
     Task{
         do {
-            Games = try await GKLocalPlayer.local.fetchSavedGames()
+            let games = try await GKLocalPlayer.local.fetchSavedGames()
             
-            let result = try convert_save_games(Games)
+            let result = try convert_save_games(games)
             
             receive_save_games(IosGCSaveGamesResponse.done(result))
         } catch {
