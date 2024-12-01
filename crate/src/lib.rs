@@ -68,7 +68,7 @@ impl IosGCResolvedConflictsResponse {
 
 /// Expected event data in response to [`request_player`] method call.
 /// See Event [`IosGamecenterEvents`]
-#[derive(Debug, Clone, Default)]
+#[derive(Event, Debug, Clone, Default)]
 pub struct IosGCPlayer {
     pub game_id: String,
     pub team_id: String,
@@ -215,7 +215,7 @@ impl IosGCAchievement {
 
 /// Expected event data in response to [`achievement_progress`] method call.
 /// See Event [`IosGamecenterEvents`]
-#[derive(Debug, Clone)]
+#[derive(Event, Debug, Clone)]
 pub enum IosGCAchievementProgressResponse {
     Done(IosGCAchievement),
     Error(String),
@@ -233,7 +233,7 @@ impl IosGCAchievementProgressResponse {
 
 /// Expected event data in response to [`achievements_reset`] method call.
 /// See Event [`IosGamecenterEvents`]
-#[derive(Debug, Clone)]
+#[derive(Event, Debug, Clone)]
 pub enum IosGCAchievementsResetResponse {
     Done,
     Error(String),
@@ -251,7 +251,7 @@ impl IosGCAchievementsResetResponse {
 
 /// Expected event data in response to [`leaderboards_score`] method call.
 /// See Event [`IosGamecenterEvents`]
-#[derive(Debug, Clone)]
+#[derive(Event, Debug, Clone)]
 pub enum IosGCScoreSubmitResponse {
     Done,
     Error(String),
@@ -269,7 +269,7 @@ impl IosGCScoreSubmitResponse {
 
 /// Expected event data in response to [`delete_savegame`] method call.
 /// See Event [`IosGamecenterEvents`]
-#[derive(Debug, Clone)]
+#[derive(Event, Debug, Clone)]
 pub enum IosGCDeleteSaveGameResponse {
     Done(String),
     Error(String),
@@ -318,7 +318,7 @@ impl IosGCFetchItemsForSignatureVerification {
 
 /// Expected event data in response to [`fetch_signature`] method call.
 /// See Event [`IosGamecenterEvents`]
-#[derive(Debug, Clone)]
+#[derive(Event, Debug, Clone)]
 pub enum IosGCFetchItemsForSignatureVerificationResponse {
     Done(IosGCFetchItemsForSignatureVerification),
     Error(String),
