@@ -1,6 +1,6 @@
 [package]
 name = "bevy_ios_gamecenter"
-version = "0.2.0"
+version = "0.3.0"
 edition = "2021"
 build = "build.rs"
 readme = "../README.md"
@@ -15,12 +15,12 @@ description = "Bevy Plugin and Swift Package to provide access to iOS native Gam
 crate-type = ["staticlib", "rlib"]
 
 [dependencies]
-bevy_app = { version = "0.14", default-features = false }
-bevy_ecs = { version = "0.14", default-features = false }
-bevy_ecs_macros = { version = "0.14", default-features = false }
-bevy_log = { version = "0.14", default-features = false }
+bevy_app = { version = "0.15", default-features = false }
+bevy_ecs = { version = "0.15", default-features = false }
+bevy_ecs_macros = { version = "0.15", default-features = false }
+bevy_log = { version = "0.15", default-features = false }
 swift-bridge = "0.1"
-bevy_crossbeam_event = "0.6"
+bevy_crossbeam_event = "0.7"
 base64 = "0.22"
 
 [build-dependencies]

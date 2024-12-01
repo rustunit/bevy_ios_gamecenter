@@ -18,8 +18,6 @@ It uses [Swift-Bridge](https://github.com/chinedufn/swift-bridge) to auto-genera
 
 > Demo from our game using this crate: [zoolitaire.com](https://zoolitaire.com)
 
-See also [bevy_ios_iap](https://github.com/rustunit/bevy_ios_iap), [bevy_ios_notifications](https://github.com/rustunit/bevy_ios_notifications), [bevy_ios_alerts](https://github.com/rustunit/bevy_ios_alerts), [bevy_ios_review](https://github.com/rustunit/bevy_ios_review) & [bevy_ios_impact](https://github.com/rustunit/bevy_ios_impact)
-
 ## Features
 * authentication
 * save games (based on iCloud)
@@ -132,11 +130,24 @@ fn process_gamecenter_events(
 }
 ```
 
+## Our Other Crates
+
+- [bevy_debug_log](https://github.com/rustunit/bevy_debug_log)
+- [bevy_device_lang](https://github.com/rustunit/bevy_device_lang)
+- [bevy_web_popups](https://github.com/rustunit/bevy_web_popups)
+- [bevy_libgdx_atlas](https://github.com/rustunit/bevy_libgdx_atlas)
+- [bevy_ios_review](https://github.com/rustunit/bevy_ios_review)
+- [bevy_ios_alerts](https://github.com/rustunit/bevy_ios_alerts)
+- [bevy_ios_iap](https://github.com/rustunit/bevy_ios_iap)
+- [bevy_ios_notifications](https://github.com/rustunit/bevy_ios_notifications)
+- [bevy_ios_impact](https://github.com/rustunit/bevy_ios_impact)
+
 ## Bevy version support
 
 |bevy|bevy\_ios\_gamecenter|
 |----|---|
-|0.14|0.2,main|
+|0.15|0.3,main|
+|0.14|0.2|
 |0.13|0.1|
 
 # License

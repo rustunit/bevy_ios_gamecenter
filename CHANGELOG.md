@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Unreleased
 
 ### Added
+* upgraded to bevy `0.15`
 * new `resolve_conflicting_games` method (#8).
 * new `ConflictingSaveGames` and `ResolvedConflicts` events.
 * new `BevyIosGamecenter` SystemParam for convenient request response flow based on `Observer`

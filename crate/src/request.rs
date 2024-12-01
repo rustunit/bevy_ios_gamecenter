@@ -254,7 +254,7 @@ pub fn plugin(app: &mut App) {
         PreUpdate,
         (
             cleanup_finished_requests,
-            process_events.run_if(on_event::<IosGamecenterEvents>()),
+            process_events.run_if(on_event::<IosGamecenterEvents>),
         )
             .chain()
             .in_set(BevyIosGamecenterSet),
