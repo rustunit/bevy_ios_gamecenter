@@ -11,8 +11,8 @@ use crate::{
     plugin::IosGamecenterEvents, IosGCAchievement, IosGCAchievementProgressResponse,
     IosGCAchievementsResetResponse, IosGCAuthResult, IosGCDeleteSaveGameResponse,
     IosGCFetchItemsForSignatureVerification, IosGCFetchItemsForSignatureVerificationResponse,
-    IosGCLoadGamesResponse, IosGCPlayer, IosGCSaveGame, IosGCSaveGamesResponse,
-    IosGCSavedGameResponse, IosGCScoreSubmitResponse,
+    IosGCLoadGamesResponse, IosGCPlayer, IosGCResolvedConflictsResponse, IosGCSaveGame,
+    IosGCSaveGames, IosGCSaveGamesResponse, IosGCSavedGameResponse, IosGCScoreSubmitResponse,
 };
 
 #[swift_bridge::bridge]
@@ -55,7 +55,7 @@ mod ffi {
         type IosGCSaveGamesResponse;
 
         #[swift_bridge(associated_to = IosGCSaveGamesResponse)]
-        fn done(items: Vec<IosGCSaveGame>) -> IosGCSaveGamesResponse;
+        fn done(items: IosGCSaveGames) -> IosGCSaveGamesResponse;
         #[swift_bridge(associated_to = IosGCSaveGamesResponse)]
         fn error(e: String) -> IosGCSaveGamesResponse;
 
@@ -125,32 +125,54 @@ mod ffi {
         #[swift_bridge(associated_to = IosGCFetchItemsForSignatureVerificationResponse)]
         fn error(e: String) -> IosGCFetchItemsForSignatureVerificationResponse;
 
-        fn authentication(result: IosGCAuthResult);
-        fn receive_player(p: IosGCPlayer);
-        fn receive_load_game(response: IosGCLoadGamesResponse);
-        fn receive_saved_game(response: IosGCSavedGameResponse);
-        fn receive_save_games(response: IosGCSaveGamesResponse);
-        fn receive_deleted_game(response: IosGCDeleteSaveGameResponse);
-        fn receive_achievement_progress(response: IosGCAchievementProgressResponse);
-        fn receive_achievement_reset(response: IosGCAchievementsResetResponse);
-        fn receive_leaderboard_score(response: IosGCScoreSubmitResponse);
+        type IosGCSaveGames;
+
+        #[swift_bridge(associated_to = IosGCSaveGames)]
+        fn new(items: Vec<IosGCSaveGame>) -> IosGCSaveGames;
+        #[swift_bridge(associated_to = IosGCSaveGames)]
+        fn contains(items: &IosGCSaveGames, item: &IosGCSaveGame) -> bool;
+
+        type IosGCResolvedConflictsResponse;
+
+        #[swift_bridge(associated_to = IosGCResolvedConflictsResponse)]
+        fn done(items: IosGCSaveGames) -> IosGCResolvedConflictsResponse;
+        #[swift_bridge(associated_to = IosGCResolvedConflictsResponse)]
+        fn error(e: String) -> IosGCResolvedConflictsResponse;
+
+        fn receive_authentication(request: i64, result: IosGCAuthResult);
+        fn receive_player(request: i64, p: IosGCPlayer);
+        fn receive_load_game(request: i64, response: IosGCLoadGamesResponse);
+        fn receive_saved_game(request: i64, response: IosGCSavedGameResponse);
+        fn receive_save_games(request: i64, response: IosGCSaveGamesResponse);
+        fn receive_deleted_game(request: i64, response: IosGCDeleteSaveGameResponse);
+        fn receive_achievement_progress(request: i64, response: IosGCAchievementProgressResponse);
+        fn receive_achievement_reset(request: i64, response: IosGCAchievementsResetResponse);
+        fn receive_leaderboard_score(request: i64, response: IosGCScoreSubmitResponse);
         fn receive_items_for_signature_verification(
+            request: i64,
             response: IosGCFetchItemsForSignatureVerificationResponse,
         );
+        fn receive_resolved_conflicts(request: i64, response: IosGCResolvedConflictsResponse);
+
+        // no response
+        fn receive_conflicting_savegames(savegames: IosGCSaveGames);
     }
 
     extern "Swift" {
-        pub fn ios_gc_init();
-        pub fn get_player();
-        pub fn save_game(data: String, name: String);
-        pub fn load_game(save_game: IosGCSaveGame);
-        pub fn delete_game(name: String);
-        pub fn fetch_save_games();
-        pub fn achievement_progress(id: String, progress: f64);
-        pub fn reset_achievements();
-        pub fn leaderboards_score(id: String, score: i64, context: i64);
+        pub fn init_listeners();
         pub fn trigger_view(state: i32);
-        pub fn fetch_signature();
+
+        pub fn authenticate(request: i64);
+        pub fn get_player(request: i64);
+        pub fn save_game(request: i64, data: String, name: String);
+        pub fn load_game(request: i64, save_game: IosGCSaveGame);
+        pub fn delete_game(request: i64, name: String);
+        pub fn resolve_conflicting_games(request: i64, save_games: IosGCSaveGames, data: String);
+        pub fn fetch_save_games(request: i64);
+        pub fn achievement_progress(request: i64, id: String, progress: f64);
+        pub fn reset_achievements(request: i64);
+        pub fn leaderboards_score(request: i64, id: String, score: i64, context: i64);
+        pub fn fetch_signature(request: i64);
     }
 }
 
@@ -161,108 +183,126 @@ pub fn set_sender(sender: CrossbeamEventSender<IosGamecenterEvents>) {
     while SENDER.set(Some(sender.clone())).is_err() {}
 }
 
-fn authentication(result: IosGCAuthResult) {
-    #[cfg(target_os = "ios")]
-    {
-        get_player();
-
-        SENDER
-            .get()
-            .unwrap()
-            .as_ref()
-            .unwrap()
-            .send(IosGamecenterEvents::Authentication(result));
-    }
-}
-
-fn receive_player(p: IosGCPlayer) {
+fn receive_authentication(request: i64, result: IosGCAuthResult) {
     #[cfg(target_os = "ios")]
     SENDER
         .get()
         .unwrap()
         .as_ref()
         .unwrap()
-        .send(IosGamecenterEvents::Player(p));
+        .send(IosGamecenterEvents::Authentication((request, result)));
 }
 
-fn receive_saved_game(response: IosGCSavedGameResponse) {
+fn receive_player(request: i64, p: IosGCPlayer) {
     #[cfg(target_os = "ios")]
     SENDER
         .get()
         .unwrap()
         .as_ref()
         .unwrap()
-        .send(IosGamecenterEvents::SavedGame(response));
+        .send(IosGamecenterEvents::Player((request, p)));
 }
 
-fn receive_save_games(response: IosGCSaveGamesResponse) {
+fn receive_saved_game(request: i64, response: IosGCSavedGameResponse) {
     #[cfg(target_os = "ios")]
     SENDER
         .get()
         .unwrap()
         .as_ref()
         .unwrap()
-        .send(IosGamecenterEvents::SaveGames(response));
+        .send(IosGamecenterEvents::SavedGame((request, response)));
 }
 
-fn receive_load_game(response: IosGCLoadGamesResponse) {
+fn receive_save_games(request: i64, response: IosGCSaveGamesResponse) {
     #[cfg(target_os = "ios")]
     SENDER
         .get()
         .unwrap()
         .as_ref()
         .unwrap()
-        .send(IosGamecenterEvents::LoadGame(response));
+        .send(IosGamecenterEvents::SaveGames((request, response)));
 }
 
-fn receive_achievement_progress(response: IosGCAchievementProgressResponse) {
+fn receive_load_game(request: i64, response: IosGCLoadGamesResponse) {
     #[cfg(target_os = "ios")]
     SENDER
         .get()
         .unwrap()
         .as_ref()
         .unwrap()
-        .send(IosGamecenterEvents::AchievementProgress(response));
+        .send(IosGamecenterEvents::LoadGame((request, response)));
 }
 
-fn receive_achievement_reset(response: IosGCAchievementsResetResponse) {
+fn receive_achievement_progress(request: i64, response: IosGCAchievementProgressResponse) {
     #[cfg(target_os = "ios")]
     SENDER
         .get()
         .unwrap()
         .as_ref()
         .unwrap()
-        .send(IosGamecenterEvents::AchievementsReset(response));
+        .send(IosGamecenterEvents::AchievementProgress((
+            request, response,
+        )));
 }
 
-fn receive_leaderboard_score(response: IosGCScoreSubmitResponse) {
+fn receive_achievement_reset(request: i64, response: IosGCAchievementsResetResponse) {
     #[cfg(target_os = "ios")]
     SENDER
         .get()
         .unwrap()
         .as_ref()
         .unwrap()
-        .send(IosGamecenterEvents::LeaderboardScoreSubmitted(response));
+        .send(IosGamecenterEvents::AchievementsReset((request, response)));
 }
 
-fn receive_deleted_game(response: IosGCDeleteSaveGameResponse) {
+fn receive_leaderboard_score(request: i64, response: IosGCScoreSubmitResponse) {
     #[cfg(target_os = "ios")]
     SENDER
         .get()
         .unwrap()
         .as_ref()
         .unwrap()
-        .send(IosGamecenterEvents::DeletedSaveGame(response));
+        .send(IosGamecenterEvents::LeaderboardScoreSubmitted((
+            request, response,
+        )));
+}
+
+fn receive_deleted_game(request: i64, response: IosGCDeleteSaveGameResponse) {
+    #[cfg(target_os = "ios")]
+    SENDER
+        .get()
+        .unwrap()
+        .as_ref()
+        .unwrap()
+        .send(IosGamecenterEvents::DeletedSaveGame((request, response)));
 }
 
 fn receive_items_for_signature_verification(
+    request: i64,
     response: IosGCFetchItemsForSignatureVerificationResponse,
 ) {
+    #[cfg(target_os = "ios")]
+    SENDER.get().unwrap().as_ref().unwrap().send(
+        IosGamecenterEvents::ItemsForSignatureVerification((request, response)),
+    );
+}
+
+fn receive_resolved_conflicts(request: i64, response: IosGCResolvedConflictsResponse) {
     #[cfg(target_os = "ios")]
     SENDER
         .get()
         .unwrap()
         .as_ref()
         .unwrap()
-        .send(IosGamecenterEvents::ItemsForSignatureVerification(response));
+        .send(IosGamecenterEvents::ResolvedConflicts((request, response)));
+}
+
+fn receive_conflicting_savegames(savegames: IosGCSaveGames) {
+    #[cfg(target_os = "ios")]
+    SENDER
+        .get()
+        .unwrap()
+        .as_ref()
+        .unwrap()
+        .send(IosGamecenterEvents::ConflictingSaveGames(savegames));
 }

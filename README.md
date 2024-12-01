@@ -12,7 +12,7 @@
 [lk_discord]: https://discord.gg/rQNeEnMhus
 
 Bevy Plugin and Swift Package to provide access to iOS native GameKit (Gamecenter) from inside Bevy Apps
-It uses [Swift-Bridge](https://github.com/chinedufn/swift-bridge) to auto-generate the glue code and transport datatypes.
+It uses [Swift-Bridge](https://github.com/chinedufn/swift-bridge) to auto-generate the glue code and transport data types.
 
 ![demo](./assets/demo.gif)
 
@@ -98,6 +98,16 @@ fn bevy_system() {
     // based on result of above `fetch_save_games` request
     let save_game = IosGCSaveGame {..} 
     bevy_ios_gamecenter::load_game(save_game);
+}
+```
+
+Alternatively you can use a convenient `Observer` based request/response approach:
+
+```rust
+fn bevy_system(mut gamecenter: BevyIosGamecenter) {
+    gamecenter.fetch_save_games().on_response(|trigger:Trigger<IosGCSaveGamesResponse>|{
+        // handle list of save games
+    });
 }
 ```
 

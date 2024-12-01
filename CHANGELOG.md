@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Added
+* new `resolve_conflicting_games` method (#8).
+* new `ConflictingSaveGames` and `ResolvedConflicts` events.
+* new `BevyIosGamecenter` SystemParam for convenient request response flow based on `Observer`
+
+### Changed
+* `init` is now explicitly `init_listeners` and is still called automatically (by default).
+* `authenticate` was previously implictly done inside `init` this is now an explicit call and response.
+* `get_player` is not implicitly called after successful `authenticate` anymore.
+* new container type `IosGCSaveGames` now used in `IosGCSaveGamesResponse`.
+
 ## [0.2.0] - 2024-07-12
 
 ### Changed
