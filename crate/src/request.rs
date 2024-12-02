@@ -226,21 +226,21 @@ impl<'w, 's> BevyIosGamecenter<'w, 's> {
     }
 }
 
-pub struct BevyIosGCRequestBuilder<'a, T>((EntityCommands<'a>, PhantomData<T>));
+pub struct BevyIosGCRequestBuilder<'a, T>(EntityCommands<'a>, PhantomData<T>);
 
 impl<'a, T> BevyIosGCRequestBuilder<'a, T>
 where
     T: 'static + Event,
 {
     fn new(ec: EntityCommands<'a>) -> Self {
-        Self((ec, PhantomData))
+        Self(ec, PhantomData)
     }
 
     pub fn on_response<RB: Bundle, RM, OR: IntoObserverSystem<T, RB, RM>>(
         &mut self,
         on_response: OR,
     ) -> &mut Self {
-        self.0 .0.observe(on_response);
+        self.0.observe(on_response);
         self
     }
 }
