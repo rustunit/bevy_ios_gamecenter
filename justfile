@@ -36,3 +36,6 @@ zip: build-release
 	ls -lisah BevyIosGamecenterRust.xcframework.zip
 	shasum -a 256 BevyIosGamecenterRust.xcframework.zip
 	shasum -a 256 BevyIosGamecenterRust.xcframework.zip > BevyIosGamecenterRust.xcframework.sha256.txt
+
+publish-crate:
+	cd crate && cargo publish --no-verify
