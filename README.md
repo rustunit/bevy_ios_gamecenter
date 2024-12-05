@@ -45,8 +45,6 @@ It uses [Swift-Bridge](https://github.com/chinedufn/swift-bridge) to auto-genera
 The rust crate used must be exactly the same version as the Swift Package.
 I suggest using a specific version (like `0.2.0` in the screenshot) to make sure to always use binary matching versions!
 
-
-
 ### 2. Add Rust dependency
 
 ```
@@ -57,7 +55,7 @@ or
 
 ```toml
 # always pin to the same exact version you also of the Swift package
-bevy_ios_gamecenter = { version = "=0.2.0" }
+bevy_ios_gamecenter = { version = "=0.3.0" }
 ```
 
 ### 3. Setup Plugin
@@ -65,18 +63,43 @@ bevy_ios_gamecenter = { version = "=0.2.0" }
 Initialize Bevy Plugin:
 
 ```rust
-// request auth right on startup
+// init right on startup
 app.add_plugins(IosGamecenterPlugin::new(true));
 ```
 
 ```rust
-fn bevy_system() {
-    bevy_ios_gamecenter::achievements_reset();
+fn bevy_system(mut gc: BevyIosGamecenter) {
     
-    // update achievement progress, 100 % will complete it
-    bevy_ios_gamecenter::achievement_progress("id".into(),100.);
+    gc.authenticate()
+        .on_response(|trigger: Trigger<IosGCAuthResult>| match &trigger.event().0 {
+            IosGCAuthResult::IsAuthenticated => {},
+            IosGCAuthResult::LoginPresented => {},
+            IosGCAuthResult::Error(e) => error!("auth error: {e}"),
+        });
+    
+    // here we request the player info type for the username and more
+    // Note: all requests via `gc` of type `BevyIosGamecenter` 
+    // allow to attach an observer to listen to the response:
+    gc.request_player().on_response(on_player_response);
 
-    bevy_ios_gamecenter::leaderboards_score(
+    // update achievement progress, 100 % will complete it
+    gc.achievement_progress("id".into(),100.);
+
+    // reset all achievements
+    gc.achievements_reset();
+
+    // save a game state as a byte slice
+    gc.save_game("test".into(), vec![1, 2, 3].as_slice());
+
+    // request list of `IosGCSaveGame`
+    gc.fetch_save_games().on_response(on_response);
+
+    // based on result of above `fetch_save_games` request
+    let save_game = IosGCSaveGame {..} 
+    gc.load_game(save_game);
+
+    // update leaderboard score
+    gc.leaderboards_score(
         "raking id".into(),
         // score
         1,
@@ -85,48 +108,7 @@ fn bevy_system() {
     );
 
     // open gamecenter view (leaderboard)
-    bevy_ios_gamecenter::trigger_view(view_states::LEADERBOARDS);
-
-    // save arbitrary binary buffer as a savegame
-    bevy_ios_gamecenter::save_game("test".into(), vec![1, 2, 3].as_slice());
-
-    // request list of `IosGCSaveGame`
-    bevy_ios_gamecenter::fetch_save_games();
-
-    // based on result of above `fetch_save_games` request
-    let save_game = IosGCSaveGame {..} 
-    bevy_ios_gamecenter::load_game(save_game);
-}
-```
-
-Alternatively you can use a convenient `Observer` based request/response approach:
-
-```rust
-fn bevy_system(mut gamecenter: BevyIosGamecenter) {
-    gamecenter.fetch_save_games().on_response(|trigger:Trigger<IosGCSaveGamesResponse>|{
-        // handle list of save games
-    });
-}
-```
-
-Process Response Events from iOS back to us in Rust:
-
-```rust
-fn process_gamecenter_events(
-    mut events: EventReader<IosGamecenterEvents>,
-) {
-    for e in events.read() {
-        match e {
-            IosGamecenterEvents::SaveGames(response) => todo!(),
-            IosGamecenterEvents::Player(player) => todo!(),
-            IosGamecenterEvents::Authentication(response) => todo!(),
-            IosGamecenterEvents::SavedGame(response) => todo!(),
-            IosGamecenterEvents::LoadGame(response) => todo!(),
-            IosGamecenterEvents::AchievementProgress(response) => todo!(),
-            IosGamecenterEvents::AchievementsReset(response) => todo!(),
-            IosGamecenterEvents::LeaderboardScoreSubmitted(response) => todo!(),
-        }
-    }
+    gc.trigger_view(view_states::LEADERBOARDS);
 }
 ```
 
