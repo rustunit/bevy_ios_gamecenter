@@ -24,9 +24,14 @@ struct DebugIosGamecenter {
     conflicting: Vec<IosGCSaveGame>,
     events: Vec<String>,
     player: IosGCPlayer,
+    test_achievement_ids: Vec<String>,
+    test_ranking_ids: Vec<String>,
 }
 
-pub struct IosGamecenterEguiPlugin;
+pub struct IosGamecenterEguiPlugin {
+    pub test_achievement_ids: Vec<String>,
+    pub test_ranking_ids: Vec<String>,
+}
 
 impl Plugin for IosGamecenterEguiPlugin {
     fn build(&self, app: &mut App) {
@@ -35,7 +40,11 @@ impl Plugin for IosGamecenterEguiPlugin {
         }
 
         app.init_resource::<DebugUiResource>();
-        app.init_resource::<DebugIosGamecenter>();
+        app.insert_resource(DebugIosGamecenter {
+            test_achievement_ids: self.test_achievement_ids.clone(),
+            test_ranking_ids: self.test_ranking_ids.clone(),
+            ..default()
+        });
 
         app.add_systems(Update, update);
         app.add_systems(
@@ -120,22 +129,23 @@ fn ios_gamecenter_ui(ui: &mut egui::Ui, res: &mut ResMut<DebugIosGamecenter>) {
     });
 
     ui.collapsing("leaderboards", |ui| {
-        if ui.button("submit").clicked() {
-            bevy_ios_gamecenter::leaderboards_score(
-                -1,
-                "com.rustunit.zoolitaire.ranking".into(),
-                1,
-                2,
-            );
-        }
-
-        if ui.button("show").clicked() {
+        if ui.button("show ui").clicked() {
             bevy_ios_gamecenter::trigger_view(view_states::LEADERBOARDS);
+        }
+        for id in &res.test_ranking_ids {
+            ui.collapsing(id, |ui| {
+                if ui.button("submit score = 1").clicked() {
+                    bevy_ios_gamecenter::leaderboards_score(-1, id.clone(), 1, 2);
+                }
+                if ui.button("submit score = 100").clicked() {
+                    bevy_ios_gamecenter::leaderboards_score(-1, id.clone(), 100, 2);
+                }
+            });
         }
     });
 
     ui.collapsing("achievements", |ui| {
-        if ui.button("show").clicked() {
+        if ui.button("show ui").clicked() {
             bevy_ios_gamecenter::trigger_view(view_states::ACHIEVEMENTS);
         }
 
@@ -143,33 +153,20 @@ fn ios_gamecenter_ui(ui: &mut egui::Ui, res: &mut ResMut<DebugIosGamecenter>) {
             bevy_ios_gamecenter::achievements_reset(-1);
         }
 
-        if ui.button("achievement: 50%").clicked() {
-            bevy_ios_gamecenter::achievement_progress(
-                -1,
-                "com.rustunit.zoolitaire.solved_first".into(),
-                50.,
-            );
+        if ui.button("achievement: invalid id").clicked() {
+            bevy_ios_gamecenter::achievement_progress(-1, "totally-invalid-id".into(), 100.0);
         }
-        if ui.button("achievement: 100%").clicked() {
-            bevy_ios_gamecenter::achievement_progress(
-                -1,
-                "com.rustunit.zoolitaire.solved_first".into(),
-                100.0,
-            );
-        }
-        if ui.button("achievement: 2").clicked() {
-            bevy_ios_gamecenter::achievement_progress(
-                -1,
-                "com.rustunit.zoolitaire.solved_005".into(),
-                100.0,
-            );
-        }
-        if ui.button("achievement: invalid").clicked() {
-            bevy_ios_gamecenter::achievement_progress(
-                -1,
-                "com.rustunit.zoolitaire.invalid".into(),
-                100.0,
-            );
+
+        for id in &res.test_achievement_ids {
+            ui.collapsing(id, |ui| {
+                if ui.button("set to 50%").clicked() {
+                    bevy_ios_gamecenter::achievement_progress(-1, id.clone(), 50.);
+                }
+
+                if ui.button("set to 100%").clicked() {
+                    bevy_ios_gamecenter::achievement_progress(-1, id.clone(), 100.);
+                }
+            });
         }
     });
 

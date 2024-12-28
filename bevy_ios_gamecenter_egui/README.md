@@ -18,7 +18,12 @@ Add this to your code:
 
 ```rust
 // initialize the plugin on startup
-app.add_plugins(IosGamecenterEguiPlugin);
+app.add_plugins(IosGamecenterEguiPlugin {
+    test_achievement_ids: vec![
+        "com.yourapp.achievement".into()
+    ],
+    test_ranking_ids: vec!["com.yourapp.ranking".into()],
+});
 
 // in any of your bevy systems you can toggle the ui with the following command:
 commands.trigger(IosGamecenterEguiOpen::Toggle);
