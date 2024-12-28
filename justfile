@@ -1,6 +1,8 @@
 check:
 	cd ./crate/ && cargo c --target=aarch64-apple-ios-sim
 	cd ./crate/ && cargo clippy --target=aarch64-apple-ios-sim
+	cd bevy_ios_gamecenter_egui && cargo clippy
+	cd bevy_ios_gamecenter_egui && cargo clippy --target=aarch64-apple-ios-sim
 
 build-rust-release:
 	./crate/build-rust-release.sh
