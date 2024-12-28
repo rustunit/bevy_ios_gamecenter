@@ -23,6 +23,7 @@ It uses [Swift-Bridge](https://github.com/chinedufn/swift-bridge) to auto-genera
 * save games (based on iCloud)
 * achievements
 * leaderboards
+* egui based debug ui crate see [bevy_ios_gamecenter_egui folder](./bevy_ios_gamecenter_egui/README.md)
 
 ## TODOs
 * challenges, matchmaking
