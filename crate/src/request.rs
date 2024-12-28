@@ -76,7 +76,7 @@ pub struct BevyIosGamecenter<'w, 's> {
     res: ResMut<'w, BevyIosGamecenterState>,
 }
 
-impl<'w, 's> BevyIosGamecenter<'w, 's> {
+impl BevyIosGamecenter<'_, '_> {
     pub fn authenticate(&mut self) -> BevyIosGCRequestBuilder<'_, IosGCAuthResult> {
         let id = self.res.request_id;
         self.res.request_id += 1;
@@ -272,7 +272,7 @@ fn cleanup_finished_requests(
     }
 }
 
-#[allow(unused_variables, unused_mut)]
+#[allow(unused_variables, unused_mut, clippy::too_many_arguments)]
 fn process_events(
     mut events: EventReader<IosGamecenterEvents>,
     mut commands: Commands,
