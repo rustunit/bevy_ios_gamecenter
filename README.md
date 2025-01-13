@@ -120,10 +120,11 @@ fn bevy_system(mut gc: BevyIosGamecenter) {
 - [bevy_web_popups](https://github.com/rustunit/bevy_web_popups)
 - [bevy_libgdx_atlas](https://github.com/rustunit/bevy_libgdx_atlas)
 - [bevy_ios_review](https://github.com/rustunit/bevy_ios_review)
-- [bevy_ios_alerts](https://github.com/rustunit/bevy_ios_alerts)
 - [bevy_ios_iap](https://github.com/rustunit/bevy_ios_iap)
+- [bevy_ios_alerts](https://github.com/rustunit/bevy_ios_alerts)
 - [bevy_ios_notifications](https://github.com/rustunit/bevy_ios_notifications)
 - [bevy_ios_impact](https://github.com/rustunit/bevy_ios_impact)
+- [bevy_ios_safearea](https://github.com/rustunit/bevy_ios_safearea)
 
 ## Bevy version support
 
