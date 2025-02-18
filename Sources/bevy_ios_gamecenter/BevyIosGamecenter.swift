@@ -37,7 +37,6 @@ public func authenticate(request: Int64) {
             return
         }
         
-        GKLocalPlayer.local.authenticateHandler = nil
         GKLocalPlayer.local.authenticateHandler = { gcAuthVC, error in
             if GKLocalPlayer.local.isAuthenticated {
                 receive_authentication(request, IosGCAuthResult.authenticated())
