@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Changed
+* support ios `15.0`
+* fix crash on iOS < 17.2 ([#1](https://github.com/rustunit/bevy_ios_gamecenter/pull/11))
+
 ## [0.3.0] - 2024-12-02
 
 ### Added
