@@ -18,8 +18,8 @@ let package = Package(
         .binaryTarget(
             name: "BevyIosGamecenterRust",
             //  path: "BevyIosGamecenterRust.xcframework"),
-           url: "https://github.com/rustunit/bevy_ios_gamecenter/releases/download/rs-0.3.0/BevyIosGamecenterRust.xcframework.zip",
-           checksum: "9da134600fd5740b40bf8c9c2fc4aca5ecb7fe6f62089303972408ae3bd0cc4a"),
+           url: "https://github.com/rustunit/bevy_ios_gamecenter/releases/download/rs-0.3.1/BevyIosGamecenterRust.xcframework.zip",
+           checksum: "05295ada53ee5fbf9864b1050b42d78af6cabff57bc81b3b23096c33dc9a95c5"),
         .target(
             name: "bevy_ios_gamecenter",
             dependencies: ["BevyIosGamecenterRust"]),
