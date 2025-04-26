@@ -42,7 +42,7 @@ It uses [Swift-Bridge](https://github.com/chinedufn/swift-bridge) to auto-genera
 * Go to `File` -> `Add Package Dependencies` and paste `https://github.com/rustunit/bevy_ios_gamecenter.git` into the search bar on the top right:
 ![xcode](./assets/xcode-spm.png)
 
-**Note:** 
+**Note:**
 The rust crate used must be exactly the same version as the Swift Package.
 I suggest using a specific version (like `0.2.0` in the screenshot) to make sure to always use binary matching versions!
 
@@ -50,13 +50,13 @@ I suggest using a specific version (like `0.2.0` in the screenshot) to make sure
 
 ```
 cargo add bevy_ios_gamecenter
-``` 
+```
 
-or 
+or
 
 ```toml
 # always pin to the same exact version you also of the Swift package
-bevy_ios_gamecenter = { version = "=0.3.0" }
+bevy_ios_gamecenter = { version = "=0.4.0" }
 ```
 
 ### 3. Setup Plugin
@@ -70,16 +70,16 @@ app.add_plugins(IosGamecenterPlugin::new(true));
 
 ```rust
 fn bevy_system(mut gc: BevyIosGamecenter) {
-    
+
     gc.authenticate()
         .on_response(|trigger: Trigger<IosGCAuthResult>| match &trigger.event().0 {
             IosGCAuthResult::IsAuthenticated => {},
             IosGCAuthResult::LoginPresented => {},
             IosGCAuthResult::Error(e) => error!("auth error: {e}"),
         });
-    
+
     // here we request the player info type for the username and more
-    // Note: all requests via `gc` of type `BevyIosGamecenter` 
+    // Note: all requests via `gc` of type `BevyIosGamecenter`
     // allow to attach an observer to listen to the response:
     gc.request_player().on_response(on_player_response);
 
@@ -96,7 +96,7 @@ fn bevy_system(mut gc: BevyIosGamecenter) {
     gc.fetch_save_games().on_response(on_response);
 
     // based on result of above `fetch_save_games` request
-    let save_game = IosGCSaveGame {..} 
+    let save_game = IosGCSaveGame {..}
     gc.load_game(save_game);
 
     // update leaderboard score
@@ -130,7 +130,8 @@ fn bevy_system(mut gc: BevyIosGamecenter) {
 
 |bevy|bevy\_ios\_gamecenter|
 |----|---|
-|0.15|0.3,main|
+|0.16|0.4,main|
+|0.15|0.3|
 |0.14|0.2|
 |0.13|0.1|
 

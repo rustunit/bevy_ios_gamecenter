@@ -266,7 +266,7 @@ fn cleanup_finished_requests(
     query: Query<Entity, (With<RequestEntity>, Without<RequestId>)>,
 ) {
     for e in query.iter() {
-        if let Some(mut ec) = commands.get_entity(e) {
+        if let Ok(mut ec) = commands.get_entity(e) {
             ec.despawn();
         }
     }
@@ -294,7 +294,7 @@ fn process_events(
                 for (e, id) in &request_authentication {
                     if id.0 == *r {
                         commands.trigger_targets(response.clone(), e);
-                        if let Some(mut ec) = commands.get_entity(e) {
+                        if let Ok(mut ec) = commands.get_entity(e) {
                             ec.remove::<RequestId>();
                         }
                         break;
@@ -305,7 +305,7 @@ fn process_events(
                 for (e, id) in &request_player {
                     if id.0 == *r {
                         commands.trigger_targets(response.clone(), e);
-                        if let Some(mut ec) = commands.get_entity(e) {
+                        if let Ok(mut ec) = commands.get_entity(e) {
                             ec.remove::<RequestId>();
                         }
                         break;
@@ -316,7 +316,7 @@ fn process_events(
                 for (e, id) in &request_save_games {
                     if id.0 == *r {
                         commands.trigger_targets(response.clone(), e);
-                        if let Some(mut ec) = commands.get_entity(e) {
+                        if let Ok(mut ec) = commands.get_entity(e) {
                             ec.remove::<RequestId>();
                         }
                         break;
@@ -327,7 +327,7 @@ fn process_events(
                 for (e, id) in &request_save_game {
                     if id.0 == *r {
                         commands.trigger_targets(response.clone(), e);
-                        if let Some(mut ec) = commands.get_entity(e) {
+                        if let Ok(mut ec) = commands.get_entity(e) {
                             ec.remove::<RequestId>();
                         }
                         break;
@@ -338,7 +338,7 @@ fn process_events(
                 for (e, id) in &request_load_game {
                     if id.0 == *r {
                         commands.trigger_targets(response.clone(), e);
-                        if let Some(mut ec) = commands.get_entity(e) {
+                        if let Ok(mut ec) = commands.get_entity(e) {
                             ec.remove::<RequestId>();
                         }
                         break;
@@ -349,7 +349,7 @@ fn process_events(
                 for (e, id) in &request_resolve_conflicts {
                     if id.0 == *r {
                         commands.trigger_targets(response.clone(), e);
-                        if let Some(mut ec) = commands.get_entity(e) {
+                        if let Ok(mut ec) = commands.get_entity(e) {
                             ec.remove::<RequestId>();
                         }
                         break;
@@ -360,7 +360,7 @@ fn process_events(
                 for (e, id) in &request_delete_savegame {
                     if id.0 == *r {
                         commands.trigger_targets(response.clone(), e);
-                        if let Some(mut ec) = commands.get_entity(e) {
+                        if let Ok(mut ec) = commands.get_entity(e) {
                             ec.remove::<RequestId>();
                         }
                         break;
@@ -371,7 +371,7 @@ fn process_events(
                 for (e, id) in &request_fetch_signature {
                     if id.0 == *r {
                         commands.trigger_targets(response.clone(), e);
-                        if let Some(mut ec) = commands.get_entity(e) {
+                        if let Ok(mut ec) = commands.get_entity(e) {
                             ec.remove::<RequestId>();
                         }
                         break;
@@ -382,7 +382,7 @@ fn process_events(
                 for (e, id) in &request_achievement_progress {
                     if id.0 == *r {
                         commands.trigger_targets(response.clone(), e);
-                        if let Some(mut ec) = commands.get_entity(e) {
+                        if let Ok(mut ec) = commands.get_entity(e) {
                             ec.remove::<RequestId>();
                         }
                         break;
@@ -393,7 +393,7 @@ fn process_events(
                 for (e, id) in &request_achievements_reset {
                     if id.0 == *r {
                         commands.trigger_targets(response.clone(), e);
-                        if let Some(mut ec) = commands.get_entity(e) {
+                        if let Ok(mut ec) = commands.get_entity(e) {
                             ec.remove::<RequestId>();
                         }
                         break;
@@ -404,7 +404,7 @@ fn process_events(
                 for (e, id) in &request_leaderboard_score {
                     if id.0 == *r {
                         commands.trigger_targets(response.clone(), e);
-                        if let Some(mut ec) = commands.get_entity(e) {
+                        if let Ok(mut ec) = commands.get_entity(e) {
                             ec.remove::<RequestId>();
                         }
                         break;
