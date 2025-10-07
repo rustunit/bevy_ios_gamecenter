@@ -1,9 +1,13 @@
+mod events;
 mod methods;
 mod native;
 mod plugin;
 mod request;
 
-use bevy_ecs::event::Event;
+use bevy_ecs::{
+    entity::Entity,
+    event::{EntityEvent, Event},
+};
 pub use methods::{
     achievement_progress, achievements_reset, authenticate, delete_savegame, fetch_save_games,
     fetch_signature, init_listeners, leaderboards_score, load_game, request_player,
@@ -16,7 +20,7 @@ pub use request::{BevyIosGamecenter, BevyIosGamecenterSet};
 /// implicit on startup when registering Plugin via `IosGamecenterPlugin::new(true)`.
 ///
 /// See Event [`IosGamecenterEvents`]
-#[derive(Debug, Clone, Event)]
+#[derive(Debug, Clone)]
 pub enum IosGCAuthResult {
     IsAuthenticated,
     LoginPresented,
@@ -50,7 +54,7 @@ impl IosGCSaveGames {
     }
 }
 
-#[derive(Debug, Clone, Event)]
+#[derive(Debug, Clone)]
 pub enum IosGCResolvedConflictsResponse {
     Done(IosGCSaveGames),
     Error(String),
@@ -68,7 +72,7 @@ impl IosGCResolvedConflictsResponse {
 
 /// Expected event data in response to [`request_player`] method call.
 /// See Event [`IosGamecenterEvents`]
-#[derive(Event, Debug, Clone, Default)]
+#[derive(Debug, Clone, Default)]
 pub struct IosGCPlayer {
     pub game_id: String,
     pub team_id: String,
@@ -97,7 +101,7 @@ impl IosGCPlayer {
 
 /// Expected event data in response to [`save_game`] method call.
 /// See Event [`IosGamecenterEvents`]
-#[derive(Debug, Clone, Event)]
+#[derive(Debug, Clone)]
 pub enum IosGCSavedGameResponse {
     Done(IosGCSaveGame),
     Error(String),
@@ -115,7 +119,7 @@ impl IosGCSavedGameResponse {
 
 /// Expected event data in response to [`fetch_save_games`] method call.
 /// See Event [`IosGamecenterEvents`]
-#[derive(Debug, Clone, Event)]
+#[derive(Debug, Clone)]
 pub enum IosGCSaveGamesResponse {
     Done(IosGCSaveGames),
     Error(String),
@@ -160,7 +164,7 @@ impl IosGCSaveGame {
 
 /// Expected event data in response to [`load_game`] method call.
 /// See Event [`IosGamecenterEvents`]
-#[derive(Debug, Clone, Event)]
+#[derive(Debug, Clone)]
 pub enum IosGCLoadGamesResponse {
     /// Indicates a successfully loaded Save Game
     /// It will return the Save Game that was requested and the Data as a `Option<Vec<u8>>`.
@@ -215,7 +219,7 @@ impl IosGCAchievement {
 
 /// Expected event data in response to [`achievement_progress`] method call.
 /// See Event [`IosGamecenterEvents`]
-#[derive(Event, Debug, Clone)]
+#[derive(Debug, Clone)]
 pub enum IosGCAchievementProgressResponse {
     Done(IosGCAchievement),
     Error(String),
@@ -233,7 +237,7 @@ impl IosGCAchievementProgressResponse {
 
 /// Expected event data in response to [`achievements_reset`] method call.
 /// See Event [`IosGamecenterEvents`]
-#[derive(Event, Debug, Clone)]
+#[derive(Debug, Clone)]
 pub enum IosGCAchievementsResetResponse {
     Done,
     Error(String),
@@ -251,7 +255,7 @@ impl IosGCAchievementsResetResponse {
 
 /// Expected event data in response to [`leaderboards_score`] method call.
 /// See Event [`IosGamecenterEvents`]
-#[derive(Event, Debug, Clone)]
+#[derive(Debug, Clone)]
 pub enum IosGCScoreSubmitResponse {
     Done,
     Error(String),
@@ -269,7 +273,7 @@ impl IosGCScoreSubmitResponse {
 
 /// Expected event data in response to [`delete_savegame`] method call.
 /// See Event [`IosGamecenterEvents`]
-#[derive(Event, Debug, Clone)]
+#[derive(Debug, Clone)]
 pub enum IosGCDeleteSaveGameResponse {
     Done(String),
     Error(String),
@@ -318,7 +322,7 @@ impl IosGCFetchItemsForSignatureVerification {
 
 /// Expected event data in response to [`fetch_signature`] method call.
 /// See Event [`IosGamecenterEvents`]
-#[derive(Event, Debug, Clone)]
+#[derive(Debug, Clone)]
 pub enum IosGCFetchItemsForSignatureVerificationResponse {
     Done(IosGCFetchItemsForSignatureVerification),
     Error(String),

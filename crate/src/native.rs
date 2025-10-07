@@ -2,17 +2,17 @@
 
 use std::sync::OnceLock;
 
-use bevy_crossbeam_event::CrossbeamEventSender;
+use bevy_channel_message::ChannelMessageSender;
 
 #[allow(unused_imports)]
 pub use ffi::*;
 
 use crate::{
-    plugin::IosGamecenterEvents, IosGCAchievement, IosGCAchievementProgressResponse,
-    IosGCAchievementsResetResponse, IosGCAuthResult, IosGCDeleteSaveGameResponse,
-    IosGCFetchItemsForSignatureVerification, IosGCFetchItemsForSignatureVerificationResponse,
-    IosGCLoadGamesResponse, IosGCPlayer, IosGCResolvedConflictsResponse, IosGCSaveGame,
-    IosGCSaveGames, IosGCSaveGamesResponse, IosGCSavedGameResponse, IosGCScoreSubmitResponse,
+    IosGCAchievement, IosGCAchievementProgressResponse, IosGCAchievementsResetResponse,
+    IosGCAuthResult, IosGCDeleteSaveGameResponse, IosGCFetchItemsForSignatureVerification,
+    IosGCFetchItemsForSignatureVerificationResponse, IosGCLoadGamesResponse, IosGCPlayer,
+    IosGCResolvedConflictsResponse, IosGCSaveGame, IosGCSaveGames, IosGCSaveGamesResponse,
+    IosGCSavedGameResponse, IosGCScoreSubmitResponse, plugin::IosGamecenterEvents,
 };
 
 #[swift_bridge::bridge]
@@ -176,10 +176,10 @@ mod ffi {
     }
 }
 
-static SENDER: OnceLock<Option<CrossbeamEventSender<IosGamecenterEvents>>> = OnceLock::new();
+static SENDER: OnceLock<Option<ChannelMessageSender<IosGamecenterEvents>>> = OnceLock::new();
 
 #[allow(dead_code)]
-pub fn set_sender(sender: CrossbeamEventSender<IosGamecenterEvents>) {
+pub fn set_sender(sender: ChannelMessageSender<IosGamecenterEvents>) {
     while SENDER.set(Some(sender.clone())).is_err() {}
 }
 

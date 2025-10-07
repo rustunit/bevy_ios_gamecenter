@@ -12,6 +12,7 @@ use crate::{
     IosGCLoadGamesResponse, IosGCPlayer, IosGCResolvedConflictsResponse, IosGCSaveGame,
     IosGCSaveGames, IosGCSaveGamesResponse, IosGCSavedGameResponse, IosGCScoreSubmitResponse,
     IosGamecenterEvents,
+    events::{GCAuthResult, PlayerResult, SaveGamesResult, SavedGameResult},
 };
 
 #[derive(Resource, Default)]
@@ -77,7 +78,7 @@ pub struct BevyIosGamecenter<'w, 's> {
 }
 
 impl BevyIosGamecenter<'_, '_> {
-    pub fn authenticate(&mut self) -> BevyIosGCRequestBuilder<'_, IosGCAuthResult> {
+    pub fn authenticate(&mut self) -> BevyIosGCRequestBuilder<'_, GCAuthResult> {
         let id = self.res.request_id;
         self.res.request_id += 1;
         crate::methods::authenticate(id);
@@ -88,7 +89,7 @@ impl BevyIosGamecenter<'_, '_> {
         )))
     }
 
-    pub fn request_player(&mut self) -> BevyIosGCRequestBuilder<'_, IosGCPlayer> {
+    pub fn request_player(&mut self) -> BevyIosGCRequestBuilder<'_, PlayerResult> {
         let id = self.res.request_id;
         self.res.request_id += 1;
         crate::methods::request_player(id);
@@ -99,7 +100,7 @@ impl BevyIosGamecenter<'_, '_> {
         )))
     }
 
-    pub fn fetch_save_games(&mut self) -> BevyIosGCRequestBuilder<'_, IosGCSaveGamesResponse> {
+    pub fn fetch_save_games(&mut self) -> BevyIosGCRequestBuilder<'_, SaveGamesResult> {
         let id = self.res.request_id;
         self.res.request_id += 1;
         crate::methods::fetch_save_games(id);
@@ -114,7 +115,7 @@ impl BevyIosGamecenter<'_, '_> {
         &mut self,
         name: String,
         data: &[u8],
-    ) -> BevyIosGCRequestBuilder<'_, IosGCSavedGameResponse> {
+    ) -> BevyIosGCRequestBuilder<'_, ResponseEvent<SavedGameResult>> {
         let id = self.res.request_id;
         self.res.request_id += 1;
         crate::methods::save_game(id, name, data);
@@ -125,112 +126,113 @@ impl BevyIosGamecenter<'_, '_> {
         )))
     }
 
-    pub fn load_game(
-        &mut self,
-        game: IosGCSaveGame,
-    ) -> BevyIosGCRequestBuilder<'_, IosGCLoadGamesResponse> {
-        let id = self.res.request_id;
-        self.res.request_id += 1;
-        crate::methods::load_game(id, game);
-        BevyIosGCRequestBuilder::new(self.commands.spawn((
-            RequestLoadGame,
-            RequestId(id),
-            RequestEntity,
-        )))
-    }
+    // pub fn load_game(
+    //     &mut self,
+    //     game: IosGCSaveGame,
+    // ) -> BevyIosGCRequestBuilder<'_, ResponseEvent<IosGCLoadGamesResponse>> {
+    //     let id = self.res.request_id;
+    //     self.res.request_id += 1;
+    //     crate::methods::load_game(id, game);
+    //     BevyIosGCRequestBuilder::new(self.commands.spawn((
+    //         RequestLoadGame,
+    //         RequestId(id),
+    //         RequestEntity,
+    //     )))
+    // }
 
-    pub fn resolve_conflicts(
-        &mut self,
-        save_games: IosGCSaveGames,
-        data: &[u8],
-    ) -> BevyIosGCRequestBuilder<'_, IosGCResolvedConflictsResponse> {
-        let id = self.res.request_id;
-        self.res.request_id += 1;
-        crate::methods::resolve_conflicting_games(id, save_games, data);
-        BevyIosGCRequestBuilder::new(self.commands.spawn((
-            RequestResolveConflicts,
-            RequestId(id),
-            RequestEntity,
-        )))
-    }
+    // pub fn resolve_conflicts(
+    //     &mut self,
+    //     save_games: IosGCSaveGames,
+    //     data: &[u8],
+    // ) -> BevyIosGCRequestBuilder<'_, ResponseEvent<IosGCResolvedConflictsResponse>> {
+    //     let id = self.res.request_id;
+    //     self.res.request_id += 1;
+    //     crate::methods::resolve_conflicting_games(id, save_games, data);
+    //     BevyIosGCRequestBuilder::new(self.commands.spawn((
+    //         RequestResolveConflicts,
+    //         RequestId(id),
+    //         RequestEntity,
+    //     )))
+    // }
 
-    pub fn delete_savegame(
-        &mut self,
-        name: String,
-    ) -> BevyIosGCRequestBuilder<'_, IosGCDeleteSaveGameResponse> {
-        let id = self.res.request_id;
-        self.res.request_id += 1;
-        crate::methods::delete_savegame(id, name);
-        BevyIosGCRequestBuilder::new(self.commands.spawn((
-            RequestDeleteSavegame,
-            RequestId(id),
-            RequestEntity,
-        )))
-    }
+    // pub fn delete_savegame(
+    //     &mut self,
+    //     name: String,
+    // ) -> BevyIosGCRequestBuilder<'_, ResponseEvent<IosGCDeleteSaveGameResponse>> {
+    //     let id = self.res.request_id;
+    //     self.res.request_id += 1;
+    //     crate::methods::delete_savegame(id, name);
+    //     BevyIosGCRequestBuilder::new(self.commands.spawn((
+    //         RequestDeleteSavegame,
+    //         RequestId(id),
+    //         RequestEntity,
+    //     )))
+    // }
 
-    pub fn fetch_signature(
-        &mut self,
-    ) -> BevyIosGCRequestBuilder<'_, IosGCFetchItemsForSignatureVerificationResponse> {
-        let id = self.res.request_id;
-        self.res.request_id += 1;
-        crate::methods::fetch_signature(id);
-        BevyIosGCRequestBuilder::new(self.commands.spawn((
-            RequestFetchSignature,
-            RequestId(id),
-            RequestEntity,
-        )))
-    }
+    // pub fn fetch_signature(
+    //     &mut self,
+    // ) -> BevyIosGCRequestBuilder<'_, ResponseEvent<IosGCFetchItemsForSignatureVerificationResponse>>
+    // {
+    //     let id = self.res.request_id;
+    //     self.res.request_id += 1;
+    //     crate::methods::fetch_signature(id);
+    //     BevyIosGCRequestBuilder::new(self.commands.spawn((
+    //         RequestFetchSignature,
+    //         RequestId(id),
+    //         RequestEntity,
+    //     )))
+    // }
 
-    pub fn achievement_progress(
-        &mut self,
-        achievement_id: String,
-        progress: f64,
-    ) -> BevyIosGCRequestBuilder<'_, IosGCAchievementProgressResponse> {
-        let id = self.res.request_id;
-        self.res.request_id += 1;
-        crate::methods::achievement_progress(id, achievement_id, progress);
-        BevyIosGCRequestBuilder::new(self.commands.spawn((
-            RequestAchievementProgress,
-            RequestId(id),
-            RequestEntity,
-        )))
-    }
+    // pub fn achievement_progress(
+    //     &mut self,
+    //     achievement_id: String,
+    //     progress: f64,
+    // ) -> BevyIosGCRequestBuilder<'_, ResponseEvent<IosGCAchievementProgressResponse>> {
+    //     let id = self.res.request_id;
+    //     self.res.request_id += 1;
+    //     crate::methods::achievement_progress(id, achievement_id, progress);
+    //     BevyIosGCRequestBuilder::new(self.commands.spawn((
+    //         RequestAchievementProgress,
+    //         RequestId(id),
+    //         RequestEntity,
+    //     )))
+    // }
 
-    pub fn achievements_reset(
-        &mut self,
-    ) -> BevyIosGCRequestBuilder<'_, IosGCAchievementsResetResponse> {
-        let id = self.res.request_id;
-        self.res.request_id += 1;
-        crate::methods::achievements_reset(id);
-        BevyIosGCRequestBuilder::new(self.commands.spawn((
-            RequestAchievementsReset,
-            RequestId(id),
-            RequestEntity,
-        )))
-    }
+    // pub fn achievements_reset(
+    //     &mut self,
+    // ) -> BevyIosGCRequestBuilder<'_, ResponseEvent<IosGCAchievementsResetResponse>> {
+    //     let id = self.res.request_id;
+    //     self.res.request_id += 1;
+    //     crate::methods::achievements_reset(id);
+    //     BevyIosGCRequestBuilder::new(self.commands.spawn((
+    //         RequestAchievementsReset,
+    //         RequestId(id),
+    //         RequestEntity,
+    //     )))
+    // }
 
-    pub fn leaderboards_score(
-        &mut self,
-        leaderboard_id: String,
-        score: i64,
-        context: i64,
-    ) -> BevyIosGCRequestBuilder<'_, IosGCScoreSubmitResponse> {
-        let id = self.res.request_id;
-        self.res.request_id += 1;
-        crate::methods::leaderboards_score(id, leaderboard_id, score, context);
-        BevyIosGCRequestBuilder::new(self.commands.spawn((
-            RequestLeaderboardScore,
-            RequestId(id),
-            RequestEntity,
-        )))
-    }
+    // pub fn leaderboards_score(
+    //     &mut self,
+    //     leaderboard_id: String,
+    //     score: i64,
+    //     context: i64,
+    // ) -> BevyIosGCRequestBuilder<'_, ResponseEvent<IosGCScoreSubmitResponse>> {
+    //     let id = self.res.request_id;
+    //     self.res.request_id += 1;
+    //     crate::methods::leaderboards_score(id, leaderboard_id, score, context);
+    //     BevyIosGCRequestBuilder::new(self.commands.spawn((
+    //         RequestLeaderboardScore,
+    //         RequestId(id),
+    //         RequestEntity,
+    //     )))
+    // }
 }
 
 pub struct BevyIosGCRequestBuilder<'a, T>(EntityCommands<'a>, PhantomData<T>);
 
 impl<'a, T> BevyIosGCRequestBuilder<'a, T>
 where
-    T: 'static + Event,
+    T: 'static + EntityEvent,
 {
     fn new(ec: EntityCommands<'a>) -> Self {
         Self(ec, PhantomData)
@@ -254,7 +256,7 @@ pub fn plugin(app: &mut App) {
         PreUpdate,
         (
             cleanup_finished_requests,
-            process_events.run_if(on_event::<IosGamecenterEvents>),
+            process_events.run_if(on_message::<IosGamecenterEvents>),
         )
             .chain()
             .in_set(BevyIosGamecenterSet),
@@ -274,7 +276,7 @@ fn cleanup_finished_requests(
 
 #[allow(unused_variables, unused_mut, clippy::too_many_arguments)]
 fn process_events(
-    mut events: EventReader<IosGamecenterEvents>,
+    mut events: MessageReader<IosGamecenterEvents>,
     mut commands: Commands,
     request_authentication: Query<(Entity, &RequestId), With<RequestAuthentication>>,
     request_player: Query<(Entity, &RequestId), With<RequestPlayer>>,
@@ -293,7 +295,10 @@ fn process_events(
             IosGamecenterEvents::Authentication((r, response)) => {
                 for (e, id) in &request_authentication {
                     if id.0 == *r {
-                        commands.trigger_targets(response.clone(), e);
+                        commands.trigger(GCAuthResult {
+                            entity: e,
+                            response: response.clone(),
+                        });
                         if let Ok(mut ec) = commands.get_entity(e) {
                             ec.remove::<RequestId>();
                         }
@@ -304,7 +309,10 @@ fn process_events(
             IosGamecenterEvents::Player((r, response)) => {
                 for (e, id) in &request_player {
                     if id.0 == *r {
-                        commands.trigger_targets(response.clone(), e);
+                        commands.trigger(PlayerResult {
+                            entity: e,
+                            response: response.clone(),
+                        });
                         if let Ok(mut ec) = commands.get_entity(e) {
                             ec.remove::<RequestId>();
                         }
@@ -315,7 +323,10 @@ fn process_events(
             IosGamecenterEvents::SaveGames((r, response)) => {
                 for (e, id) in &request_save_games {
                     if id.0 == *r {
-                        commands.trigger_targets(response.clone(), e);
+                        commands.trigger(SaveGamesResult {
+                            entity: e,
+                            response: response.clone(),
+                        });
                         if let Ok(mut ec) = commands.get_entity(e) {
                             ec.remove::<RequestId>();
                         }
@@ -326,7 +337,10 @@ fn process_events(
             IosGamecenterEvents::SavedGame((r, response)) => {
                 for (e, id) in &request_save_game {
                     if id.0 == *r {
-                        commands.trigger_targets(response.clone(), e);
+                        commands.trigger(SavedGameResult {
+                            entity: e,
+                            response: response.clone(),
+                        });
                         if let Ok(mut ec) = commands.get_entity(e) {
                             ec.remove::<RequestId>();
                         }
@@ -337,7 +351,7 @@ fn process_events(
             IosGamecenterEvents::LoadGame((r, response)) => {
                 for (e, id) in &request_load_game {
                     if id.0 == *r {
-                        commands.trigger_targets(response.clone(), e);
+                        // commands.trigger_targets(response.clone(), e);
                         if let Ok(mut ec) = commands.get_entity(e) {
                             ec.remove::<RequestId>();
                         }
@@ -348,7 +362,7 @@ fn process_events(
             IosGamecenterEvents::ResolvedConflicts((r, response)) => {
                 for (e, id) in &request_resolve_conflicts {
                     if id.0 == *r {
-                        commands.trigger_targets(response.clone(), e);
+                        // commands.trigger_targets(response.clone(), e);
                         if let Ok(mut ec) = commands.get_entity(e) {
                             ec.remove::<RequestId>();
                         }
@@ -359,7 +373,7 @@ fn process_events(
             IosGamecenterEvents::DeletedSaveGame((r, response)) => {
                 for (e, id) in &request_delete_savegame {
                     if id.0 == *r {
-                        commands.trigger_targets(response.clone(), e);
+                        // commands.trigger_targets(response.clone(), e);
                         if let Ok(mut ec) = commands.get_entity(e) {
                             ec.remove::<RequestId>();
                         }
@@ -370,7 +384,7 @@ fn process_events(
             IosGamecenterEvents::ItemsForSignatureVerification((r, response)) => {
                 for (e, id) in &request_fetch_signature {
                     if id.0 == *r {
-                        commands.trigger_targets(response.clone(), e);
+                        // commands.trigger_targets(response.clone(), e);
                         if let Ok(mut ec) = commands.get_entity(e) {
                             ec.remove::<RequestId>();
                         }
@@ -381,7 +395,7 @@ fn process_events(
             IosGamecenterEvents::AchievementProgress((r, response)) => {
                 for (e, id) in &request_achievement_progress {
                     if id.0 == *r {
-                        commands.trigger_targets(response.clone(), e);
+                        // commands.trigger_targets(response.clone(), e);
                         if let Ok(mut ec) = commands.get_entity(e) {
                             ec.remove::<RequestId>();
                         }
@@ -392,7 +406,7 @@ fn process_events(
             IosGamecenterEvents::AchievementsReset((r, response)) => {
                 for (e, id) in &request_achievements_reset {
                     if id.0 == *r {
-                        commands.trigger_targets(response.clone(), e);
+                        // commands.trigger_targets(response.clone(), e);
                         if let Ok(mut ec) = commands.get_entity(e) {
                             ec.remove::<RequestId>();
                         }
@@ -403,7 +417,7 @@ fn process_events(
             IosGamecenterEvents::LeaderboardScoreSubmitted((r, response)) => {
                 for (e, id) in &request_leaderboard_score {
                     if id.0 == *r {
-                        commands.trigger_targets(response.clone(), e);
+                        // commands.trigger_targets(response.clone(), e);
                         if let Ok(mut ec) = commands.get_entity(e) {
                             ec.remove::<RequestId>();
                         }
