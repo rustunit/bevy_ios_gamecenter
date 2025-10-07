@@ -115,7 +115,7 @@ impl BevyIosGamecenter<'_, '_> {
         &mut self,
         name: String,
         data: &[u8],
-    ) -> BevyIosGCRequestBuilder<'_, ResponseEvent<SavedGameResult>> {
+    ) -> BevyIosGCRequestBuilder<'_, SavedGameResult> {
         let id = self.res.request_id;
         self.res.request_id += 1;
         crate::methods::save_game(id, name, data);
