@@ -36,9 +36,7 @@ pub struct IosGamecenterEguiPlugin {
 impl Plugin for IosGamecenterEguiPlugin {
     fn build(&self, app: &mut App) {
         if !app.is_plugin_added::<EguiPlugin>() {
-            app.add_plugins(EguiPlugin {
-                enable_multipass_for_primary_context: false,
-            });
+            app.add_plugins(EguiPlugin::default());
         }
 
         app.init_resource::<DebugUiResource>();
@@ -51,14 +49,14 @@ impl Plugin for IosGamecenterEguiPlugin {
         app.add_systems(Update, update);
         app.add_systems(
             Update,
-            process_gc_events.run_if(on_event::<IosGamecenterEvents>),
+            process_gc_events.run_if(on_message::<IosGamecenterEvents>),
         );
 
         app.add_observer(on_toggle);
     }
 }
 
-fn on_toggle(trigger: Trigger<IosGamecenterEguiOpen>, mut res: ResMut<DebugUiResource>) {
+fn on_toggle(trigger: On<IosGamecenterEguiOpen>, mut res: ResMut<DebugUiResource>) {
     match trigger.event() {
         IosGamecenterEguiOpen::Toggle => res.open = !res.open,
         IosGamecenterEguiOpen::Open => res.open = true,
@@ -67,7 +65,7 @@ fn on_toggle(trigger: Trigger<IosGamecenterEguiOpen>, mut res: ResMut<DebugUiRes
 }
 
 fn process_gc_events(
-    mut events: EventReader<IosGamecenterEvents>,
+    mut events: MessageReader<IosGamecenterEvents>,
     mut res: ResMut<DebugIosGamecenter>,
 ) {
     for e in events.read() {
@@ -97,7 +95,7 @@ fn update(
     mut res_gc: ResMut<DebugIosGamecenter>,
 ) {
     let mut open_state = res.open;
-    let Some(ctx) = contexts.try_ctx_mut() else {
+    let Ok(ctx) = contexts.ctx_mut() else {
         return;
     };
 

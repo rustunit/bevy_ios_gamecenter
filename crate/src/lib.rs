@@ -4,10 +4,6 @@ mod native;
 mod plugin;
 mod request;
 
-use bevy_ecs::{
-    entity::Entity,
-    event::{EntityEvent, Event},
-};
 pub use methods::{
     achievement_progress, achievements_reset, authenticate, delete_savegame, fetch_save_games,
     fetch_signature, init_listeners, leaderboards_score, load_game, request_player,
