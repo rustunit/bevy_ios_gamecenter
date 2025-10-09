@@ -9,9 +9,9 @@ use bevy_ecs::{
 use crate::{
     IosGCSaveGame, IosGCSaveGames, IosGamecenterEvents,
     events::{
-        AchievementProgressResult, AchievementsResetResult, DeleteSaveGameResult,
-        FetchItemsForSignatureVerificationResult, GCAuthResult, LoadGamesResult, PlayerResult,
-        ResolvedConflictsResult, SaveGamesResult, SavedGameResult, ScoreSubmitResult,
+        AchievementProgressResult, AchievementsResetResult, AuthenticationResult,
+        DeleteSaveGameResult, FetchItemsForSignatureVerificationResult, LoadGamesResult,
+        PlayerResult, ResolvedConflictsResult, SaveGamesResult, SavedGameResult, ScoreSubmitResult,
     },
 };
 
@@ -78,7 +78,7 @@ pub struct BevyIosGamecenter<'w, 's> {
 }
 
 impl BevyIosGamecenter<'_, '_> {
-    pub fn authenticate(&mut self) -> BevyIosGCRequestBuilder<'_, GCAuthResult> {
+    pub fn authenticate(&mut self) -> BevyIosGCRequestBuilder<'_, AuthenticationResult> {
         let id = self.res.request_id;
         self.res.request_id += 1;
         crate::methods::authenticate(id);
@@ -292,7 +292,7 @@ fn process_events(
             IosGamecenterEvents::Authentication((r, response)) => {
                 for (e, id) in &request_authentication {
                     if id.0 == *r {
-                        commands.trigger(GCAuthResult {
+                        commands.trigger(AuthenticationResult {
                             entity: e,
                             response: response.clone(),
                         });

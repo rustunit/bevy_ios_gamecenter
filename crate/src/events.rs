@@ -10,11 +10,11 @@ use crate::{
 };
 
 #[derive(EntityEvent, Clone, Debug)]
-pub struct GCAuthResult {
+pub struct AuthenticationResult {
     pub entity: Entity,
     pub response: IosGCAuthResult,
 }
-impl Deref for GCAuthResult {
+impl Deref for AuthenticationResult {
     type Target = IosGCAuthResult;
 
     fn deref(&self) -> &Self::Target {
