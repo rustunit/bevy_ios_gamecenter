@@ -4,6 +4,11 @@ mod native;
 mod plugin;
 mod request;
 
+pub use events::{
+    AchievementProgressResult, AchievementsResetResult, AuthenticationResult, DeleteSaveGameResult,
+    FetchItemsForSignatureVerificationResult, LoadGamesResult, PlayerResult,
+    ResolvedConflictsResult, SaveGamesResult, SavedGameResult, ScoreSubmitResult,
+};
 pub use methods::{
     achievement_progress, achievements_reset, authenticate, delete_savegame, fetch_save_games,
     fetch_signature, init_listeners, leaderboards_score, load_game, request_player,
