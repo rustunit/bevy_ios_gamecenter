@@ -56,7 +56,7 @@ or
 
 ```toml
 # always pin to the same exact version you also of the Swift package
-bevy_ios_gamecenter = { version = "=0.4.0" }
+bevy_ios_gamecenter = { version = "=0.5.0" }
 ```
 
 ### 3. Setup Plugin
@@ -72,7 +72,7 @@ app.add_plugins(IosGamecenterPlugin::new(true));
 fn bevy_system(mut gc: BevyIosGamecenter) {
 
     gc.authenticate()
-        .on_response(|trigger: Trigger<AuthenticationResult>| match &trigger.event() {
+        .on_response(|result: On<AuthenticationResult>| match result.response {
             IosGCAuthResult::IsAuthenticated => {},
             IosGCAuthResult::LoginPresented => {},
             IosGCAuthResult::Error(e) => error!("auth error: {e}"),
