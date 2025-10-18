@@ -72,7 +72,7 @@ app.add_plugins(IosGamecenterPlugin::new(true));
 fn bevy_system(mut gc: BevyIosGamecenter) {
 
     gc.authenticate()
-        .on_response(|trigger: Trigger<IosGCAuthResult>| match &trigger.event().0 {
+        .on_response(|trigger: Trigger<AuthenticationResult>| match &trigger.event() {
             IosGCAuthResult::IsAuthenticated => {},
             IosGCAuthResult::LoginPresented => {},
             IosGCAuthResult::Error(e) => error!("auth error: {e}"),
@@ -130,7 +130,8 @@ fn bevy_system(mut gc: BevyIosGamecenter) {
 
 |bevy|bevy\_ios\_gamecenter|
 |----|---|
-|0.16|0.4,main|
+|0.17|0.5,main|
+|0.16|0.4|
 |0.15|0.3|
 |0.14|0.2|
 |0.13|0.1|

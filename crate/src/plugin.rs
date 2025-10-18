@@ -2,14 +2,14 @@ use bevy_app::prelude::*;
 use bevy_ecs::prelude::*;
 
 use crate::{
-    request, IosGCAchievementProgressResponse, IosGCAchievementsResetResponse, IosGCAuthResult,
+    IosGCAchievementProgressResponse, IosGCAchievementsResetResponse, IosGCAuthResult,
     IosGCDeleteSaveGameResponse, IosGCFetchItemsForSignatureVerificationResponse,
     IosGCLoadGamesResponse, IosGCPlayer, IosGCResolvedConflictsResponse, IosGCSaveGames,
-    IosGCSaveGamesResponse, IosGCSavedGameResponse, IosGCScoreSubmitResponse,
+    IosGCSaveGamesResponse, IosGCSavedGameResponse, IosGCScoreSubmitResponse, request,
 };
 
 /// All events for communication from native iOS (Swift) side to Rust/Bevy
-#[derive(Event, Clone, Debug)]
+#[derive(Message, Clone, Debug)]
 pub enum IosGamecenterEvents {
     /// Triggered by calls to [`init`][crate::init] or implicit when registering [`IosGamecenterPlugin`] via `IosGamecenterPlugin::new(true)`
     Authentication((i64, IosGCAuthResult)),
@@ -56,18 +56,18 @@ impl Plugin for IosGamecenterPlugin {
 
         #[cfg(not(target_os = "ios"))]
         {
-            app.add_event::<IosGamecenterEvents>();
+            app.add_message::<IosGamecenterEvents>();
         }
 
         #[cfg(target_os = "ios")]
         {
-            use bevy_crossbeam_event::{CrossbeamEventApp, CrossbeamEventSender};
+            use bevy_channel_message::{ChannelMessageApp, ChannelMessageSender};
 
-            app.add_crossbeam_event::<IosGamecenterEvents>();
+            app.add_channel_message::<IosGamecenterEvents>();
 
             let sender = app
                 .world()
-                .get_resource::<CrossbeamEventSender<IosGamecenterEvents>>()
+                .get_resource::<ChannelMessageSender<IosGamecenterEvents>>()
                 .unwrap()
                 .clone();
 
