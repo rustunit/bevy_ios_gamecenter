@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 * update to bevy `0.17`
+* massive api change since `Message` cannot be an `EntityEvent` at the same time. Basically all Trigger/Observer responses are now wrapped in one additional level of indirectin and the old information can be accessed via `response` field (example: `AuthenticationResult`).
 
 ## [0.4.0] - 2025-04-26
 
