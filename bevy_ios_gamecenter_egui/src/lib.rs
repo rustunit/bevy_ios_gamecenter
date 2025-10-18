@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use bevy_egui::{egui, EguiContexts, EguiPlugin};
+use bevy_egui::{egui, EguiContexts, EguiPrimaryContextPass};
 use bevy_ios_gamecenter::{
     view_states, IosGCPlayer, IosGCSaveGame, IosGCSaveGames, IosGCSaveGamesResponse,
     IosGamecenterEvents,
@@ -35,10 +35,6 @@ pub struct IosGamecenterEguiPlugin {
 
 impl Plugin for IosGamecenterEguiPlugin {
     fn build(&self, app: &mut App) {
-        if !app.is_plugin_added::<EguiPlugin>() {
-            app.add_plugins(EguiPlugin::default());
-        }
-
         app.init_resource::<DebugUiResource>();
         app.insert_resource(DebugIosGamecenter {
             test_achievement_ids: self.test_achievement_ids.clone(),
@@ -46,7 +42,7 @@ impl Plugin for IosGamecenterEguiPlugin {
             ..default()
         });
 
-        app.add_systems(Update, update);
+        app.add_systems(EguiPrimaryContextPass, update);
         app.add_systems(
             Update,
             process_gc_events.run_if(on_message::<IosGamecenterEvents>),
