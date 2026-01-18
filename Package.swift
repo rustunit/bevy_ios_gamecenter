@@ -17,10 +17,10 @@ let package = Package(
         // Targets can depend on other targets in this package and products from dependencies.
         .binaryTarget(
             name: "BevyIosGamecenterRust",
-            path: "BevyIosGamecenterRust.xcframework"),
-        // url:
-        // "https://github.com/rustunit/bevy_ios_gamecenter/releases/download/rs-0.5.0/BevyIosGamecenterRust.xcframework.zip",
-        // checksum: "0ec2c82067d7c1598e863b8c26f934ecc43a4742482f9025f66ea3d9384cfa76"),
+            // path: "BevyIosGamecenterRust.xcframework"),
+            url:
+                "https://github.com/rustunit/bevy_ios_gamecenter/releases/download/rs-0.6.0/BevyIosGamecenterRust.xcframework.zip",
+            checksum: "2045def30fa55a49e7d848d432b5acb125c9a80fb2ae4390aabe0d1d4b298d0e"),
         .target(
             name: "bevy_ios_gamecenter",
             dependencies: ["BevyIosGamecenterRust"]),
