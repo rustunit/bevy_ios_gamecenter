@@ -11,8 +11,9 @@
 [sh_discord]: https://img.shields.io/discord/1176858176897953872?label=discord&color=5561E6
 [lk_discord]: https://discord.gg/rQNeEnMhus
 
-Bevy Plugin and Swift Package to provide access to iOS native GameKit (Gamecenter) from inside Bevy Apps
-It uses [Swift-Bridge](https://github.com/chinedufn/swift-bridge) to auto-generate the glue code and transport data types.
+Bevy Plugin to provide access to iOS native GameKit (Gamecenter) from inside Bevy Apps.
+
+Talks to `GameKit` directly via [objc2](https://github.com/madsmtm/objc2) - no Swift package or XCode setup required.
 
 ![demo](./assets/demo.gif)
 
@@ -30,36 +31,19 @@ It uses [Swift-Bridge](https://github.com/chinedufn/swift-bridge) to auto-genera
 
 ## Instructions
 
-1. Add to XCode: Add SPM (Swift Package Manager) dependency
-2. Add Rust dependency
-3. Setup Plugin
+1. Add Rust dependency
+2. Setup Plugin
 
-### 1. Add to XCode
+**Note:** Game Center still has to be enabled for your app in App Store Connect, and save games
+additionally require the iCloud capability.
 
-* Add `GameKit` framework:
-![gamekit](./assets/framework.png)
-
-* Go to `File` -> `Add Package Dependencies` and paste `https://github.com/rustunit/bevy_ios_gamecenter.git` into the search bar on the top right:
-![xcode](./assets/xcode-spm.png)
-
-**Note:**
-The rust crate used must be exactly the same version as the Swift Package.
-I suggest using a specific version (like `0.2.0` in the screenshot) to make sure to always use binary matching versions!
-
-### 2. Add Rust dependency
+### 1. Add Rust dependency
 
 ```
 cargo add bevy_ios_gamecenter
 ```
 
-or
-
-```toml
-# always pin to the same exact version you also of the Swift package
-bevy_ios_gamecenter = { version = "=0.6.0" }
-```
-
-### 3. Setup Plugin
+### 2. Setup Plugin
 
 Initialize Bevy Plugin:
 
@@ -108,9 +92,10 @@ fn bevy_system(mut gc: BevyIosGamecenter) {
         2,
     );
 
-    // open gamecenter view (leaderboard)
-    gc.trigger_view(view_states::LEADERBOARDS);
 }
+
+// opening the gamecenter view has no response, so it is a plain free function
+bevy_ios_gamecenter::trigger_view(view_states::LEADERBOARDS);
 ```
 
 ## Our Other Crates
@@ -130,7 +115,8 @@ fn bevy_system(mut gc: BevyIosGamecenter) {
 
 |bevy|bevy\_ios\_gamecenter|
 |----|---|
-|0.18|0.6,main|
+|0.18|0.7,main|
+|0.18|0.6|
 |0.17|0.5|
 |0.16|0.4|
 |0.15|0.3|

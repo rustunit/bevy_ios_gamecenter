@@ -1,0 +1,72 @@
+[package]
+name = "bevy_ios_gamecenter"
+version = "0.7.0"
+edition = "2024"
+readme = "README.md"
+license = "MIT"
+authors = ["extrawurst <mail@rusticorn.com>"]
+documentation = "https://docs.rs/bevy_ios_gamecenter"
+repository = "https://github.com/rustunit/bevy_ios_gamecenter"
+keywords = ["bevy", "gamedev", "mobile", "ios", "objc2"]
+description = "Bevy Plugin to provide access to iOS native GameKit (Gamecenter) from inside Bevy Apps"
+
+[package.metadata.docs.rs]
+default-target = "x86_64-apple-darwin"
+
+[dependencies]
+bevy_app = { version = "0.18", default-features = false }
+bevy_ecs = { version = "0.18", default-features = false }
+bevy_ecs_macros = { version = "0.18", default-features = false }
+bevy_log = { version = "0.18", default-features = false }
+bevy_channel_message = "0.2"
+
+[target.'cfg(target_os = "ios")'.dependencies]
+objc2 = { version = "0.6", default-features = false, features = ["std"] }
+block2 = { version = "0.6", default-features = false, features = ["std"] }
+dispatch2 = { version = "0.3", default-features = false, features = ["std"] }
+objc2-foundation = { version = "0.3", default-features = false, features = [
+    "std",
+    "NSArray",
+    "NSData",
+    "NSDate",
+    "NSEnumerator",
+    "NSError",
+    "NSKeyValueCoding",
+    "NSObject",
+    "NSSet",
+    "NSString",
+    "NSURL",
+    "NSValue",
+] }
+# `GKEventListener`/`GKGameActivityListener`/`GKMatchmaker`/`GKTurnBasedMatch` are not for
+# matchmaking: `GKLocalPlayerListener` inherits from all their protocols, and `registerListener:`
+# is cfg-gated on them. `GKGameCenterViewController` only supplies the state enum on iOS.
+objc2-game-kit = { version = "0.3", default-features = false, features = [
+    "std",
+    "block2",
+    "GKAccessPoint",
+    "GKAchievement",
+    "GKBasePlayer",
+    "GKEventListener",
+    "GKGameActivityListener",
+    "GKGameCenterViewController",
+    "GKLeaderboard",
+    "GKLocalPlayer",
+    "GKMatchmaker",
+    "GKPlayer",
+    "GKSavedGame",
+    "GKSavedGameListener",
+    "GKTurnBasedMatch",
+] }
+objc2-ui-kit = { version = "0.3", default-features = false, features = [
+    "std",
+    "block2",
+    "UIApplication",
+    "UIResponder",
+    "UIScene",
+    "UISceneDefinitions",
+    "UIView",
+    "UIViewController",
+    "UIWindow",
+    "UIWindowScene",
+] }

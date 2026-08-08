@@ -1,6 +1,6 @@
 #![allow(unused_variables)]
 
-#[allow(unused_imports)]
+#[cfg(target_os = "ios")]
 use crate::native;
 use crate::{IosGCSaveGame, IosGCSaveGames, IosGCViewState};
 
@@ -26,16 +26,9 @@ pub fn request_player(request: i64) {
 
 /// Save Game under `name`
 /// Expected to be confirmed with [`IosGamecenterEvents::SavedGame`][crate::IosGamecenterEvents::SavedGame] event
-///
-/// ## Note
-/// This will base64 encode the data to save it
 pub fn save_game(request: i64, name: String, data: &[u8]) {
     #[cfg(target_os = "ios")]
-    {
-        use base64::Engine;
-        let s = base64::engine::general_purpose::STANDARD.encode(data);
-        native::save_game(request, s, name);
-    }
+    native::save_game(request, name, data);
 }
 
 /// Requests the Data inside a given [`IosGCSaveGame`]
@@ -60,11 +53,7 @@ pub fn delete_savegame(request: i64, name: String) {
 /// See <https://developer.apple.com/documentation/gamekit/gklocalplayer/1521116-resolveconflictingsavedgames>
 pub fn resolve_conflicting_games(request: i64, save_games: IosGCSaveGames, data: &[u8]) {
     #[cfg(target_os = "ios")]
-    {
-        use base64::Engine;
-        let s = base64::engine::general_purpose::STANDARD.encode(data);
-        native::resolve_conflicting_games(request, save_games, s);
-    }
+    native::resolve_conflicting_games(request, save_games, data);
 }
 
 /// Fetch Items for Signature Verification

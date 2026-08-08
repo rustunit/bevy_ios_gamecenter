@@ -8,10 +8,10 @@ use crate::{
     IosGCSaveGamesResponse, IosGCSavedGameResponse, IosGCScoreSubmitResponse, request,
 };
 
-/// All events for communication from native iOS (Swift) side to Rust/Bevy
+/// All events for communication from native iOS (GameKit) side to Rust/Bevy
 #[derive(Message, Clone, Debug)]
 pub enum IosGamecenterEvents {
-    /// Triggered by calls to [`init`][crate::init] or implicit when registering [`IosGamecenterPlugin`] via `IosGamecenterPlugin::new(true)`
+    /// Triggered by calls to [`authenticate`][crate::authenticate]
     Authentication((i64, IosGCAuthResult)),
     /// Triggered by calls to [`save_game`][crate::save_game]
     SavedGame((i64, IosGCSavedGameResponse)),

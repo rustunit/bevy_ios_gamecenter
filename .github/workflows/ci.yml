@@ -20,27 +20,21 @@ jobs:
 
       - name: Rust Cache
         uses: Swatinem/rust-cache@v2
-        with:
-          workspaces: "./crate"
 
-      # TODO: enable once https://github.com/rust-lang/rust-bindgen/issues/3181 is released
-      # - name: Check iOS Sim
-      #   run: |
-      #     cd ./crate/
-      #     cargo c --target=aarch64-apple-ios-sim
-      #     cargo b --target=aarch64-apple-ios-sim
-      #     cargo clippy --target=aarch64-apple-ios-sim
+      - name: Check iOS Sim
+        run: |
+          cargo c --target=aarch64-apple-ios-sim
+          cargo b --target=aarch64-apple-ios-sim
+          cargo clippy --target=aarch64-apple-ios-sim
 
       - name: Check iOS
         run: |
-          cd ./crate/
           cargo c --target=aarch64-apple-ios
           cargo b --target=aarch64-apple-ios
           cargo clippy --target=aarch64-apple-ios
 
       - name: Check MacOs
         run: |
-          cd ./crate/
           cargo c
           cargo b
           cargo clippy
@@ -61,13 +55,12 @@ jobs:
         with:
           workspaces: "./bevy_ios_gamecenter_egui"
 
-      # TODO: enable once https://github.com/rust-lang/rust-bindgen/issues/3181 is released
-      # - name: Check iOS Sim
-      #   run: |
-      #     cd bevy_ios_gamecenter_egui
-      #     cargo c --target=aarch64-apple-ios-sim
-      #     cargo b --target=aarch64-apple-ios-sim
-      #     cargo clippy --target=aarch64-apple-ios-sim
+      - name: Check iOS Sim
+        run: |
+          cd bevy_ios_gamecenter_egui
+          cargo c --target=aarch64-apple-ios-sim
+          cargo b --target=aarch64-apple-ios-sim
+          cargo clippy --target=aarch64-apple-ios-sim
 
       - name: Check iOS
         run: |

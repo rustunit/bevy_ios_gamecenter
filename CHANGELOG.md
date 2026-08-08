@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## [0.7.0] - unreleased
+
+### Changed
+* call `GameKit` directly via `objc2`, the Swift package dependency is gone
+* the XCode setup steps (SPM package and linking `GameKit`) are no longer needed
+* repo flattened: the crate now lives at the repository root
+* iOS simulator support is back: without `swift-bridge` there is no `rust-bindgen` involvement, so
+  `aarch64-apple-ios-sim` builds again
+* save game and signature payloads are no longer round-tripped through base64, they are passed as
+  bytes. `IosGCLoadGamesResponse::Done` keeps its `Option<Vec<u8>>` shape but is now always `Some`
+
+### Removed
+* the constructors that only existed to let Swift build our types across the bridge:
+  `IosGCSaveGame::{new, equals}`, `IosGCSaveGames::contains`, `IosGCPlayer::new`,
+  `IosGCAchievement::new` and `IosGCFetchItemsForSignatureVerification::new`
+
 ## [0.6.0] - 2026-01-18
 
 ### Changed
