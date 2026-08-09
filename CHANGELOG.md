@@ -7,9 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
-## [0.7.0] - unreleased
+## [0.7.0] - 2026-08-09
 
 ### Changed
+* update to bevy `0.19`
 * call `GameKit` directly via `objc2`, the Swift package dependency is gone
 * the XCode setup steps (SPM package and linking `GameKit`) are no longer needed
 * repo flattened: the crate now lives at the repository root
@@ -22,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * the constructors that only existed to let Swift build our types across the bridge:
   `IosGCSaveGame::{new, equals}`, `IosGCSaveGames::contains`, `IosGCPlayer::new`,
   `IosGCAchievement::new` and `IosGCFetchItemsForSignatureVerification::new`
+* the unused `bevy_ecs_macros` dependency
 
 ## [0.6.0] - 2026-01-18
 

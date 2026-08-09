@@ -16,7 +16,6 @@ default-target = "x86_64-apple-darwin"
 [dependencies]
 bevy_app = { version = "0.19", default-features = false }
 bevy_ecs = { version = "0.19", default-features = false }
-bevy_ecs_macros = { version = "0.19", default-features = false }
 bevy_log = { version = "0.19", default-features = false }
 bevy_channel_message = "0.3"
 

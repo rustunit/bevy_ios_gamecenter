@@ -7,9 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
-## [0.4.0] - unreleased
+## [0.4.0] - 2026-08-09
 
 ### Changed
+* update to bevy `0.19`
 * `bevy_ios_gamecenter` 0.7 upgrade (objc2 migration, no Swift package needed anymore)
 
 ## [0.3.0] - 2026-01-18
