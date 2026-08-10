@@ -11,9 +11,11 @@
 [sh_discord]: https://img.shields.io/discord/1176858176897953872?label=discord&color=5561E6
 [lk_discord]: https://discord.gg/rQNeEnMhus
 
-Bevy Plugin to provide access to iOS native GameKit (Gamecenter) from inside Bevy Apps.
+Bevy Plugin to provide access to iOS and tvOS native GameKit (Gamecenter) from inside Bevy Apps.
 
 Talks to `GameKit` directly via [objc2](https://github.com/madsmtm/objc2) - no Swift package or XCode setup required.
+
+On every other platform the plugin builds and does nothing, so no `cfg` is needed on the calling side.
 
 ![demo](./assets/demo.gif)
 
@@ -24,7 +26,7 @@ Talks to `GameKit` directly via [objc2](https://github.com/madsmtm/objc2) - no S
 * save games (based on iCloud)
 * achievements
 * leaderboards
-* egui based debug ui crate see [bevy_ios_gamecenter_egui folder](./bevy_ios_gamecenter_egui/README.md)
+* egui based debug ui crate see [bevy_ios_gamecenter_egui folder](./bevy_ios_gamecenter_egui/README.md) (iOS only)
 
 ## TODOs
 * challenges, matchmaking
@@ -35,7 +37,8 @@ Talks to `GameKit` directly via [objc2](https://github.com/madsmtm/objc2) - no S
 2. Setup Plugin
 
 **Note:** Game Center still has to be enabled for your app in App Store Connect, and save games
-additionally require the iCloud capability.
+additionally require the iCloud capability. On tvOS the same entitlement applies - and it matters
+more there, since an Apple TV has no keyboard worth typing an account into.
 
 ### 1. Add Rust dependency
 

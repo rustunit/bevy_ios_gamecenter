@@ -54,12 +54,12 @@ impl Plugin for IosGamecenterPlugin {
     fn build(&self, app: &mut App) {
         app.add_plugins(request::plugin);
 
-        #[cfg(not(target_os = "ios"))]
+        #[cfg(not(any(target_os = "ios", target_os = "tvos")))]
         {
             app.add_message::<IosGamecenterEvents>();
         }
 
-        #[cfg(target_os = "ios")]
+        #[cfg(any(target_os = "ios", target_os = "tvos"))]
         {
             use bevy_channel_message::{ChannelMessageApp, ChannelMessageSender};
 

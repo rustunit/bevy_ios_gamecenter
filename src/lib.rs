@@ -1,6 +1,6 @@
 mod events;
 mod methods;
-#[cfg(target_os = "ios")]
+#[cfg(any(target_os = "ios", target_os = "tvos"))]
 mod native;
 mod plugin;
 mod request;
@@ -29,7 +29,7 @@ pub enum IosGCAuthResult {
     Error(String),
 }
 
-#[cfg(target_os = "ios")]
+#[cfg(any(target_os = "ios", target_os = "tvos"))]
 impl IosGCAuthResult {
     fn authenticated() -> Self {
         Self::IsAuthenticated
@@ -53,7 +53,7 @@ pub enum IosGCResolvedConflictsResponse {
     Error(String),
 }
 
-#[cfg(target_os = "ios")]
+#[cfg(any(target_os = "ios", target_os = "tvos"))]
 impl IosGCResolvedConflictsResponse {
     fn done(items: IosGCSaveGames) -> Self {
         Self::Done(items)
@@ -83,7 +83,7 @@ pub enum IosGCSavedGameResponse {
     Error(String),
 }
 
-#[cfg(target_os = "ios")]
+#[cfg(any(target_os = "ios", target_os = "tvos"))]
 impl IosGCSavedGameResponse {
     fn done(item: IosGCSaveGame) -> Self {
         Self::Done(item)
@@ -102,7 +102,7 @@ pub enum IosGCSaveGamesResponse {
     Error(String),
 }
 
-#[cfg(target_os = "ios")]
+#[cfg(any(target_os = "ios", target_os = "tvos"))]
 impl IosGCSaveGamesResponse {
     fn done(items: IosGCSaveGames) -> Self {
         Self::Done(items)
@@ -142,7 +142,7 @@ pub enum IosGCLoadGamesResponse {
     Error(String),
 }
 
-#[cfg(target_os = "ios")]
+#[cfg(any(target_os = "ios", target_os = "tvos"))]
 impl IosGCLoadGamesResponse {
     fn done(save_game: IosGCSaveGame, data: Vec<u8>) -> Self {
         Self::Done((save_game, Some(data)))
@@ -173,7 +173,7 @@ pub enum IosGCAchievementProgressResponse {
     Error(String),
 }
 
-#[cfg(target_os = "ios")]
+#[cfg(any(target_os = "ios", target_os = "tvos"))]
 impl IosGCAchievementProgressResponse {
     fn done(a: IosGCAchievement) -> Self {
         Self::Done(a)
@@ -192,7 +192,7 @@ pub enum IosGCAchievementsResetResponse {
     Error(String),
 }
 
-#[cfg(target_os = "ios")]
+#[cfg(any(target_os = "ios", target_os = "tvos"))]
 impl IosGCAchievementsResetResponse {
     fn done() -> Self {
         Self::Done
@@ -211,7 +211,7 @@ pub enum IosGCScoreSubmitResponse {
     Error(String),
 }
 
-#[cfg(target_os = "ios")]
+#[cfg(any(target_os = "ios", target_os = "tvos"))]
 impl IosGCScoreSubmitResponse {
     fn done() -> Self {
         Self::Done
@@ -230,7 +230,7 @@ pub enum IosGCDeleteSaveGameResponse {
     Error(String),
 }
 
-#[cfg(target_os = "ios")]
+#[cfg(any(target_os = "ios", target_os = "tvos"))]
 impl IosGCDeleteSaveGameResponse {
     fn done(name: String) -> Self {
         Self::Done(name)
@@ -257,7 +257,7 @@ pub enum IosGCFetchItemsForSignatureVerificationResponse {
     Error(String),
 }
 
-#[cfg(target_os = "ios")]
+#[cfg(any(target_os = "ios", target_os = "tvos"))]
 impl IosGCFetchItemsForSignatureVerificationResponse {
     fn done(items: IosGCFetchItemsForSignatureVerification) -> Self {
         Self::Done(items)
