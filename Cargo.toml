@@ -1,8 +1,7 @@
 [package]
 name = "bevy_ios_gamecenter"
-version = "0.8.0"
+version = "0.8.1"
 edition = "2024"
-readme = "README.md"
 license = "MIT"
 authors = ["extrawurst <mail@rusticorn.com>"]
 documentation = "https://docs.rs/bevy_ios_gamecenter"
@@ -16,10 +15,10 @@ default-target = "x86_64-apple-darwin"
 [dependencies]
 bevy_app = { version = "0.20", default-features = false }
 bevy_ecs = { version = "0.20", default-features = false }
-bevy_log = { version = "0.20", default-features = false }
-bevy_channel_message = "0.4"
 
 [target.'cfg(any(target_os = "ios", target_os = "tvos"))'.dependencies]
+bevy_log = { version = "0.20", default-features = false }
+bevy_channel_message = "0.4"
 objc2 = { version = "0.6", default-features = false, features = ["std"] }
 block2 = { version = "0.6", default-features = false, features = ["std"] }
 dispatch2 = { version = "0.3", default-features = false, features = ["std"] }

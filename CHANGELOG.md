@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## [0.8.1] - 2026-10-19
+
+### Fixed
+* `bevy_log` and `bevy_channel_message` are only pulled in on iOS and tvOS, the only targets that
+  use them - silences the `unused dependency` warnings everywhere else
+
 ## [0.8.0] - 2026-10-19
 
 ### Changed
