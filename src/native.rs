@@ -5,25 +5,25 @@
 //! Bevy schedule from there.
 
 use std::sync::OnceLock;
+#[cfg(target_os = "ios")]
 use std::sync::atomic::{AtomicBool, Ordering};
 
 use bevy_channel_message::ChannelMessageSender;
 use block2::RcBlock;
 use dispatch2::DispatchQueue;
 use objc2::rc::Retained;
-use objc2::runtime::{AnyObject, ProtocolObject};
-use objc2::{AnyThread, MainThreadMarker, define_class, msg_send};
+use objc2::runtime::AnyObject;
+#[cfg(target_os = "ios")]
+use objc2::runtime::ProtocolObject;
+use objc2::{AnyThread, MainThreadMarker, msg_send};
 use objc2_foundation::{
-    NSArray, NSData, NSDate, NSError, NSInteger, NSNumber, NSObject, NSObjectNSKeyValueCoding,
-    NSObjectProtocol, NSString, NSUInteger, NSURL,
+    NSArray, NSData, NSDate, NSError, NSInteger, NSNumber, NSObjectNSKeyValueCoding, NSString,
+    NSUInteger, NSURL,
 };
-// `GKChallengeListener` is deprecated, but `GKLocalPlayerListener` still inherits from it.
-#[allow(deprecated)]
-use objc2_game_kit::GKChallengeListener;
+#[cfg(target_os = "ios")]
+use objc2_game_kit::GKSavedGame;
 use objc2_game_kit::{
-    GKAccessPoint, GKAchievement, GKGameActivityListener, GKGameCenterViewControllerState,
-    GKInviteEventListener, GKLeaderboard, GKLocalPlayer, GKLocalPlayerListener, GKPlayer,
-    GKSavedGame, GKSavedGameListener, GKTurnBasedEventListener,
+    GKAccessPoint, GKAchievement, GKGameCenterViewControllerState, GKLeaderboard, GKLocalPlayer,
 };
 use objc2_ui_kit::{UIApplication, UISceneActivationState, UIViewController, UIWindowScene};
 
@@ -59,6 +59,7 @@ fn error_message(error: &NSError) -> String {
     error.localizedDescription().to_string()
 }
 
+#[cfg(target_os = "ios")]
 fn convert_save_game(game: &GKSavedGame) -> IosGCSaveGame {
     // SAFETY: property reads on a `GKSavedGame` GameKit handed us.
     unsafe {
@@ -73,6 +74,7 @@ fn convert_save_game(game: &GKSavedGame) -> IosGCSaveGame {
     }
 }
 
+#[cfg(target_os = "ios")]
 fn convert_save_games(games: &NSArray<GKSavedGame>) -> IosGCSaveGames {
     IosGCSaveGames(games.iter().map(|g| convert_save_game(&g)).collect())
 }
@@ -105,6 +107,7 @@ fn convert_achievement(achievement: &GKAchievement) -> IosGCAchievement {
 
 /// `fetchSavedGames` is the only way into the save game store - GameKit has no API to look up a
 /// single [`GKSavedGame`] by name.
+#[cfg(target_os = "ios")]
 fn fetch_saved_games<F>(on_result: F)
 where
     F: Fn(Result<&NSArray<GKSavedGame>, String>) + 'static,
@@ -126,8 +129,17 @@ where
 
 // Own module so the deprecation of `GKChallengeListener` can be allowed for the whole class -
 // `define_class!` drops `#[allow]` on the individual protocol impls.
+#[cfg(target_os = "ios")]
 mod listener {
     #![allow(deprecated)]
+
+    use objc2::define_class;
+    use objc2_foundation::{NSObject, NSObjectProtocol};
+    // `GKChallengeListener` is deprecated, but `GKLocalPlayerListener` still inherits from it.
+    use objc2_game_kit::{
+        GKChallengeListener, GKGameActivityListener, GKInviteEventListener, GKLocalPlayerListener,
+        GKPlayer, GKSavedGameListener, GKTurnBasedEventListener,
+    };
 
     use super::*;
 
@@ -161,11 +173,14 @@ mod listener {
     );
 }
 
+#[cfg(target_os = "ios")]
 use listener::SavedGameListener;
 
 /// Registering the same listener twice is undefined behavior per GameKit's docs.
+#[cfg(target_os = "ios")]
 static LISTENER_REGISTERED: AtomicBool = AtomicBool::new(false);
 
+#[cfg(target_os = "ios")]
 pub fn init_listeners() {
     if LISTENER_REGISTERED.swap(true, Ordering::SeqCst) {
         return;
@@ -298,6 +313,7 @@ pub fn get_player(request: i64) {
     send(IosGamecenterEvents::Player((request, player)));
 }
 
+#[cfg(target_os = "ios")]
 pub fn save_game(request: i64, name: String, data: &[u8]) {
     let handler = RcBlock::new(move |game: *mut GKSavedGame, error: *mut NSError| {
         // SAFETY: GameKit passes valid pointers or null.
@@ -319,6 +335,7 @@ pub fn save_game(request: i64, name: String, data: &[u8]) {
     }
 }
 
+#[cfg(target_os = "ios")]
 pub fn fetch_save_games(request: i64) {
     fetch_saved_games(move |result| {
         let response = match result {
@@ -329,6 +346,7 @@ pub fn fetch_save_games(request: i64) {
     });
 }
 
+#[cfg(target_os = "ios")]
 pub fn load_game(request: i64, save_game: IosGCSaveGame) {
     fetch_saved_games(move |result| {
         let games = match result {
@@ -369,6 +387,7 @@ pub fn load_game(request: i64, save_game: IosGCSaveGame) {
     });
 }
 
+#[cfg(target_os = "ios")]
 pub fn delete_game(request: i64, name: String) {
     let deleted = name.clone();
     let handler = RcBlock::new(move |error: *mut NSError| {
@@ -387,6 +406,7 @@ pub fn delete_game(request: i64, name: String) {
     }
 }
 
+#[cfg(target_os = "ios")]
 pub fn resolve_conflicting_games(request: i64, save_games: IosGCSaveGames, data: &[u8]) {
     let data = data.to_vec();
 
@@ -433,6 +453,46 @@ pub fn resolve_conflicting_games(request: i64, save_games: IosGCSaveGames, data:
         }
     });
 }
+
+/// GameKit has no save games on tvOS (`API_UNAVAILABLE(tvos)`), so every request is answered with
+/// an error instead of sending selectors the runtime may not implement.
+#[cfg(target_os = "tvos")]
+mod save_games_unsupported {
+    use super::*;
+
+    const UNSUPPORTED: &str = "save games are not supported on tvOS";
+
+    /// The listener only reports save game conflicts, so there is nothing to register.
+    pub fn init_listeners() {}
+
+    pub fn save_game(request: i64, _name: String, _data: &[u8]) {
+        let response = IosGCSavedGameResponse::error(UNSUPPORTED.into());
+        send(IosGamecenterEvents::SavedGame((request, response)));
+    }
+
+    pub fn fetch_save_games(request: i64) {
+        let response = IosGCSaveGamesResponse::error(UNSUPPORTED.into());
+        send(IosGamecenterEvents::SaveGames((request, response)));
+    }
+
+    pub fn load_game(request: i64, _save_game: IosGCSaveGame) {
+        let response = IosGCLoadGamesResponse::error(UNSUPPORTED.into());
+        send(IosGamecenterEvents::LoadGame((request, response)));
+    }
+
+    pub fn delete_game(request: i64, _name: String) {
+        let response = IosGCDeleteSaveGameResponse::error(UNSUPPORTED.into());
+        send(IosGamecenterEvents::DeletedSaveGame((request, response)));
+    }
+
+    pub fn resolve_conflicting_games(request: i64, _save_games: IosGCSaveGames, _data: &[u8]) {
+        let response = IosGCResolvedConflictsResponse::error(UNSUPPORTED.into());
+        send(IosGamecenterEvents::ResolvedConflicts((request, response)));
+    }
+}
+
+#[cfg(target_os = "tvos")]
+pub use save_games_unsupported::*;
 
 pub fn fetch_signature(request: i64) {
     let handler = RcBlock::new(

@@ -23,7 +23,7 @@ On every other platform the plugin builds and does nothing, so no `cfg` is neede
 
 ## Features
 * authentication
-* save games (based on iCloud)
+* save games (based on iCloud, iOS only - GameKit has none on tvOS)
 * achievements
 * leaderboards
 * egui based debug ui crate see [bevy_ios_gamecenter_egui folder](./bevy_ios_gamecenter_egui/README.md) (iOS only)
@@ -37,8 +37,8 @@ On every other platform the plugin builds and does nothing, so no `cfg` is neede
 2. Setup Plugin
 
 **Note:** Game Center still has to be enabled for your app in App Store Connect, and save games
-additionally require the iCloud capability. On tvOS the same entitlement applies - and it matters
-more there, since an Apple TV has no keyboard worth typing an account into.
+additionally require the iCloud capability. On tvOS the Game Center entitlement applies the same
+way - and it matters more there, since an Apple TV has no keyboard worth typing an account into.
 
 ### 1. Add Rust dependency
 
