@@ -1,6 +1,6 @@
 [package]
 name = "bevy_ios_gamecenter"
-version = "0.7.1"
+version = "0.8.0"
 edition = "2024"
 readme = "README.md"
 license = "MIT"
@@ -14,10 +14,10 @@ description = "Bevy Plugin to provide access to iOS and tvOS native GameKit (Gam
 default-target = "x86_64-apple-darwin"
 
 [dependencies]
-bevy_app = { version = "0.19", default-features = false }
-bevy_ecs = { version = "0.19", default-features = false }
-bevy_log = { version = "0.19", default-features = false }
-bevy_channel_message = "0.3"
+bevy_app = { version = "0.20", default-features = false }
+bevy_ecs = { version = "0.20", default-features = false }
+bevy_log = { version = "0.20", default-features = false }
+bevy_channel_message = "0.4"
 
 [target.'cfg(any(target_os = "ios", target_os = "tvos"))'.dependencies]
 objc2 = { version = "0.6", default-features = false, features = ["std"] }
