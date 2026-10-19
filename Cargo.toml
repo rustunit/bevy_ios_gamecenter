@@ -68,7 +68,3 @@ objc2-ui-kit = { version = "0.3", default-features = false, features = [
     "UIWindow",
     "UIWindowScene",
 ] }
-
-[lints.cargo]
-# cargo writes `readme` back into the packaged manifest, which trips this lint on publish
-manual_readme = "allow"
