@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## [0.7.1] - 2026-10-19
+
 ### Added
 * tvOS support: `aarch64-apple-tvos` and `aarch64-apple-tvos-sim` are built and linted in CI.
   Authentication, achievements, leaderboards, signature verification and the access point work
