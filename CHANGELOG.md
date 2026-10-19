@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Added
+* tvOS support: `aarch64-apple-tvos` and `aarch64-apple-tvos-sim` are built and linted in CI.
+  Authentication, achievements, leaderboards, signature verification and the access point work
+  unchanged. GameKit has no save games on tvOS, so those calls answer with an `Error` response
+  there. The `bevy_ios_gamecenter_egui` debug ui stays iOS-only
+
 ## [0.7.0] - 2026-08-09
 
 ### Changed

@@ -18,8 +18,15 @@ jobs:
       - name: Add iOS targets
         run: rustup target add aarch64-apple-ios aarch64-apple-ios-sim x86_64-apple-ios
 
+      - name: Add tvOS targets
+        run: rustup target add aarch64-apple-tvos aarch64-apple-tvos-sim
+
       - name: Rust Cache
         uses: Swatinem/rust-cache@v2
+
+      # libc >= 0.2.190 drops `fork`/`exec*` on tvOS, but nix 0.31.3 (via bevy_app -> ctrlc) still calls them
+      - name: Pin libc
+        run: cargo update -p libc --precise 0.2.189
 
       - name: Check iOS Sim
         run: |
@@ -33,6 +40,18 @@ jobs:
           cargo b --target=aarch64-apple-ios
           cargo clippy --target=aarch64-apple-ios
 
+      - name: Check tvOS Sim
+        run: |
+          cargo c --target=aarch64-apple-tvos-sim
+          cargo b --target=aarch64-apple-tvos-sim
+          cargo clippy --target=aarch64-apple-tvos-sim
+
+      - name: Check tvOS
+        run: |
+          cargo c --target=aarch64-apple-tvos
+          cargo b --target=aarch64-apple-tvos
+          cargo clippy --target=aarch64-apple-tvos
+
       - name: Check MacOs
         run: |
           cargo c
@@ -40,6 +59,7 @@ jobs:
           cargo clippy
           cargo t
 
+  # no tvOS leg: the debug ui pulls in `bevy_egui`, and `winit` does not build for tvOS
   build_egui:
     runs-on: macos-latest
 
