@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## [0.5.0] - 2026-10-19
+
+### Changed
+* update to bevy `0.20`
+* `bevy_ios_gamecenter` 0.8 upgrade
+
 ## [0.4.0] - 2026-08-09
 
 ### Changed

@@ -118,7 +118,8 @@ bevy_ios_gamecenter::trigger_view(view_states::LEADERBOARDS);
 
 |bevy|bevy\_ios\_gamecenter|
 |----|---|
-|0.19|0.7,main|
+|0.20|0.8,main|
+|0.19|0.7|
 |0.18|0.6|
 |0.17|0.5|
 |0.16|0.4|
