@@ -24,6 +24,10 @@ jobs:
       - name: Rust Cache
         uses: Swatinem/rust-cache@v2
 
+      # libc >= 0.2.190 drops `fork`/`exec*` on tvOS, but nix 0.31.3 (via bevy_app -> ctrlc) still calls them
+      - name: Pin libc
+        run: cargo update -p libc --precise 0.2.189
+
       - name: Check iOS Sim
         run: |
           cargo c --target=aarch64-apple-ios-sim
